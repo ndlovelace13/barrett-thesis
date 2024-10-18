@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SimpleJSON;
 
 public class Flashcard
 {
     public int cardId;
-    public string[] fields;
+    public List<string> fields;
     public List<int> imgFields;
     public List<int> audioFields;
     public string noteId;
@@ -23,32 +24,36 @@ public class Flashcard
         
     }
 
-    public Flashcard(int arrayLength, List<string> foundFields, string noteType)
+    public Flashcard(JSONNode noteNode)
     {
-        fields = new string[arrayLength];
+        fields = new List<string>();
         imgFields = new List<int>();
         audioFields = new List<int>();
-        noteId = noteType;
+        noteId = noteNode["note_model_uuid"].Value;
 
-        //store all fields to the field array
-        for (int i = 0; i < arrayLength; i++)
+        int i = 0;
+        foreach (var field in noteNode["fields"].Values)
         {
-            fields[i] = foundFields[i];
-            
+            string finalField = field;
             //if field contains img, isolate the img address and store index to imgFields
-            if (fields[i].Contains("<img"))
+            if (finalField.Contains("<img"))
             {
-                string[] splitPath = fields[i].Split("\"");
-                fields[i] = splitPath[1];
+                string[] splitPath = finalField.Split("\"");
+                finalField = splitPath[1];
                 imgFields.Add(i);
             }
             //if field contains sound, isolate the sound address and store index to audioFields
-            else if (fields[i].Contains("[sound:"))
+            else if (finalField.Contains("[sound:"))
             {
-                string[] splitPath = fields[i].Split(":");
-                fields[i] = splitPath[1].Substring(0, splitPath[1].Length - 2);
+                string[] splitPath = finalField.Split(":");
+                finalField = splitPath[1].Substring(0, splitPath[1].Length - 2);
                 audioFields.Add(i);
             }
+
+            fields.Add(finalField);
+            i++;
         }
+        
+        Debug.Log("Card created: " + imgFields.Count + " " + audioFields.Count);
     }
 }

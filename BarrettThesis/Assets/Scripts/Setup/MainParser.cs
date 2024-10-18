@@ -4,6 +4,7 @@ using UnityEngine;
 using SimpleFileBrowser;
 using System.IO;
 using System.Linq;
+using SimpleJSON;
 
 public class MainParser : MonoBehaviour
 {
@@ -47,6 +48,7 @@ public class MainParser : MonoBehaviour
             jsonFilePath = FileBrowser.Result[0];
             assetFilePath = FilenameRemove(jsonFilePath);
             Debug.Log(assetFilePath);
+            DeckCreate();
         }
             
     }
@@ -66,33 +68,65 @@ public class MainParser : MonoBehaviour
 
         //store the root json to a string, pass to DeckSerialize
         string root = File.ReadAllText(jsonFilePath);
+        var rootDeck = JSON.Parse(root);
+        //Debug.Log(root);
 
         //parse each card in the json file, creating a new flashcard and adding it to the deck
-        List <Flashcard> cards = DeckSerialize(root, newDeck);
+        List <Flashcard> cards = DeckSerialize(rootDeck, newDeck);
+        Debug.Log("Deck note models: " + newDeck.noteTypes.Count);
+        Debug.Log("Card Count: " + cards.Count);
+        Debug.Log("Parse successful");
     }
 
-    private List<Flashcard> DeckSerialize(string jsonDeck, Deck bigDeck)
+    private List<Flashcard> DeckSerialize(JSONNode jsonDeck, Deck bigDeck)
     {
         //create an storage space for all created flashcards
         List<Flashcard> allCards = new List<Flashcard>();
         //parse the json
-        Root coreDeck = JsonUtility.FromJson<Root>(jsonDeck);
+        //var coreDeck = JSON.Parse(jsonDeck);
+        Debug.Log(jsonDeck["children"].Count);
         //recursive call if decks are nested
-        if (coreDeck.children != null)
+        if (jsonDeck["children"].Count > 0)
         {
             Debug.Log("Nested Deck found");
-            foreach (var child in coreDeck.children)
+            foreach (var child in jsonDeck["children"].Values)
             {
-                allCards = allCards.Union<Flashcard>(DeckSerialize(JsonUtility.ToJson(child)), bigDeck).ToList<Flashcard>();
+                allCards = allCards.Union<Flashcard>(DeckSerialize(child, bigDeck)).ToList<Flashcard>();
             }
         }
         //base case, continue with parsing
         else
         {
-            foreach (var model in coreDeck.note_models)
-            {
+            JSONNode noteModels = jsonDeck["note_models"];
+            Debug.Log(jsonDeck["crowdanki_uuid"]);
 
+            foreach (var model in noteModels.Values)
+            {
+                //create a new NoteType, store in the deck dictionary
+                NoteType newType = new NoteType(model);
+                bigDeck.noteTypes.Add(newType.id, newType);
             }
+
+            allCards = NoteParse(jsonDeck["notes"]);
         }
+
+        Debug.Log("Card Count at end of Parse: " + allCards.Count);
+        return allCards;
     }
+
+    private List<Flashcard> NoteParse(JSONNode jsonNode)
+    {
+        List<Flashcard> newCards = new List<Flashcard>();
+
+        //parse each notecard in the deck and create an associated flashcard
+        foreach (var note in jsonNode.Values)
+        {
+            Flashcard newNote = new Flashcard(note);
+            newCards.Add(newNote);
+        }
+
+        Debug.Log("Card Count at end of note parse: " + newCards.Count);
+        return newCards;
+    }
+        
 }
