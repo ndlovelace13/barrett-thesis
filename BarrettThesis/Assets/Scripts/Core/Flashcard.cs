@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 
+[System.Serializable]
 public class Flashcard
 {
     public int cardId;

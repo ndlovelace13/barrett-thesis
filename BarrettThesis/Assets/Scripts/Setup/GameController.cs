@@ -10,6 +10,9 @@ public class GameController : MonoBehaviour
     //player's save data
     public static SaveData SaveData;
 
+    public bool testingMode = false;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,5 +29,6 @@ public class GameController : MonoBehaviour
     {
         GameControl = this;
         DontDestroyOnLoad(gameObject);
+        SaveData = new SaveData();
     }
 }

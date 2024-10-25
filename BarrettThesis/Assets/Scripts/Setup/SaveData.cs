@@ -8,6 +8,8 @@ public class SaveData
     public string playerName;
     public int cardCount;
     public int balance;
+    //public Flashcard testCard;
+    public Deck currentDeck;
 
 
     // Start is called before the first frame update

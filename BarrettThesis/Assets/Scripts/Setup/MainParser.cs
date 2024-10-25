@@ -15,7 +15,7 @@ public class MainParser : MonoBehaviour
     void Start()
     {
         //isolate this to a button eventually
-        FileSearch();
+        //FileSearch();
     }
 
     // Update is called once per frame
@@ -36,21 +36,24 @@ public class MainParser : MonoBehaviour
     {
         yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Select a File", "Create Deck");
 
-        //Debug.Log(FileBrowser.Success);
-
-        if (!FileBrowser.Result[0].Contains(".json"))
-        {
-            Debug.Log("Please select a json file");
-            StartCoroutine(ShowFileLoadWindow());
-        }
+        if (!FileBrowser.Success)
+            GameObject.FindWithTag("TitleUI").GetComponent<TitleBehavior>().Cancel();
         else
         {
-            jsonFilePath = FileBrowser.Result[0];
-            assetFilePath = FilenameRemove(jsonFilePath);
-            Debug.Log(assetFilePath);
-            DeckCreate();
-        }
-            
+            if (!FileBrowser.Result[0].Contains(".json"))
+            {
+                Debug.Log("Please select a json file");
+                StartCoroutine(ShowFileLoadWindow());
+            }
+            else
+            {
+                jsonFilePath = FileBrowser.Result[0];
+                assetFilePath = FilenameRemove(jsonFilePath);
+                Debug.Log(assetFilePath);
+                DeckCreate();
+                GameObject.FindWithTag("TitleUI").GetComponent<TitleBehavior>().ChooseSave();
+            }
+        } 
     }
 
     //replace the filename with the folder that the json references
@@ -73,9 +76,13 @@ public class MainParser : MonoBehaviour
 
         //parse each card in the json file, creating a new flashcard and adding it to the deck
         List <Flashcard> cards = DeckSerialize(rootDeck, newDeck);
+        newDeck.cards = cards;
         Debug.Log("Deck note models: " + newDeck.noteTypes.Count);
-        Debug.Log("Card Count: " + cards.Count);
+        Debug.Log("Card Count: " + newDeck.cards.Count);
         Debug.Log("Parse successful");
+        GameController.SaveData.currentDeck = newDeck;
+        //GameController.SaveData.testCard = newDeck.cards[0];
+        //SaveHandler.SaveSystem.SaveGame();
     }
 
     private List<Flashcard> DeckSerialize(JSONNode jsonDeck, Deck bigDeck)
@@ -102,10 +109,14 @@ public class MainParser : MonoBehaviour
 
             foreach (var model in noteModels.Values)
             {
-                //create a new NoteType, store in the deck dictionary
+                //create a new NoteType, store in the deck lists, then translate to dict once all have been loaded
                 NoteType newType = new NoteType(model);
-                bigDeck.noteTypes.Add(newType.id, newType);
+                bigDeck.noteTypeIndex.Add(newType.id);
+                bigDeck.noteTypes.Add(newType);
             }
+
+            //create the notedict
+            bigDeck.noteDictTranslate();
 
             allCards = NoteParse(jsonDeck["notes"]);
         }

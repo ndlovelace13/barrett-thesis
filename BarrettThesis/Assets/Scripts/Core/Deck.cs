@@ -4,7 +4,7 @@ using UnityEngine;
 using SimpleJSON;
 using System.Linq;
 
-
+[System.Serializable]
 public class NoteType
 {
     public string id;
@@ -63,10 +63,15 @@ public class NoteType
     }
 }
 
+[System.Serializable]
 public class Deck
 {
+    //must create separate lists for the dict in order to save
+    public List<string> noteTypeIndex;
+    public List<NoteType> noteTypes;
+    //dict for actual referencing
+    Dictionary<string, NoteType> noteTypeDict;
     public List<Flashcard> cards;
-    public Dictionary<string, NoteType> noteTypes;
     string ogJson;
     string mediaPath;
 
@@ -84,9 +89,23 @@ public class Deck
 
     public Deck(string jsonPath, string media)
     {
+        noteTypeIndex = new List<string>();
+        noteTypes = new List<NoteType>();
         cards = new List<Flashcard>();
         ogJson = jsonPath;
         mediaPath = media;
-        noteTypes = new Dictionary<string, NoteType>();
+    }
+
+    //Dictionary can't be stored to json using JsonUtility, call this function whenever you need to restore the dictionary
+    //for example, when creating a deck for the first time or loading one from a json file
+    public void noteDictTranslate()
+    {
+        noteTypeDict = new Dictionary<string, NoteType>();
+        for (int i = 0; i < noteTypeIndex.Count; i++)
+        {
+            noteTypeDict.Add(noteTypeIndex[i], noteTypes[i]);
+        }
+
+        Debug.Log("Dict created - Count: " + noteTypeDict.Count);
     }
 }
