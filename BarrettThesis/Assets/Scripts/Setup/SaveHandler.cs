@@ -76,7 +76,6 @@ public class SaveHandler : MonoBehaviour
             Debug.Log("Save data successfully loaded!");
             GameController.SaveData.currentDeck.noteDictTranslate();
             //Debug.Log(GameController.SaveData.currentDeck.noteTypes.Count);
-            SceneManager.LoadScene("Museum");
         }
         else
         {

@@ -108,4 +108,9 @@ public class Deck
 
         Debug.Log("Dict created - Count: " + noteTypeDict.Count);
     }
+
+    public NoteType dictRetrieve(string noteType)
+    {
+        return noteTypeDict[noteType];
+    }
 }

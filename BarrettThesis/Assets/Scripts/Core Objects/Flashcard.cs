@@ -57,4 +57,12 @@ public class Flashcard
         
         Debug.Log("Card created: " + imgFields.Count + " " + audioFields.Count);
     }
+
+    public void FieldPrint()
+    {
+        foreach (var field in fields)
+        {
+            Debug.Log(field);
+        }
+    }
 }
