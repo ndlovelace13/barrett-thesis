@@ -11,6 +11,8 @@ public class Flashcard
     public List<int> imgFields;
     public List<int> audioFields;
     public string noteId;
+
+    //progression elements
     
 
     // Start is called before the first frame update
@@ -47,7 +49,7 @@ public class Flashcard
             else if (finalField.Contains("[sound:"))
             {
                 string[] splitPath = finalField.Split(":");
-                finalField = splitPath[1].Substring(0, splitPath[1].Length - 2);
+                finalField = splitPath[1].Substring(0, splitPath[1].Length - 1);
                 audioFields.Add(i);
             }
 

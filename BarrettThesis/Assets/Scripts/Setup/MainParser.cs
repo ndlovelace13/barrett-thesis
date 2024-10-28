@@ -49,7 +49,7 @@ public class MainParser : MonoBehaviour
             {
                 jsonFilePath = FileBrowser.Result[0];
                 assetFilePath = FilenameRemove(jsonFilePath);
-                Debug.Log(assetFilePath);
+                Debug.Log("Assets stored at: " + assetFilePath);
                 DeckCreate();
                 GameObject.FindWithTag("TitleUI").GetComponent<TitleBehavior>().ChooseSave();
             }

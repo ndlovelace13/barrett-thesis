@@ -44,8 +44,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        moveDirection = direction.forward * verticalInput + direction.right * horizontalInput;
-        rb.AddForce(moveDirection.normalized * playerSpeed * 10, ForceMode.Force);
+        if (!GameController.GameControl.lockPlayer)
+        {
+            moveDirection = direction.forward * verticalInput + direction.right * horizontalInput;
+            rb.AddForce(moveDirection.normalized * playerSpeed * 10, ForceMode.Force);
+        }
     }
 
     private void GetInput()

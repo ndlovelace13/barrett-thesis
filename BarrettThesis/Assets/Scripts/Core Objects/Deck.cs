@@ -73,7 +73,7 @@ public class Deck
     Dictionary<string, NoteType> noteTypeDict;
     public List<Flashcard> cards;
     string ogJson;
-    string mediaPath;
+    public string mediaPath;
 
     // Start is called before the first frame update
     void Start()
