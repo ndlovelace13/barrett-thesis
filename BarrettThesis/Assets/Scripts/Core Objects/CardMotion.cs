@@ -29,14 +29,15 @@ public class CardMotion : MonoBehaviour
         Debug.Log("Flipping Card");
         float currentTime = 0f;
 
-        Quaternion startingRot = transform.rotation;
-        Quaternion endingRot = new Quaternion(startingRot.x, startingRot.y + 180f, startingRot.z, startingRot.w);
+        Vector3 startingRot = transform.eulerAngles;
+        Vector3 endingRot = startingRot + 180f * Vector3.up;
 
-        while (currentTime < 1f)
+        while (currentTime < 0.5f)
         {
-            transform.rotation = Quaternion.Lerp(startingRot, endingRot, currentTime / 1f);
+            transform.eulerAngles = Vector3.Lerp(startingRot, endingRot, currentTime / 0.5f);
             yield return new WaitForEndOfFrame();
             currentTime += Time.deltaTime;
         }
+        transform.eulerAngles = endingRot;
     }
 }

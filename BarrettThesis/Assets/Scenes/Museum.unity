@@ -759,6 +759,7 @@ GameObject:
   - component: {fileID: 699736619}
   - component: {fileID: 699736618}
   - component: {fileID: 699736620}
+  - component: {fileID: 699736621}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -831,6 +832,18 @@ MonoBehaviour:
     m_Bits: 128
   grounded: 0
   groundDrag: 5
+--- !u!114 &699736621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699736617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7a783db429324144857b9695eb53c76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &748062973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,6 +1203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fbf774bcaa84bb4fb6a9d69195d8afa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayedCards: []
 --- !u!23 &853208890
 MeshRenderer:
   m_ObjectHideFlags: 0

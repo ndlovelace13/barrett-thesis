@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Archives : MonoBehaviour
+public class Archives : Interactable
 {
     GameObject player;
     ObjectPool cardPool;
@@ -21,13 +21,8 @@ public class Archives : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && GameController.GameControl.gameMode == GameMode.DEFAULT)
-        {
-            GameController.GameControl.lockPlayer = true;
-            currentIndex = 0;
-            GameController.GameControl.gameMode = GameMode.ARCHIVE;
-            StartCoroutine(ArchiveCam());
-        }
+        if (Input.GetKeyDown(KeyCode.E))
+            Interact();
         if (GameController.GameControl.gameMode == GameMode.ARCHIVE)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -45,7 +40,16 @@ public class Archives : MonoBehaviour
         }
 
     }
-    
+
+    public override void Interact()
+    {
+        base.Interact();
+        GameController.GameControl.lockPlayer = true;
+        currentIndex = 0;
+        GameController.GameControl.gameMode = GameMode.ARCHIVE;
+        StartCoroutine(ArchiveCam());
+    }
+
     public void cardIncrement(int indexMod)
     {
         //check whether index is within bounds
