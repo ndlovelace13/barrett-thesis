@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//all possible gamemodes, always should have one active
+public enum GameMode
+{
+    DEFAULT,
+    ARCHIVE
+}
+
 public class GameController : MonoBehaviour
 {
     //game controller obj
@@ -12,6 +20,8 @@ public class GameController : MonoBehaviour
 
     public bool testingMode = false;
     public bool lockPlayer = false;
+
+    public GameMode gameMode = GameMode.DEFAULT;
     
 
     // Start is called before the first frame update
@@ -32,8 +42,15 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        GameControl = this;
-        DontDestroyOnLoad(gameObject);
-        SaveData = new SaveData();
+        if (GameControl == null)
+        {
+            GameControl = this;
+            DontDestroyOnLoad(gameObject);
+            SaveData = new SaveData();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
