@@ -21,17 +21,8 @@ public class Archives : Interactable
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-            Interact();
         if (GameController.GameControl.gameMode == GameMode.ARCHIVE)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                GameController.GameControl.lockPlayer = false;
-                GameController.GameControl.gameMode = GameMode.DEFAULT;
-                StartCoroutine(RemoveCard(displayedCards));
-            }
-
             //get archive increment
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
                 cardIncrement(-indexModAmount);
@@ -48,6 +39,19 @@ public class Archives : Interactable
         currentIndex = 0;
         GameController.GameControl.gameMode = GameMode.ARCHIVE;
         StartCoroutine(ArchiveCam());
+    }
+
+    public override void CancelInteract()
+    {
+        base.CancelInteract();
+        GameController.GameControl.lockPlayer = false;
+        GameController.GameControl.gameMode = GameMode.DEFAULT;
+        StartCoroutine(RemoveCard(displayedCards));
+    }
+
+    public override string GetPrompt()
+    {
+        return "Press E to Check the Archives";
     }
 
     public void cardIncrement(int indexMod)
