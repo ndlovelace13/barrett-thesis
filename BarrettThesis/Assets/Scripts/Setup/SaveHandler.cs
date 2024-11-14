@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public class SaveHandler : MonoBehaviour
 {
@@ -45,6 +46,8 @@ public class SaveHandler : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Keypad9))
                 DeleteGame();
+            if (Input.GetKey(KeyCode.Keypad7))
+                SaveGame();
         }
     }
 
@@ -54,6 +57,8 @@ public class SaveHandler : MonoBehaviour
         {
             if (GameController.SaveData == null)
                 GameController.SaveData = new SaveData();
+            //update the save time
+            GameController.SaveData.saveTime = DateTime.UtcNow.ToString();
             string playerData = JsonUtility.ToJson(GameController.SaveData);
             File.WriteAllText(saveFilePath, playerData);
 

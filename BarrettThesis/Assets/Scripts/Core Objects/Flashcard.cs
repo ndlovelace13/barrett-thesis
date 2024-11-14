@@ -13,7 +13,10 @@ public class Flashcard
     public string noteId;
 
     //progression elements
-    
+    public bool discovered;
+    public int masteryLevel;
+    public int masteryPoints;
+    public int daysTilNext;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +59,12 @@ public class Flashcard
             fields.Add(finalField);
             i++;
         }
+
+        //set initial progression elements
+        masteryLevel = 0;
+        masteryPoints = 0;
+        discovered = false;
+        daysTilNext = 0;
         
         Debug.Log("Card created: " + imgFields.Count + " " + audioFields.Count);
     }
