@@ -84,6 +84,7 @@ public class SaveSlot : MonoBehaviour
             SaveHandler.SaveSystem.SaveGame();
             SceneManager.LoadScene("Museum");
         }
+        GameController.GameControl.GameStart();
     }
 
 

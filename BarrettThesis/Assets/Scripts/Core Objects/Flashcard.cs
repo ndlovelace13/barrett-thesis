@@ -17,6 +17,12 @@ public class Flashcard
     public int masteryLevel;
     public int masteryPoints;
     public int daysTilNext;
+    public int prevInterval;
+    public int correctCount;
+    public int missedCount;
+
+    //tracker for frequently confused
+    public List<int> confusedIndexes;
 
     // Start is called before the first frame update
     void Start()
@@ -64,7 +70,11 @@ public class Flashcard
         masteryLevel = 0;
         masteryPoints = 0;
         discovered = false;
+        prevInterval = 0;
         daysTilNext = 0;
+        correctCount = 0;
+        missedCount = 0;
+        confusedIndexes = new List<int>();
         
         Debug.Log("Card created: " + imgFields.Count + " " + audioFields.Count);
     }
@@ -75,5 +85,26 @@ public class Flashcard
         {
             Debug.Log(field);
         }
+    }
+
+    public void Correct()
+    {
+        correctCount++;
+        //increment the mastery points
+
+        //increase the days til next 
+        daysTilNext = Mathf.CeilToInt(prevInterval * 1.5f);
+        prevInterval = daysTilNext;
+    }
+
+    public void Missed(int index)
+    {
+        missedCount++;
+        //decrement the mastery points
+
+        //reset the days til next
+        daysTilNext = 0;
+
+        //readd to cardqueue?
     }
 }

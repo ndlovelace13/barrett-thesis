@@ -8,7 +8,8 @@ using UnityEngine;
 public enum GameMode
 {
     DEFAULT,
-    ARCHIVE
+    ARCHIVE,
+    MATCHING
 }
 
 public class GameController : MonoBehaviour
@@ -21,6 +22,8 @@ public class GameController : MonoBehaviour
 
     public bool testingMode = false;
     public bool lockPlayer = false;
+
+    public int habitRange = 2; //in hours
 
     public GameMode gameMode = GameMode.DEFAULT;
     
@@ -53,5 +56,10 @@ public class GameController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void GameStart()
+    {
+        DeckManager.DeckManage.DateCheck();
     }
 }
