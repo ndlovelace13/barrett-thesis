@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     //states
     public bool grounded;
     public float groundDrag;
+    public bool moving;
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +48,10 @@ public class PlayerMovement : MonoBehaviour
         if (!GameController.GameControl.lockPlayer)
         {
             moveDirection = direction.forward * verticalInput + direction.right * horizontalInput;
+            if (moveDirection.magnitude > 0)
+                moving = true;
+            else
+                moving = false;
             rb.AddForce(moveDirection.normalized * playerSpeed * 10, ForceMode.Force);
         }
     }

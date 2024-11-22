@@ -258,6 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testingMode: 0
   lockPlayer: 0
+  habitRange: 2
   gameMode: 0
 --- !u!4 &173715470
 Transform:
@@ -736,6 +737,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1348105635}
+  - {fileID: 2075304431}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &460870618
@@ -2940,6 +2942,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1940602364}
   m_CullTransparentMesh: 1
+--- !u!1 &2075304430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2075304431}
+  - component: {fileID: 2075304432}
+  m_Layer: 0
+  m_Name: DeckManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2075304431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075304430}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 618.8292, y: 391.3028, z: -36.805756}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 289863558}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2075304432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075304430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289107f9d996d4b4391a7c5ff2de614b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardQueue: []
 --- !u!1001 &1703033544362799679
 PrefabInstance:
   m_ObjectHideFlags: 0
