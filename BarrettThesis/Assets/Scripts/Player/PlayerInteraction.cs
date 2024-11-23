@@ -20,7 +20,7 @@ public class PlayerInteraction : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!isInteracting)
+        if (!isInteracting && GameController.GameControl.gameMode == GameMode.DEFAULT)
         {
             //create a raycast, highlight any interactables that are within range
             RaycastHit hit;

@@ -8,13 +8,15 @@ public class ChecklistMotion : MonoBehaviour
     [SerializeField] PlayerMovement player;
 
     float currentY = 0f;
-    float maxY = 0.2f;
-    float minY = -0.2f;
+    float maxY = 0.15f;
+    float minY = -0.15f;
     bool up = true;
     bool inspecting = false;
+    bool disabled = false;
 
     [SerializeField] Transform startingPos;
     [SerializeField] Transform inspectPos;
+    [SerializeField] Transform offScreen;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +27,7 @@ public class ChecklistMotion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.moving && inspecting)
+        if (player.moving && !inspecting)
         {
             if (up)
             {
@@ -55,28 +57,118 @@ public class ChecklistMotion : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !disabled)
         {
-            if (inspecting)
-            {
-                StartCoroutine(Uninspect());
-            }
-            else
-            {
-                StartCoroutine(Inspect());
-            }
-            inspecting = !inspecting;
+            InspectHandler();
         }
+
+        DisableHandler();
+    }
+
+    private void InspectHandler()
+    {
+        StopAllCoroutines();
+        if (inspecting)
+        {
+            StartCoroutine(Uninspect());
+            GameController.GameControl.gameMode = GameMode.DEFAULT;
+        }
+        else
+        {
+            StartCoroutine(Inspect());
+            GameController.GameControl.gameMode = GameMode.INSPECTING;
+        }
+        inspecting = !inspecting;
+    }
+
+    private void DisableHandler()
+    {
+        if (GameController.GameControl.gameMode == GameMode.DEFAULT)
+        {
+            //lerp checklist back to its normal place
+            if (disabled)
+            {
+                disabled = false;
+                StartCoroutine(Enable());
+            }
+        }
+        else if (GameController.GameControl.gameMode != GameMode.INSPECTING)
+        {
+            //lerp checklist down and don't render it
+            if (!disabled)
+            {
+                StopAllCoroutines();
+                disabled = true;
+                StartCoroutine(Disable());
+            }
+        }
+        
+
     }
 
     IEnumerator Inspect()
     {
-        
+        //Vector3 startingPos = transform.position;
+        //Quaternion startingRot = transform.rotation;
+
+        while (transform.position != inspectPos.position && transform.rotation != inspectPos.rotation)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, inspectPos.position, 2 * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, inspectPos.rotation, 100 * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+        transform.position = inspectPos.position;
+        transform.rotation = inspectPos.rotation;
+
         yield return null;
     }
 
     IEnumerator Uninspect()
     {
+        while (transform.position != startingPos.position && transform.rotation != startingPos.rotation)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, startingPos.position, 2 * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, startingPos.rotation, 100 * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+        transform.position = startingPos.position;
+        transform.rotation = startingPos.rotation;
+
+        yield return null;
+    }
+
+    IEnumerator Disable()
+    {
+        Vector3 startLoc = transform.position;
+        float timer = 0f;
+        while (timer < 1f)
+        {
+            transform.position = Vector3.Lerp(startLoc, offScreen.position, timer);
+            yield return new WaitForEndOfFrame();
+            timer += Time.deltaTime;
+            if (!disabled)
+                yield break;
+        }
+        transform.position = offScreen.position;
+        GetComponent<MeshRenderer>().enabled = false;
+        yield return null;
+        
+    }
+
+    IEnumerator Enable()
+    {
+        Vector3 startLoc = transform.position;
+        GetComponent<MeshRenderer>().enabled = true;
+        float timer = 0f;
+        while (timer < .25f)
+        {
+            transform.position = Vector3.Lerp(startLoc, startingPos.position, timer / .25f);
+            yield return new WaitForEndOfFrame();
+            timer += Time.deltaTime;
+            if (disabled)
+                yield break;
+        }
+        transform.position = startingPos.position;
         yield return null;
     }
 }

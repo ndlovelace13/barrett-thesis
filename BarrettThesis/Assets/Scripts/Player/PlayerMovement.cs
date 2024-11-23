@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask ground;
 
     //states
-    public bool grounded;
+    public bool grounded = true;
     public float groundDrag;
     public bool moving;
 
@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, ground);
+        //grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, ground);
 
         GetInput();
         SpeedLimit();
@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         if (!GameController.GameControl.lockPlayer)
         {
             moveDirection = direction.forward * verticalInput + direction.right * horizontalInput;
-            if (moveDirection.magnitude > 0)
+            if (rb.velocity.magnitude > 1)
                 moving = true;
             else
                 moving = false;

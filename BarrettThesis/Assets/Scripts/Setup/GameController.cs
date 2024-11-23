@@ -9,7 +9,8 @@ public enum GameMode
 {
     DEFAULT,
     ARCHIVE,
-    MATCHING
+    MATCHING,
+    INSPECTING
 }
 
 public class GameController : MonoBehaviour

@@ -5,8 +5,12 @@ using UnityEngine;
 public class Archives : Interactable
 {
     GameObject player;
+    PlayerCam cam;
     ObjectPool cardPool;
     public List<GameObject> displayedCards;
+
+    //cam control
+    public Transform camControl;
 
     int currentIndex;
     int indexModAmount = 1;
@@ -14,6 +18,7 @@ public class Archives : Interactable
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        cam = Camera.main.GetComponent<PlayerCam>();
         cardPool = GameObject.FindWithTag("CardPool").GetComponent<ObjectPool>();
         displayedCards = new List<GameObject>();
     }
@@ -45,6 +50,7 @@ public class Archives : Interactable
     {
         base.CancelInteract();
         GameController.GameControl.lockPlayer = false;
+        camControl.rotation = Camera.main.transform.rotation;
         GameController.GameControl.gameMode = GameMode.DEFAULT;
         StartCoroutine(RemoveCard(displayedCards));
     }
@@ -72,16 +78,19 @@ public class Archives : Interactable
     IEnumerator ArchiveCam()
     {
         float currentTime = 0f;
-        Quaternion startingRot = Camera.main.transform.rotation;
-        Quaternion endingRot = new Quaternion(0f, startingRot.y, 0f, startingRot.w);
+        float camStart = cam.xRotation;
+        //Quaternion startingRot = Camera.main.transform.rotation;
+        //Quaternion endingRot = new Quaternion(0f, startingRot.y, 0f, startingRot.w);
         //lerp the camera to straight on
         while (currentTime < 0.3f)
         {
-            Camera.main.transform.rotation = Quaternion.Lerp(startingRot, endingRot, currentTime / 0.3f);
+            cam.xRotation = Mathf.Lerp(camStart, 0, currentTime / 0.3f);
+            //Camera.main.transform.rotation = Quaternion.Lerp(startingRot, endingRot, currentTime / 0.3f);
             yield return new WaitForEndOfFrame();
             currentTime += Time.deltaTime;
         }
-        Camera.main.transform.rotation = endingRot;
+        //Camera.main.transform.rotation = endingRot;
+        cam.xRotation = 0f;
 
         StartCoroutine(SpawnCard(currentIndex, indexModAmount));
         yield return null;

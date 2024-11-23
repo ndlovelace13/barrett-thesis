@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class DeckManager : MonoBehaviour
 {
     public static DeckManager DeckManage;
-
-    public List<Flashcard> cardQueue;
 
     // Start is called before the first frame update
     void Start()
@@ -31,16 +30,15 @@ public class DeckManager : MonoBehaviour
     public void AssignTasks()
     {
         //create a new cardQueue
-        cardQueue = new List<Flashcard>();
 
         //retrieve the new cards to add to the mix
         int startIndex = GameController.SaveData.newestIndex;
-        for (int i = 0; i < GameController.SaveData.newPerDay; i++)
+        for (int i = 0; i < GameController.SaveData.newPerDay - GameController.SaveData.newQueue.Count; i++)
         {
-            cardQueue.Add(GameController.SaveData.currentDeck.cards[startIndex + i]);
+            GameController.SaveData.newQueue.Add(GameController.SaveData.currentDeck.cards[startIndex + i]);
         }
         GameController.SaveData.newestIndex = startIndex + GameController.SaveData.newPerDay - 1;
-        Debug.Log(cardQueue.Count + " new cards added to queue");
+        Debug.Log(GameController.SaveData.newQueue.Count + " new cards added to queue");
 
         int counter = 0;
         //retrieve all cards that are meant to appear (daysTilNext <= 1)
@@ -48,16 +46,18 @@ public class DeckManager : MonoBehaviour
         {
             if (card.discovered && card.daysTilNext <= 1)
             {
-                cardQueue.Add(card);
+                GameController.SaveData.cardQueue.Add(card);
                 card.daysTilNext = 0;
                 counter++;
             }
             else
                 card.daysTilNext--;
         }
+
+        GameController.SaveData.cardQueue = GameController.SaveData.cardQueue.Distinct().ToList();
         Debug.Log(counter + " old cards added to queue");
 
-        Debug.Log(cardQueue.Count + " total queue");
+        //Debug.Log(cardQueue.Count + " total queue");
 
         //update all progression variables
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(24).ToString();

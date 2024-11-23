@@ -17,6 +17,9 @@ public class SaveData
     public int completeDays;
     public int dayIndex = 0;
 
+    public List<Flashcard> newQueue;
+    public List<Flashcard> cardQueue;
+
     public bool tasksComplete;
 
     //settings
@@ -31,6 +34,7 @@ public class SaveData
     {
         newestIndex = 0;
         dayIndex = 0;
+
         tasksComplete = false;
         balance = 0;
         playerName = "Hugh Mungus";
@@ -38,6 +42,9 @@ public class SaveData
         saveTime = DateTime.UtcNow.ToString();
         refreshTime = DateTime.UtcNow.AddHours(24).ToString();
         nextDayIndex = new List<int>();
+
+        newQueue = new List<Flashcard>();
+        cardQueue = new List<Flashcard>();
     }
 
     // Start is called before the first frame update

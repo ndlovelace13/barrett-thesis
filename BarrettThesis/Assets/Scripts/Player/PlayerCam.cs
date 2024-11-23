@@ -9,8 +9,8 @@ public class PlayerCam : MonoBehaviour
 
     public Transform direction;
 
-    public float xRotation;
-    public float yRotation;
+    public float xRotation = 0;
+    public float yRotation = 0;
 
 
     // Start is called before the first frame update
@@ -19,6 +19,8 @@ public class PlayerCam : MonoBehaviour
         //lock the cursor & hide it
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        xRotation = 0f;
+        yRotation = 0f;
     }
 
     // Update is called once per frame
@@ -34,8 +36,8 @@ public class PlayerCam : MonoBehaviour
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-            direction.rotation = Quaternion.Euler(0, yRotation, 0);
         }
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        direction.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 }
