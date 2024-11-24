@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TitleUI
   - CardPool
+  - Checklist
   layers:
   - Default
   - TransparentFX

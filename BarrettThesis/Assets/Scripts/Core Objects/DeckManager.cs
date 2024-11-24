@@ -63,6 +63,9 @@ public class DeckManager : MonoBehaviour
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(24).ToString();
         GameController.SaveData.tasksComplete = false;
         GameController.SaveData.dayIndex++;
+
+        //instantiate the tasks and checklist here
+        GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskMenu();
     }
 
     //call this when the player completes their tasks for the day (when the museum opens)
@@ -121,8 +124,11 @@ public class DeckManager : MonoBehaviour
                 //allow the user to continue their progress
 
                 //if this is the first day, assignTasks for the first time
-                if (GameController.SaveData.dayIndex == 0)
+                if (GameController.SaveData.dayIndex == 0 || GameController.SaveData.newQueue == null)
                 {
+                    GameController.SaveData.dayIndex = 0;
+                    GameController.SaveData.newQueue = new List<Flashcard>();
+                    GameController.SaveData.cardQueue = new List<Flashcard>();
                     AssignTasks();
                 }
             }

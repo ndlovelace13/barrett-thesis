@@ -11,6 +11,8 @@ public class Matching : Interactable
     int cardRatio;
 
     public int cardsPerRound = 5;
+    bool newCard = false;
+    List<Flashcard> flashcards;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +38,7 @@ public class Matching : Interactable
 
     public override void CancelInteract()
     {
+        ExitCards();
         base.CancelInteract();
         GameController.GameControl.lockPlayer = false;
         GameController.GameControl.gameMode = GameMode.DEFAULT;
@@ -50,34 +53,67 @@ public class Matching : Interactable
             return "Press E for Extra Practice";
     }
 
-    IEnumerator MainGameplay()
+    public void CardSelect()
     {
+        Debug.Log("Selecting Cards");
         cardRatio = GameController.SaveData.cardQueue.Count / GameController.SaveData.newQueue.Count;
         //store the new variables
 
-        List<Flashcard> flashcards = new List<Flashcard>();
         //if must decide which card to present
         if (GameController.SaveData.newQueue.Count > 0 && GameController.SaveData.cardQueue.Count > 0)
         {
             if (cardsCorrect > newCardsCorrect * GameController.SaveData.newQueue.Count)
-                SelectQueue();
+                flashcards = SelectQueue();
             else
-                NewQueue();
+                flashcards = NewQueue();
         }
         //if no old cards remain
         else if (GameController.SaveData.cardQueue.Count == 0 && GameController.SaveData.newQueue.Count > 0)
         {
-            NewQueue();
+            flashcards = NewQueue();
         }
         //if no new cards remain
         else if (GameController.SaveData.cardQueue.Count > 0)
         {
-            SelectQueue();
+            flashcards = SelectQueue();
         }
+        Debug.Log(flashcards.Count + " cards selected");
+    }
 
+    public void ExitCards()
+    {
+        Debug.Log("Replacing Cards");
+        if (flashcards.Count > 0)
+        {
+            if (newCard)
+            {
+                GameController.SaveData.newQueue.Insert(0, flashcards[0]);
+            }
+            else
+            {
+                GameController.SaveData.cardQueue = GameController.SaveData.cardQueue.Union(flashcards).ToList();
+            }
+        }
+        flashcards.Clear();
+    }
+
+    IEnumerator MainGameplay()
+    {
+        flashcards = new List<Flashcard>();
+        while (GameController.GameControl.gameMode == GameMode.MATCHING)
+        {
+            if (flashcards.Count == 0)
+            {
+                //fill the wall with new cards
+                CardSelect();
+            }
+            else
+            {
+                //check for matches
+            }
+            yield return new WaitForEndOfFrame();
+        }
         
-        //randomly select cards from current queue
-        yield return null;
     }
 
     private List<Flashcard> NewQueue()
@@ -85,6 +121,7 @@ public class Matching : Interactable
         List<Flashcard> selectedCards = new List<Flashcard>();
         selectedCards.Add(GameController.SaveData.newQueue[0]);
         GameController.SaveData.newQueue.RemoveAt(0);
+        newCard = true;
         return selectedCards;
     }
 
@@ -94,7 +131,7 @@ public class Matching : Interactable
         int chosen = 0;
         int index = 0;
 
-        while (GameController.SaveData.cardQueue.Count > 0 && chosen <  cardsPerRound)
+        while (GameController.SaveData.cardQueue.Count > 0 && chosen < cardsPerRound)
         {
             index = Random.Range(0, GameController.SaveData.cardQueue.Count);
             Flashcard selected = GameController.SaveData.cardQueue[index];
@@ -102,11 +139,9 @@ public class Matching : Interactable
             GameController.SaveData.cardQueue.RemoveAt(index);
             chosen++;
         }
-
+        newCard = false;
         return selectedCards;
     }
-
-    private void 
 }
 
     

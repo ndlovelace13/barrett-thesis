@@ -19,6 +19,7 @@ public class SaveData
 
     public List<Flashcard> newQueue;
     public List<Flashcard> cardQueue;
+    public List<TaskType> taskMenu;
 
     public bool tasksComplete;
 
@@ -28,7 +29,6 @@ public class SaveData
 
     public string saveTime;
     public string refreshTime;
-    public List<int> nextDayIndex;
 
     public SaveData()
     {
@@ -41,7 +41,6 @@ public class SaveData
         completeDays = 0;
         saveTime = DateTime.UtcNow.ToString();
         refreshTime = DateTime.UtcNow.AddHours(24).ToString();
-        nextDayIndex = new List<int>();
 
         newQueue = new List<Flashcard>();
         cardQueue = new List<Flashcard>();
