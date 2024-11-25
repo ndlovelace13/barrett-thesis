@@ -75,7 +75,7 @@ public class SaveSlot : MonoBehaviour
         PlayerPrefs.SetInt("recentSave", saveIndex);
         SaveHandler.SaveSystem.SetSaveFile();
         if (SaveHandler.SaveSystem.loading)
-        { 
+        {
             SaveHandler.SaveSystem.LoadGame();
             SceneManager.LoadScene("Museum");
         }
@@ -84,7 +84,6 @@ public class SaveSlot : MonoBehaviour
             SaveHandler.SaveSystem.SaveGame();
             SceneManager.LoadScene("Museum");
         }
-        GameController.GameControl.GameStart();
     }
 
 

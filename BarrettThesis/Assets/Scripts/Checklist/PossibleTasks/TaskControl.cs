@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//[CreateAssetMenu(fileName = "New Card", menuName = "Custom/TaskControl")]
 public class TaskControl : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public string taskDescription;
+    public int tasksComplete;
+    public int tasksTotal;
+    // Start is called before the first frame update
+    public TaskControl()
     {
-        
+
     }
 
     public virtual void UpdateTask()

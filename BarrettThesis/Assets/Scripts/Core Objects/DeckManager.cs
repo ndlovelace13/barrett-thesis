@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class DeckManager : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class DeckManager : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         DeckManage = this;
+
     }
 
     //call this when the player opens on a new day
@@ -56,6 +58,7 @@ public class DeckManager : MonoBehaviour
 
         GameController.SaveData.cardQueue = GameController.SaveData.cardQueue.Distinct().ToList();
         Debug.Log(counter + " old cards added to queue");
+        GameController.SaveData.cardCount = GameController.SaveData.cardQueue.Count + 15;
 
         //Debug.Log(cardQueue.Count + " total queue");
 
@@ -65,7 +68,10 @@ public class DeckManager : MonoBehaviour
         GameController.SaveData.dayIndex++;
 
         //instantiate the tasks and checklist here
-        GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskMenu();
+        GameObject test = GameObject.FindWithTag("Checklist");
+        Debug.Log(SceneManager.GetActiveScene().name);
+
+        test.GetComponent<ChecklistDisplay>().TaskMenu();
     }
 
     //call this when the player completes their tasks for the day (when the museum opens)

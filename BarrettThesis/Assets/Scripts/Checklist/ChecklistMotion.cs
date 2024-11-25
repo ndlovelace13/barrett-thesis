@@ -157,6 +157,7 @@ public class ChecklistMotion : MonoBehaviour
 
     IEnumerator Enable()
     {
+        GetComponent<ChecklistDisplay>().TaskUpdate();
         Vector3 startLoc = transform.position;
         GetComponent<MeshRenderer>().enabled = true;
         float timer = 0f;
