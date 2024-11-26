@@ -12,6 +12,9 @@ public class NoteType
     public List<int> front;
     public List<int> back;
 
+    public int matchPromptField = 0;
+    public int matchAnswerField = 1;
+
     //instantiate a NoteType obj to only store the necessary information from the parsed data for our purposes
     public NoteType(JSONNode coreModel)
     {

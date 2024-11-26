@@ -35,7 +35,8 @@ public class DeckManager : MonoBehaviour
 
         //retrieve the new cards to add to the mix
         int startIndex = GameController.SaveData.newestIndex;
-        for (int i = 0; i < GameController.SaveData.newPerDay - GameController.SaveData.newQueue.Count; i++)
+        int currentNew = GameController.SaveData.newQueue.Count;
+        for (int i = 0; i < GameController.SaveData.newPerDay - currentNew; i++)
         {
             GameController.SaveData.newQueue.Add(GameController.SaveData.currentDeck.cards[startIndex + i]);
         }
@@ -97,11 +98,13 @@ public class DeckManager : MonoBehaviour
             if (hourCount < -24)
             {
                 //reset streak
+                Debug.Log("STATUS: tasks completed, but streak reset, assigning new tasks");
                 AssignTasks();
             }
             //case for login after museum has reclosed, time for new tasks
             else if (hourCount < 0)
             {
+                Debug.Log("STATUS: streak upheld, assigning new tasks");
                 DateTime completeTime = refreshTime.AddHours(-8);
                 TimeSpan habitCheck = completeTime - DateTime.UtcNow;
                 //check if login is within 2 hours of the same time yesterday, habit points gained if true
@@ -114,7 +117,7 @@ public class DeckManager : MonoBehaviour
             //case for museum is still open, come back later - set the clock to trigger AssignTasks when museum closes
             else
             {
-
+                Debug.Log("STATUS: museum still open, come back later for new tasks");
             }
         }
         else
@@ -123,20 +126,25 @@ public class DeckManager : MonoBehaviour
             if (hourCount > 0)
             {
                 //reset streak
+                Debug.Log("STATUS: tasks not completed, streak reset, assigning new tasks");
                 AssignTasks();
             }
             else
             {
                 //allow the user to continue their progress
+               
 
                 //if this is the first day, assignTasks for the first time
                 if (GameController.SaveData.dayIndex == 0 || GameController.SaveData.newQueue == null)
                 {
+                    Debug.Log("STATUS: First day tasks being assigned");
                     GameController.SaveData.dayIndex = 0;
                     GameController.SaveData.newQueue = new List<Flashcard>();
                     GameController.SaveData.cardQueue = new List<Flashcard>();
                     AssignTasks();
                 }
+                else
+                    Debug.Log("STATUS: tasks still remain, continue working");
             }
         }
 

@@ -14,6 +14,10 @@ public class Matching : Interactable
     bool newCard = false;
     List<Flashcard> flashcards;
 
+    //pools
+    [SerializeField] ObjectPool promptObjectPool;
+    [SerializeField] ObjectPool answerObjectPool;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +51,7 @@ public class Matching : Interactable
 
     public override string GetPrompt()
     {
-        if (GameController.SaveData.cardQueue.Count > 0)
+        if (GameController.SaveData.cardQueue.Count > 0 || GameController.SaveData.newQueue.Count > 0)
             return "Press E to Start Matching";
         else
             return "Press E for Extra Practice";
@@ -78,6 +82,23 @@ public class Matching : Interactable
             flashcards = SelectQueue();
         }
         Debug.Log(flashcards.Count + " cards selected");
+        ObjectCreation();
+    }
+
+    public void ObjectCreation()
+    {
+        foreach (Flashcard flashcard in flashcards)
+        {
+            //activate the prompt
+            GameObject newPrompt = promptObjectPool.GetPooledObject();
+            newPrompt.SetActive(true);
+            newPrompt.GetComponent<MatchingPrompt>().ActivatePrompt(flashcard);
+
+            //activate the answer
+            GameObject newAnswer = answerObjectPool.GetPooledObject();
+            newAnswer.SetActive(true);
+            newAnswer.GetComponent<MatchingAnswer>().ActivateAnswer(flashcard);
+        }
     }
 
     public void ExitCards()
