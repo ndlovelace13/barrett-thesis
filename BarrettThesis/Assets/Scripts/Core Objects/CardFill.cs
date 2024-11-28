@@ -3,64 +3,45 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.IO;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 using System.Reflection;
 
 public class CardFill : MonoBehaviour
 {
-    Flashcard currentCard;
+    protected Flashcard currentCard;
 
-    [SerializeField] GameObject cardFront;
-    [SerializeField] GameObject cardBack;
+    [SerializeField] protected GameObject cardFront;
+    [SerializeField] protected GameObject cardBack;
 
-    [SerializeField] GameObject textObj;
-    [SerializeField] GameObject imgPlane;
-    [SerializeField] GameObject audioCue;
+    [SerializeField] protected GameObject textObj;
+    [SerializeField] protected GameObject imgPlane;
+    [SerializeField] protected GameObject audioCue;
 
-    AudioSource audioPlayer;
-    List<AudioClip> clipList;
+    protected bool cardAssigned = false;
+    protected string prevNoteId;
 
-    bool cardAssigned = false;
     // Start is called before the first frame update
     void Start()
     {
-        audioPlayer = GetComponent<AudioSource>();
-        clipList = new List<AudioClip>();
+        //audioPlayer = GetComponent<AudioSource>();
+        //clipList = new List<AudioClip>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Alpha1))
-        {
-            if (clipList.Count > 0)
-            {
-                audioPlayer.clip = clipList[0];
-                audioPlayer.Play();
-            }
-        }
-        if (Input.GetKey(KeyCode.Alpha2))
-        {
-            if (clipList.Count > 1)
-            {
-                audioPlayer.clip = clipList[1];
-                audioPlayer.Play();
-            }
-        }
-        if (Input.GetKey(KeyCode.Alpha3))
-        {
-            if (clipList.Count > 2)
-            {
-                audioPlayer.clip = clipList[2];
-                audioPlayer.Play();
-            }
-        }
+
+    }
+
+    public int GetCardID()
+    {
+        return currentCard.cardId;
     }
 
     //for the full card information
-    public void CardAssign(Flashcard newCard)
+    public virtual void CardAssign(Flashcard newCard)
     {
         //assign the card
         currentCard = newCard;
@@ -72,24 +53,32 @@ public class CardFill : MonoBehaviour
         //cardFront.text = currentCard.fields[noteInfo.front[0]];
         //cardBack.text = currentCard.fields[noteInfo.back[0]];
 
-        if (!cardAssigned)
-        {
-            //fill the front
-            FieldFill(cardFront, noteInfo.front);
+        //call the object's FillDecision
+        FillDecision(noteInfo);
 
-            //fill the back
-            FieldFill(cardBack, noteInfo.back);
-        }
-        else
+        cardAssigned = true;
+        prevNoteId = currentCard.noteId;
+    }
+
+    protected virtual void FillDecision(NoteType noteInfo)
+    {
+        if (cardAssigned && prevNoteId.Equals(currentCard.noteId))
         {
+            //fields already set, just need to fill them in
             FieldReplace(cardFront, noteInfo.front);
             FieldReplace(cardBack, noteInfo.back);
         }
-        cardAssigned = true;
+        else
+        {
+            //fill the front
+            FieldFill(cardFront, noteInfo.front);
+            //fill the back
+            FieldFill(cardBack, noteInfo.back);
+        }
     }
 
     //use this to fill initially
-    private void FieldFill(GameObject parent, List<int> indexes)
+    protected void FieldFill(GameObject parent, List<int> indexes)
     {
         foreach (int index in indexes)
         {
@@ -101,11 +90,11 @@ public class CardFill : MonoBehaviour
                 {
                     //load the image into a texture
                     string filePath = GameController.SaveData.currentDeck.mediaPath + currentCard.fields[index];
-                    Debug.Log(filePath);
+                    //Debug.Log(filePath);
                     byte[] fileData = File.ReadAllBytes(filePath);
                     Texture2D tex = new Texture2D(2, 2);
                     tex.LoadImage(fileData);
-                    newImg.GetComponent<MeshRenderer>().material.SetTexture("_MainTex", tex);
+                    newImg.GetComponentInChildren<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
                 }
                 else
                     newImg.SetActive(false);
@@ -115,24 +104,24 @@ public class CardFill : MonoBehaviour
             {
                 //TODO - placeholder text for now
                 GameObject newAudio = Instantiate(audioCue, parent.transform);
-                newAudio.GetComponent<TMP_Text>().text = currentCard.fields[index];
+                //newAudio.GetComponentInChildren<TMP_Text>().text = currentCard.fields[index];
 
                 //load audio
                 string filePath = GameController.SaveData.currentDeck.mediaPath + currentCard.fields[index];
                 Debug.Log(filePath);
-                StartCoroutine(LoadSongCoroutine(filePath));
+                StartCoroutine(LoadSongCoroutine(filePath, newAudio));
             }
             //create text field
             else
             {
                 GameObject newText = Instantiate(textObj, parent.transform);
-                newText.GetComponent<TMP_Text>().text = currentCard.fields[index];
+                newText.GetComponentInChildren<TMP_Text>().text = currentCard.fields[index];
             }
 
         }
     }
 
-    private void FieldReplace(GameObject parent, List<int> indexes)
+    protected void FieldReplace(GameObject parent, List<int> indexes)
     {
         //Debug.Log("child 0: " + parent.transform.GetChild(0).gameObject.name);
         for (int i = 0; i < indexes.Count; i++)
@@ -149,7 +138,7 @@ public class CardFill : MonoBehaviour
                     byte[] fileData = File.ReadAllBytes(filePath);
                     Texture2D tex = new Texture2D(2, 2);
                     tex.LoadImage(fileData);
-                    newImg.GetComponent<MeshRenderer>().material.SetTexture("_MainTex", tex);
+                    newImg.GetComponentInChildren<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
                 }
                 else
                     newImg.SetActive(false);
@@ -159,25 +148,26 @@ public class CardFill : MonoBehaviour
             {
                 //TODO - placeholder text for now
                 GameObject newAudio = parent.transform.GetChild(i).gameObject;
-                newAudio.GetComponent<TMP_Text>().text = currentCard.fields[i];
+                //newAudio.GetComponent<TMP_Text>().text = currentCard.fields[i];
 
                 //load audio
                 string filePath = GameController.SaveData.currentDeck.mediaPath + currentCard.fields[indexes[i]];
-                Debug.Log(filePath);
-                StartCoroutine(LoadSongCoroutine(filePath));
+                //Debug.Log(filePath);
+                StartCoroutine(LoadSongCoroutine(filePath, newAudio));
             }
             //create text field
             else
             {
                 Debug.Log(indexes[i] + " " + currentCard.fields[indexes[i]]);
                 GameObject newText = parent.transform.GetChild(i).gameObject;
-                newText.GetComponent<TMP_Text>().text = currentCard.fields[indexes[i]];
+                newText.GetComponentInChildren<TMP_Text>().text = currentCard.fields[indexes[i]];
             }
 
         }
     }
 
-    IEnumerator LoadSongCoroutine(string path)
+    //need to add the audioclip to the button, event on click
+    IEnumerator LoadSongCoroutine(string path, GameObject button)
     {
         string uri = "file://" + path;
         using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(uri, AudioType.MPEG))
@@ -192,9 +182,11 @@ public class CardFill : MonoBehaviour
             {
                 try
                 {
-                    Debug.Log(path);
+                    //Debug.Log(path);
                     AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
-                    clipList.Add(clip);
+                    button.GetComponentInChildren<AudioSource>().clip = clip;
+                    //clipList.Add(clip);
+                    Debug.Log("audio button properly instantiated");
                 }
                 catch (Exception e)
                 {

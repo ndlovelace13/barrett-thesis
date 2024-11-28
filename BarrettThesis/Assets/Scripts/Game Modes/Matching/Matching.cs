@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class Matching : Interactable
 {
+    GameObject player;
+    PlayerCam cam;
+
     int newCardsCorrect;
     int cardsCorrect;
     int cardRatio;
@@ -18,9 +21,19 @@ public class Matching : Interactable
     [SerializeField] ObjectPool promptObjectPool;
     [SerializeField] ObjectPool answerObjectPool;
 
+    [SerializeField] GameObject promptHolder;
+    [SerializeField] GameObject answerHolder;
+
+    [SerializeField] Transform playerLocation;
+
+    List<GameObject> activePrompts;
+    List<GameObject> activeAnswers;
+
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindWithTag("Player");
+        cam = Camera.main.GetComponent<PlayerCam>();
         cardsCorrect = 0;
         newCardsCorrect = 0;
         cardRatio = 0;
@@ -37,7 +50,7 @@ public class Matching : Interactable
         base.Interact();
         GameController.GameControl.lockPlayer = true;
         GameController.GameControl.gameMode = GameMode.MATCHING;
-        StartCoroutine(MainGameplay());
+        StartCoroutine(MatchingCam());
     }
 
     public override void CancelInteract()
@@ -47,6 +60,35 @@ public class Matching : Interactable
         GameController.GameControl.lockPlayer = false;
         GameController.GameControl.gameMode = GameMode.DEFAULT;
        
+    }
+
+    IEnumerator MatchingCam()
+    {
+        float currentTime = 0f;
+        float duration = 0.5f;
+        float camStartX = cam.xRotation;
+        float camStartY = cam.yRotation;
+
+        Vector3 startingPos = player.transform.position;
+        Quaternion startingRot = player.transform.rotation;
+        //Quaternion startingRot = Camera.main.transform.rotation;
+        //Quaternion endingRot = new Quaternion(0f, startingRot.y, 0f, startingRot.w);
+        //lerp the camera to straight on
+        while (currentTime < duration)
+        {
+            player.transform.position = Vector3.Lerp(startingPos, playerLocation.position, currentTime / duration);
+            player.transform.rotation = Quaternion.Lerp(startingRot, playerLocation.rotation, currentTime / duration);
+            cam.xRotation = Mathf.Lerp(camStartX, 0f, currentTime / duration);
+            cam.yRotation = Mathf.Lerp(camStartY, 180, currentTime / duration);
+            //Camera.main.transform.rotation = Quaternion.Lerp(startingRot, endingRot, currentTime / 0.3f);
+            yield return new WaitForFixedUpdate();
+            currentTime += Time.fixedDeltaTime;
+        }
+        //Camera.main.transform.rotation = endingRot;
+        cam.xRotation = 0f;
+
+        StartCoroutine(MainGameplay());
+        yield return null;
     }
 
     public override string GetPrompt()
@@ -92,12 +134,16 @@ public class Matching : Interactable
             //activate the prompt
             GameObject newPrompt = promptObjectPool.GetPooledObject();
             newPrompt.SetActive(true);
-            newPrompt.GetComponent<MatchingPrompt>().ActivatePrompt(flashcard);
+            newPrompt.GetComponent<MatchingPrompt>().CardAssign(flashcard);
+            newPrompt.transform.SetParent(promptHolder.transform, false);
+            activePrompts.Add(newPrompt);
 
             //activate the answer
             GameObject newAnswer = answerObjectPool.GetPooledObject();
             newAnswer.SetActive(true);
-            newAnswer.GetComponent<MatchingAnswer>().ActivateAnswer(flashcard);
+            newAnswer.GetComponent<MatchingAnswer>().CardAssign(flashcard);
+            newAnswer.transform.SetParent(answerHolder.transform, false);
+            activeAnswers.Add(newAnswer);
         }
     }
 
@@ -115,12 +161,23 @@ public class Matching : Interactable
                 GameController.SaveData.cardQueue = GameController.SaveData.cardQueue.Union(flashcards).ToList();
             }
         }
+        for (int i = 0; i < activeAnswers.Count; i++)
+        {
+            activePrompts[i].transform.SetParent(null);
+            activePrompts[i].SetActive(false);
+            activeAnswers[i].transform.SetParent(null);
+            activeAnswers[i].SetActive(false);
+        }
         flashcards.Clear();
     }
 
     IEnumerator MainGameplay()
     {
         flashcards = new List<Flashcard>();
+        activePrompts = new List<GameObject>();
+        activeAnswers = new List<GameObject>();
+        StartCoroutine(MatchCheck());
+
         while (GameController.GameControl.gameMode == GameMode.MATCHING)
         {
             if (flashcards.Count == 0)
@@ -131,10 +188,71 @@ public class Matching : Interactable
             else
             {
                 //check for matches
+
             }
             yield return new WaitForEndOfFrame();
         }
         
+    }
+
+    IEnumerator MatchCheck()
+    {
+        while (GameController.GameControl.gameMode == GameMode.MATCHING)
+        {
+            if ((activePrompts.Count > 0) && (activeAnswers.Count > 0))
+            {
+                GameObject selectedPrompt = null;
+                GameObject selectedAnswer = null;
+                foreach (var prompt in activePrompts)
+                {
+                    if (prompt.GetComponent<MatchingPrompt>().selected)
+                    {
+                        selectedPrompt = prompt;
+                        break;
+                    }
+                }
+                foreach (var prompt in activeAnswers)
+                {
+                    if (prompt.GetComponent<MatchingAnswer>().selected)
+                    {
+                        selectedAnswer = prompt;
+                        break;
+                    }
+                }
+                if (selectedPrompt != null && selectedAnswer != null)
+                {
+                    CheckEquality(selectedPrompt.GetComponent<MatchingPrompt>(), selectedAnswer.GetComponent<MatchingAnswer>());
+                }
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    private void CheckEquality(MatchingPrompt prompt, MatchingAnswer answer)
+    {
+        if (prompt.GetCardID() != answer.GetCardID())
+        {
+            //call the failure function for the prompt, deselect both cards
+            prompt.Incorrect(answer.GetCardID());
+
+            //deselect both cards
+            prompt.Deselect();
+            answer.Deselect();
+        }
+        else
+        {
+            //call the success function, kill both cards
+            prompt.Correct();
+
+            activePrompts.Remove(prompt.gameObject);
+            activeAnswers.Remove(answer.gameObject);
+
+            prompt.transform.SetParent(null);
+            answer.transform.SetParent(null);
+
+            prompt.gameObject.SetActive(false);
+            answer.gameObject.SetActive(false);
+        }
     }
 
     private List<Flashcard> NewQueue()

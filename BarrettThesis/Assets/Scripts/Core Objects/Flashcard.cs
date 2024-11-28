@@ -95,6 +95,7 @@ public class Flashcard
         //increase the days til next 
         daysTilNext = Mathf.CeilToInt(prevInterval * 1.5f);
         prevInterval = daysTilNext;
+        Debug.Log(cardId + " was Correct");
     }
 
     public void Missed(int index)
@@ -106,5 +107,7 @@ public class Flashcard
         daysTilNext = 0;
 
         //readd to cardqueue?
+
+        Debug.Log(cardId + " was confused with" + index);
     }
 }

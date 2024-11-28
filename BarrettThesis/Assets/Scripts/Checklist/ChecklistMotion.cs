@@ -108,8 +108,8 @@ public class ChecklistMotion : MonoBehaviour
 
     IEnumerator Inspect()
     {
-        //Vector3 startingPos = transform.position;
-        //Quaternion startingRot = transform.rotation;
+        Vector3 startingPos = transform.position;
+        Quaternion startingRot = transform.rotation;
 
         while (transform.position != inspectPos.position && transform.rotation != inspectPos.rotation)
         {
@@ -139,17 +139,17 @@ public class ChecklistMotion : MonoBehaviour
 
     IEnumerator Disable()
     {
-        Vector3 startLoc = transform.position;
+        Vector3 startLoc = transform.localPosition;
         float timer = 0f;
         while (timer < 1f)
         {
-            transform.position = Vector3.Lerp(startLoc, offScreen.position, timer);
+            transform.localPosition = Vector3.Lerp(startLoc, offScreen.localPosition, timer);
             yield return new WaitForEndOfFrame();
             timer += Time.deltaTime;
             if (!disabled)
                 yield break;
         }
-        transform.position = offScreen.position;
+        transform.localPosition = offScreen.localPosition;
         GetComponent<MeshRenderer>().enabled = false;
         yield return null;
         
@@ -158,18 +158,18 @@ public class ChecklistMotion : MonoBehaviour
     IEnumerator Enable()
     {
         GetComponent<ChecklistDisplay>().TaskUpdate();
-        Vector3 startLoc = transform.position;
+        Vector3 startLoc = transform.localPosition;
         GetComponent<MeshRenderer>().enabled = true;
         float timer = 0f;
         while (timer < .25f)
         {
-            transform.position = Vector3.Lerp(startLoc, startingPos.position, timer / .25f);
+            transform.localPosition = Vector3.Lerp(startLoc, startingPos.localPosition, timer / .25f);
             yield return new WaitForEndOfFrame();
             timer += Time.deltaTime;
             if (disabled)
                 yield break;
         }
-        transform.position = startingPos.position;
+        transform.localPosition = startingPos.localPosition;
         yield return null;
     }
 }

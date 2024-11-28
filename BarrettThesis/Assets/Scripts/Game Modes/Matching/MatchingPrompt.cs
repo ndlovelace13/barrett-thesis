@@ -3,20 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MatchingPrompt : MonoBehaviour
+public class MatchingPrompt : CardFill
 {
-    [SerializeField] GameObject cardFront;
-
-    Flashcard associatedCard;
-
-    [SerializeField] GameObject textObj;
-    //[SerializeField] GameObject imgPlane;
-    //[SerializeField] GameObject audioCue;
-
-    bool cardFilled = false;
-    string prevNoteId;
-
-    //AudioSource audioPlayer;
+    public bool selected = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,17 +19,65 @@ public class MatchingPrompt : MonoBehaviour
     }
 
     //called when a card is selected to be displayed to the user
-    public void ActivatePrompt(Flashcard card)
+    protected override void FillDecision(NoteType noteInfo)
     {
-        associatedCard = card;
-        if (cardFilled && prevNoteId.Equals(card.noteId))
-            StartCoroutine(RefillCard());
+        List<int> indices = new List<int>();
+        indices.Add(noteInfo.matchPromptField);
+        if (cardAssigned && prevNoteId.Equals(currentCard.noteId))
+            FieldReplace(cardFront, indices);
         else
-            StartCoroutine(FillCard());
+            FieldFill(cardFront, indices);
+    }
+
+    private void OnMouseOver()
+    {
+        GetComponent<Outline>().enabled = true;
+    }
+
+    private void OnMouseExit()
+    {
+        if (!selected)
+            GetComponent<Outline>().enabled = false;
+    }
+
+    private void OnMouseDown()
+    {
+        if (!selected)
+        {
+            selected = true;
+            GetComponent<Outline>().OutlineColor = Color.green;
+            foreach (var child in transform.parent.GetComponentsInChildren<MatchingPrompt>())
+            {
+                if (child != this)
+                    child.Deselect();
+            }
+        }
+        else
+        {
+            Deselect();
+        }
+        
+    }
+
+    public void Deselect()
+    {
+        selected = false;
+        GetComponent<Outline>().OutlineColor = Color.white;
+        GetComponent<Outline>().enabled = false;
+    }
+
+    public void Incorrect(int wrongAnswer)
+    {
+        currentCard.Missed(wrongAnswer);
+    }
+
+    public void Correct()
+    {
+        currentCard.Correct();
     }
 
     //fill the prompt card with the necessary fields as specified in the deck object
-    IEnumerator FillCard()
+    /*IEnumerator FillCard()
     {
         //destroy existing children
         if (cardFront.transform.childCount > 0)
@@ -64,5 +101,5 @@ public class MatchingPrompt : MonoBehaviour
         newText.GetComponent<TMP_Text>().text = associatedCard.fields[field];
         prevNoteId = associatedCard.noteId;
         yield return null;
-    }
+    }*/
 }
