@@ -11,7 +11,7 @@ public class Matching : Interactable
 
     int newCardsCorrect;
     int cardsCorrect;
-    int cardRatio;
+    float cardRatio;
 
     public int cardsPerRound = 5;
     bool newCard = false;
@@ -101,14 +101,17 @@ public class Matching : Interactable
 
     public void CardSelect()
     {
-        Debug.Log("Selecting Cards");
-        cardRatio = GameController.SaveData.cardQueue.Count / GameController.SaveData.newQueue.Count;
+        Debug.Log("Selecting Cards: " + GameController.SaveData.cardQueue.Count + " Review Cards | " + GameController.SaveData.newQueue.Count + " New Cards");
+        float currentRatio = 0;
+        if (GameController.SaveData.newQueue.Count > 0)
+            currentRatio = GameController.SaveData.cardQueue.Count / GameController.SaveData.newQueue.Count;
+
         //store the new variables
 
         //if must decide which card to present
         if (GameController.SaveData.newQueue.Count > 0 && GameController.SaveData.cardQueue.Count > 0)
         {
-            if (cardsCorrect > newCardsCorrect * GameController.SaveData.newQueue.Count)
+            if (currentRatio >= cardRatio)
                 flashcards = SelectQueue();
             else
                 flashcards = NewQueue();
@@ -123,6 +126,10 @@ public class Matching : Interactable
         {
             flashcards = SelectQueue();
         }
+        else
+        {
+            Debug.Log("No Cards Remain to study");
+        }
         Debug.Log(flashcards.Count + " cards selected");
         ObjectCreation();
     }
@@ -134,17 +141,24 @@ public class Matching : Interactable
             //activate the prompt
             GameObject newPrompt = promptObjectPool.GetPooledObject();
             newPrompt.SetActive(true);
+            newPrompt.transform.position = Vector3.zero;
             newPrompt.GetComponent<MatchingPrompt>().CardAssign(flashcard);
             newPrompt.transform.SetParent(promptHolder.transform, false);
             activePrompts.Add(newPrompt);
+            newPrompt.GetComponent<MatchingPrompt>().newCard = newCard;
 
             //activate the answer
             GameObject newAnswer = answerObjectPool.GetPooledObject();
             newAnswer.SetActive(true);
+            newAnswer.transform.position = Vector3.zero;
+            newAnswer.transform.rotation = Quaternion.Euler(0, 180, 0);
             newAnswer.GetComponent<MatchingAnswer>().CardAssign(flashcard);
             newAnswer.transform.SetParent(answerHolder.transform, false);
             activeAnswers.Add(newAnswer);
         }
+        promptHolder.GetComponent<CardArrange>().SpaceCards();
+        answerHolder.GetComponent<CardArrange>().SpaceCards();
+        Debug.Log(flashcards.Count + " prompts and answers created");
     }
 
     public void ExitCards()
@@ -176,23 +190,12 @@ public class Matching : Interactable
         flashcards = new List<Flashcard>();
         activePrompts = new List<GameObject>();
         activeAnswers = new List<GameObject>();
+        if (GameController.SaveData.newQueue.Count > 0)
+            cardRatio = (GameController.SaveData.newQueue.Count + GameController.SaveData.cardQueue.Count) / GameController.SaveData.newQueue.Count;
+        Debug.Log("OG ratio: " + cardRatio);
+        CardSelect();
         StartCoroutine(MatchCheck());
-
-        while (GameController.GameControl.gameMode == GameMode.MATCHING)
-        {
-            if (flashcards.Count == 0)
-            {
-                //fill the wall with new cards
-                CardSelect();
-            }
-            else
-            {
-                //check for matches
-
-            }
-            yield return new WaitForEndOfFrame();
-        }
-        
+        yield return null;
     }
 
     IEnumerator MatchCheck()
@@ -222,6 +225,13 @@ public class Matching : Interactable
                 if (selectedPrompt != null && selectedAnswer != null)
                 {
                     CheckEquality(selectedPrompt.GetComponent<MatchingPrompt>(), selectedAnswer.GetComponent<MatchingAnswer>());
+                    if (flashcards.Count <= 0)
+                        CardSelect();
+                    else
+                    {
+                        promptHolder.GetComponent<CardArrange>().SpaceCards();
+                        answerHolder.GetComponent<CardArrange>().SpaceCards();
+                    }
                 }
             }
             yield return new WaitForEndOfFrame();
@@ -230,20 +240,25 @@ public class Matching : Interactable
 
     private void CheckEquality(MatchingPrompt prompt, MatchingAnswer answer)
     {
+        //deselect both cards
+        prompt.Deselect();
+        answer.Deselect();
+
         if (prompt.GetCardID() != answer.GetCardID())
         {
+
             //call the failure function for the prompt, deselect both cards
             prompt.Incorrect(answer.GetCardID());
 
-            //deselect both cards
-            prompt.Deselect();
-            answer.Deselect();
+            
         }
         else
         {
+
             //call the success function, kill both cards
             prompt.Correct();
 
+            flashcards.Remove(prompt.GetFlashcard());
             activePrompts.Remove(prompt.gameObject);
             activeAnswers.Remove(answer.gameObject);
 
@@ -252,6 +267,12 @@ public class Matching : Interactable
 
             prompt.gameObject.SetActive(false);
             answer.gameObject.SetActive(false);
+
+            //increment counters
+            if (newCard)
+                newCardsCorrect++;
+            else
+                cardsCorrect++;
         }
     }
 

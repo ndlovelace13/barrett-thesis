@@ -6,6 +6,7 @@ using UnityEngine;
 public class MatchingPrompt : CardFill
 {
     public bool selected = false;
+    public bool newCard = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -68,11 +69,21 @@ public class MatchingPrompt : CardFill
 
     public void Incorrect(int wrongAnswer)
     {
+        //readd the card to queue if wrong, must check if the player comprehends after a mistake
+        if (!newCard)
+        {
+            GameController.SaveData.cardQueue.Add(currentCard);
+        }
         currentCard.Missed(wrongAnswer);
     }
 
     public void Correct()
     {
+        //if the card is new, add the card to the regular cardqueue on success
+        if (newCard)
+        {
+            GameController.SaveData.cardQueue.Add(currentCard);
+        }
         currentCard.Correct();
     }
 

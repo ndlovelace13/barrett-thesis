@@ -132,11 +132,12 @@ public class MainParser : MonoBehaviour
         //parse each notecard in the deck and create an associated flashcard
         foreach (var note in jsonNode.Values)
         {
-            Flashcard newNote = new Flashcard(note);
+            Flashcard newNote = new Flashcard(note, GameController.SaveData.cardCount);
             newCards.Add(newNote);
+            GameController.SaveData.cardCount++;
         }
 
-        Debug.Log("Card Count at end of note parse: " + newCards.Count);
+        Debug.Log("Card Count at end of note parse: " + GameController.SaveData.cardCount);
         return newCards;
     }
         

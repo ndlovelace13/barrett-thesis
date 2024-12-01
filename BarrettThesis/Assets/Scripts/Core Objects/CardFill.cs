@@ -40,6 +40,11 @@ public class CardFill : MonoBehaviour
         return currentCard.cardId;
     }
 
+    public Flashcard GetFlashcard()
+    {
+        return currentCard;
+    }
+
     //for the full card information
     public virtual void CardAssign(Flashcard newCard)
     {

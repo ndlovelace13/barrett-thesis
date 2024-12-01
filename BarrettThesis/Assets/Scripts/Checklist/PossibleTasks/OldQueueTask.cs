@@ -10,7 +10,7 @@ public class OldQueueTask : TaskControl
     void Start()
     {
         taskDescription = "Archives Reviewed";
-        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count - 15;
+        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count - GameController.SaveData.newQueue.Count;
         tasksTotal = GameController.SaveData.cardCount;
         Debug.Log("OldQueueTask exists");
     }
@@ -25,7 +25,7 @@ public class OldQueueTask : TaskControl
     {
         base.UpdateTask();
         taskDescription = "Archives Reviewed";
-        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count - 15;
+        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count - GameController.SaveData.newQueue.Count;
         tasksTotal = GameController.SaveData.cardCount;
         Debug.Log("OldQueueTask Updated");
     }

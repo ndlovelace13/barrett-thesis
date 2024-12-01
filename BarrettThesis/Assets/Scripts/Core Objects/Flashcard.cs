@@ -15,7 +15,7 @@ public class Flashcard
     //progression elements
     public bool discovered;
     public int masteryLevel;
-    public int masteryPoints;
+    //public int masteryPoints;
     public int daysTilNext;
     public int prevInterval;
     public int correctCount;
@@ -36,8 +36,9 @@ public class Flashcard
         
     }
 
-    public Flashcard(JSONNode noteNode)
+    public Flashcard(JSONNode noteNode, int currentCount)
     {
+        cardId = currentCount;
         fields = new List<string>();
         imgFields = new List<int>();
         audioFields = new List<int>();
@@ -68,7 +69,7 @@ public class Flashcard
 
         //set initial progression elements
         masteryLevel = 0;
-        masteryPoints = 0;
+        //masteryPoints = 0;
         discovered = false;
         prevInterval = 0;
         daysTilNext = 0;
@@ -91,11 +92,26 @@ public class Flashcard
     {
         correctCount++;
         //increment the mastery points
+        if (!discovered)
+        {
+            discovered = true;
+            daysTilNext++;
+            
+        }
+        else if (daysTilNext == 0)
+        {
+            daysTilNext = 1;
+        }
+        else
+        {
+            //increase the days til next 
+            daysTilNext = Mathf.CeilToInt(prevInterval * 1.5f);
+            prevInterval = daysTilNext;
+        }
 
-        //increase the days til next 
-        daysTilNext = Mathf.CeilToInt(prevInterval * 1.5f);
-        prevInterval = daysTilNext;
-        Debug.Log(cardId + " was Correct");
+        MasteryCheck();
+        
+        Debug.Log(cardId + " was Correct | Days til Next Review: " + daysTilNext);
     }
 
     public void Missed(int index)
@@ -106,8 +122,30 @@ public class Flashcard
         //reset the days til next
         daysTilNext = 0;
 
-        //readd to cardqueue?
+        //add the mistaken answer to the confused indexes list
+        confusedIndexes.Add(index);
 
         Debug.Log(cardId + " was confused with" + index);
+    }
+
+    private void MasteryCheck()
+    {
+        int newMastery = 0;
+        if (daysTilNext >= 30)
+            newMastery = 5;
+        else if (daysTilNext >= 21)
+            newMastery = 4;
+        else if (daysTilNext >= 14)
+            newMastery = 3;
+        else if (daysTilNext >= 7)
+            newMastery = 2;
+        else if (daysTilNext >= 3)
+            newMastery = 1;
+        else
+            newMastery = 0;
+        //trigger an event to reward the player for new mastery level here
+        //mastery can never dip below its previous level
+        if (newMastery > masteryLevel)
+            masteryLevel = newMastery;
     }
 }

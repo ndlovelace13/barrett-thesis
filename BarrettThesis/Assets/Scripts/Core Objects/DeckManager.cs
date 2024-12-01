@@ -59,7 +59,7 @@ public class DeckManager : MonoBehaviour
 
         GameController.SaveData.cardQueue = GameController.SaveData.cardQueue.Distinct().ToList();
         Debug.Log(counter + " old cards added to queue");
-        GameController.SaveData.cardCount = GameController.SaveData.cardQueue.Count + 15;
+        GameController.SaveData.cardCount = GameController.SaveData.cardQueue.Count + GameController.SaveData.newQueue.Count;
 
         //Debug.Log(cardQueue.Count + " total queue");
 
