@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 183938845692081201}
   - component: {fileID: 7487665812865662198}
   - component: {fileID: 4782059442066295560}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,8 @@ GameObject:
   - component: {fileID: 1221231428632458621}
   - component: {fileID: 417103197872431461}
   - component: {fileID: 5163772616088425243}
-  m_Layer: 0
+  - component: {fileID: 6740022294987784079}
+  m_Layer: 6
   m_Name: Painting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,6 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlight: 0
+  image: {fileID: 5386638307850638960}
 --- !u!114 &5163772616088425243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +219,22 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &6740022294987784079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306752982895344431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f484fc7ede2ff8f4ca978b618db4d7ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  heldRot: {x: 0, y: 120, z: 0}
+  inspecting: 0
+  held: 0
 --- !u!1 &6050277915488396309
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +246,7 @@ GameObject:
   - component: {fileID: 8154679787699964265}
   - component: {fileID: 2793803859644034575}
   - component: {fileID: 5386638307850638960}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}

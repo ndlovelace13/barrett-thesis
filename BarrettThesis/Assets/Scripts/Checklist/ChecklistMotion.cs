@@ -2,60 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChecklistMotion : MonoBehaviour
+public class ChecklistMotion : ObjectMotion
 {
-
-    [SerializeField] PlayerMovement player;
-
-    float currentY = 0f;
-    float maxY = 0.15f;
-    float minY = -0.15f;
-    bool up = true;
-    bool inspecting = false;
     bool disabled = false;
 
     [SerializeField] Transform startingPos;
     [SerializeField] Transform inspectPos;
     [SerializeField] Transform offScreen;
 
-    // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        
+        held = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Update()
     {
-        if (player.moving && !inspecting)
-        {
-            if (up)
-            {
-                if (currentY < maxY)
-                {
-                    currentY += 1 * Time.deltaTime;
-                    transform.localPosition = transform.localPosition + Vector3.up * Time.deltaTime * 0.1f;
-                }
-                else
-                {
-                    currentY = maxY;
-                    up = false;
-                }  
-            }
-            else
-            {
-                if (currentY > minY)
-                {
-                    currentY -= 1 * Time.deltaTime;
-                    transform.localPosition = transform.localPosition + Vector3.down * Time.deltaTime * 0.1f;
-                }
-                else
-                {
-                    currentY = minY;
-                    up = true;
-                }
-            }
-        }
+        base.Update();
 
         if (Input.GetKeyDown(KeyCode.Space) && !disabled)
         {
@@ -63,6 +25,11 @@ public class ChecklistMotion : MonoBehaviour
         }
 
         DisableHandler();
+
+        /*if (GameController.GameControl.gameMode == GameMode.DEFAULT)
+        {
+            Debug.Log("What the fuck");
+        }*/
     }
 
     private void InspectHandler()
@@ -90,6 +57,7 @@ public class ChecklistMotion : MonoBehaviour
             {
                 disabled = false;
                 StartCoroutine(Enable());
+                Debug.Log("Lerping Checklist Up");
             }
         }
         else if (GameController.GameControl.gameMode != GameMode.INSPECTING)
@@ -102,12 +70,13 @@ public class ChecklistMotion : MonoBehaviour
                 StartCoroutine(Disable());
             }
         }
-        
+
 
     }
 
     IEnumerator Inspect()
     {
+        Debug.Log("Inspecting");
         Vector3 startingPos = transform.position;
         Quaternion startingRot = transform.rotation;
 
@@ -125,6 +94,7 @@ public class ChecklistMotion : MonoBehaviour
 
     IEnumerator Uninspect()
     {
+        Debug.Log("Canceling Inspect");
         while (transform.position != startingPos.position && transform.rotation != startingPos.rotation)
         {
             transform.position = Vector3.MoveTowards(transform.position, startingPos.position, 2 * Time.deltaTime);
@@ -152,11 +122,12 @@ public class ChecklistMotion : MonoBehaviour
         transform.localPosition = offScreen.localPosition;
         GetComponent<MeshRenderer>().enabled = false;
         yield return null;
-        
+
     }
 
     IEnumerator Enable()
     {
+        Debug.Log("Enabling Checklist");
         GetComponent<ChecklistDisplay>().TaskUpdate();
         Vector3 startLoc = transform.localPosition;
         GetComponent<MeshRenderer>().enabled = true;
@@ -171,5 +142,7 @@ public class ChecklistMotion : MonoBehaviour
         }
         transform.localPosition = startingPos.localPosition;
         yield return null;
+        Debug.Log("Done Enabling Checklist");
     }
+
 }

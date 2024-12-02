@@ -35,6 +35,10 @@ public class Archives : Interactable
                 cardIncrement(indexModAmount);
         }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CardRetrieve();
+        }
     }
 
     public override void Interact()
@@ -53,6 +57,20 @@ public class Archives : Interactable
         camControl.rotation = Camera.main.transform.rotation;
         GameController.GameControl.gameMode = GameMode.DEFAULT;
         StartCoroutine(RemoveCard(displayedCards));
+    }
+
+    public void CardRetrieve()
+    {
+        GameObject currentCard = displayedCards[0];
+        displayedCards.Remove(currentCard);
+        currentCard.transform.SetParent(GameObject.FindWithTag("ObjectSlot").transform, false);
+        currentCard.transform.localPosition = Vector3.zero;
+        currentCard.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        //transform.localScale = transform.localScale / 2f; 
+        currentCard.GetComponent<ObjectMotion>().held = true;
+        currentCard.GetComponentInChildren<Collider>().enabled = false;
+        player.GetComponent<PlayerInteraction>().isInteracting = false;
+        CancelInteract();
     }
 
     public override string GetPrompt()
