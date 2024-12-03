@@ -10,6 +10,8 @@ public class Painting : Interactable
     Flashcard associatedCard;
 
     [SerializeField] Image image;
+
+    public bool inPlace = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,7 @@ public class Painting : Interactable
     public override void Interact()
     {
         GameObject obj = GameObject.FindWithTag("ObjectSlot");
-        if (obj != null)
+        if (obj.transform.childCount > 0)
         {
             if (obj.GetComponentInChildren<CardFill>() != null)
             {
@@ -45,24 +47,32 @@ public class Painting : Interactable
         else
         {
             base.Interact();
-            transform.SetParent(GameObject.FindWithTag("ObjectSlot").transform, false);
+
+            transform.SetParent(obj.transform, false);
+            Debug.Log(transform.parent.name);
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.Euler(Vector3.zero);
             //transform.localScale = transform.localScale / 2f; 
             GetComponent<ObjectMotion>().held = true;
             GetComponent<Collider>().enabled = false;
+            inPlace = false;
             //StartCoroutine(MatchingCam());
+            GameObject.FindWithTag("Player").GetComponent<PlayerInteraction>().RearrangePainting(gameObject);
         }
 
     }
 
     public override void CancelInteract()
     {
+        if (!inPlace)
+        {
+            transform.SetParent(null);
+            //transform.localScale = transform.localScale * 2f;
+            GetComponent<ObjectMotion>().held = false;
+            GetComponent<Collider>().enabled = true;
+        }
         base.CancelInteract();
-        transform.SetParent(null);
-        //transform.localScale = transform.localScale * 2f;
-        GetComponent<ObjectMotion>().held = false;
-        GetComponent<Collider>().enabled = true;
+        
     }
 
     public override string GetPrompt()

@@ -65,6 +65,7 @@ public class ChecklistMotion : ObjectMotion
             //lerp checklist down and don't render it
             if (!disabled)
             {
+                Debug.Log("Lerping Checklist Down");
                 StopAllCoroutines();
                 disabled = true;
                 StartCoroutine(Disable());

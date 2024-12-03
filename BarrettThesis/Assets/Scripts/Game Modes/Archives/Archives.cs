@@ -33,12 +33,15 @@ public class Archives : Interactable
                 cardIncrement(-indexModAmount);
             else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
                 cardIncrement(indexModAmount);
+
+            //retrieve card for placement in painting
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                CardRetrieve();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CardRetrieve();
-        }
+        
     }
 
     public override void Interact()
@@ -61,6 +64,11 @@ public class Archives : Interactable
 
     public void CardRetrieve()
     {
+        if (GameObject.FindWithTag("ObjectSlot").GetComponentInChildren<CardFill>() != null)
+        {
+            List<GameObject> heldCard = new List<GameObject>();
+            StartCoroutine(RemoveCard(heldCard));
+        }
         GameObject currentCard = displayedCards[0];
         displayedCards.Remove(currentCard);
         currentCard.transform.SetParent(GameObject.FindWithTag("ObjectSlot").transform, false);
