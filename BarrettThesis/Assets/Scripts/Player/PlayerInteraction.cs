@@ -23,7 +23,7 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (!isInteracting && GameController.GameControl.gameMode == GameMode.DEFAULT)
         {
@@ -31,11 +31,38 @@ public class PlayerInteraction : MonoBehaviour
         }
         else
         {
-            if (Input.GetKey(KeyCode.Escape) && currentInteractable != null && !rearranging)
+            if (Input.GetKeyDown(KeyCode.Escape) && currentInteractable != null && !rearranging)
             {
                 currentInteractable.GetComponent<Interactable>().CancelInteract();
                 isInteracting = false;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("E pressed");
+            //if E pressed, call interact() on the interactable
+            if (!rearranging && currentInteractable != null)
+            {
+                currentInteractable.GetComponent<Interactable>().Interact();
+                currentInteractable.GetComponent<Interactable>().highlight = false;
+                if (currentInteractable.GetComponent<ObjectMotion>() != null)
+                    isInteracting = false;
+                else
+                    isInteracting = true;
+            }
+            else if (rearranging && (currentInteractable == heldPainting || currentInteractable == null))
+            {
+                Debug.Log("Check One");
+                if (heldPainting.GetComponent<Painting>().inPlace)
+                {
+                    Debug.Log("Check Two");
+                    heldPainting.GetComponent<Painting>().CancelInteract();
+                    rearranging = false;
+                    heldPainting = null;
+                }
+            }
+                
         }
 
         if (rearranging)
@@ -60,27 +87,10 @@ public class PlayerInteraction : MonoBehaviour
                 Deselect();
             }
         }
-
-        //if E pressed, call interact() on the interactable
-        if (Input.GetKeyDown(KeyCode.E) && currentInteractable != null)
-        {
-            currentInteractable.GetComponent<Interactable>().Interact();
-            currentInteractable.GetComponent<Interactable>().highlight = false;
-            isInteracting = true;
-        }
     }
 
     private void RearrangeCheck()
     {
-        //if E pressed, place the painting and leave it there
-        if (Input.GetKeyDown(KeyCode.E) && heldPainting.GetComponent<Painting>().inPlace)
-        {
-            //currentInteractable.GetComponent<Interactable>().Interact();
-            //currentInteractable.GetComponent<Interactable>().highlight = false;
-            heldPainting.transform.SetParent(null);
-            isInteracting = false;
-            Debug.Log("Painting Placed");
-        }
 
         //create a raycast, highlight any interactables that are within range
         RaycastHit hit;
@@ -90,12 +100,13 @@ public class PlayerInteraction : MonoBehaviour
             GameObject currentWall = hit.collider.gameObject;
             heldPainting.transform.rotation = Quaternion.Euler(currentWall.transform.rotation.eulerAngles + new Vector3(0, 90, 0));
             heldPainting.transform.position = new Vector3(Round(hit.point.x), Round(hit.point.y), Round(hit.point.z));
-            Debug.Log(hit.point);
+            //Debug.Log(hit.point);
         }
         else
         {
+            if (heldPainting.GetComponent<Painting>().inPlace)
+                heldPainting.transform.localPosition = Vector3.zero;
             heldPainting.GetComponent<Painting>().inPlace = false;
-            heldPainting.transform.localPosition = Vector3.zero;
             heldPainting.transform.localRotation = Quaternion.Euler(Vector3.zero);
         }
 

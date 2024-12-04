@@ -59,6 +59,16 @@ public class SaveHandler : MonoBehaviour
                 GameController.SaveData = new SaveData();
             //update the save time
             GameController.SaveData.saveTime = DateTime.UtcNow.ToString();
+
+            //update all placeables here
+            Painting[] paintings = FindObjectsOfType<Painting>();
+            foreach (Painting painting in paintings)
+            {
+                painting.saveData.SavePlacement(painting.gameObject);
+                painting.saveData.Print();
+            }
+                
+
             string playerData = JsonUtility.ToJson(GameController.SaveData);
             File.WriteAllText(saveFilePath, playerData);
 

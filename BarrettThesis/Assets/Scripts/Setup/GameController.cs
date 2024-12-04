@@ -62,5 +62,7 @@ public class GameController : MonoBehaviour
     public void GameStart()
     {
         DeckManager.DeckManage.DateCheck();
+        FindObjectOfType<PlaceableHandler>().PlaceableRestore();
     }
+
 }

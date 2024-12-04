@@ -23,6 +23,9 @@ public class SaveData
 
     public bool tasksComplete;
 
+    //museum orientation
+    public List<Placeable> placeables;
+
     //settings
     public int newPerDay = 15;
 
@@ -44,6 +47,7 @@ public class SaveData
 
         newQueue = new List<Flashcard>();
         cardQueue = new List<Flashcard>();
+        placeables = new List<Placeable>();
     }
 
     // Start is called before the first frame update

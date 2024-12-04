@@ -7,15 +7,17 @@ using System.IO;
 
 public class Painting : Interactable
 {
-    Flashcard associatedCard;
+    public Flashcard associatedCard;
 
     [SerializeField] Image image;
+
+    public Placeable saveData;
 
     public bool inPlace = true;
     // Start is called before the first frame update
     void Start()
     {
-        
+        saveData = new Placeable();
     }
 
     // Update is called once per frame
@@ -34,8 +36,10 @@ public class Painting : Interactable
         {
             if (obj.GetComponentInChildren<CardFill>() != null)
             {
-                associatedCard = obj.GetComponentInChildren<CardFill>().GetFlashcard();
-                obj.GetComponentInChildren<CardFill>().gameObject.SetActive(false);
+                CardFill card = obj.GetComponentInChildren<CardFill>();
+                associatedCard = card.GetFlashcard();
+                card.transform.SetParent(null, false);
+                card.gameObject.SetActive(false);
                 AssignImage();
             }
             else if (obj.GetComponentInChildren<Painting>() != null)
@@ -64,12 +68,14 @@ public class Painting : Interactable
 
     public override void CancelInteract()
     {
-        if (!inPlace)
+        if (inPlace)
         {
+            Debug.Log("Check Three");
             transform.SetParent(null);
             //transform.localScale = transform.localScale * 2f;
             GetComponent<ObjectMotion>().held = false;
             GetComponent<Collider>().enabled = true;
+            SaveHandler.SaveSystem.SaveGame();
         }
         base.CancelInteract();
         
@@ -83,6 +89,10 @@ public class Painting : Interactable
             if (obj.GetComponentInChildren<CardFill>() != null)
             {
                 return "Press E to Assign";
+            }
+            else if (transform.parent == obj)
+            {
+                return "Press E to Place Painting";
             }
             else
             {
@@ -106,6 +116,15 @@ public class Painting : Interactable
             Texture2D tex = new Texture2D(2, 2);
             tex.LoadImage(fileData);
             image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+            SaveHandler.SaveSystem.SaveGame();
         }
+    }
+
+    public void RestoreData(Placeable placedData)
+    {
+        saveData = placedData;
+        saveData.Restore(gameObject);
+        associatedCard = GameController.SaveData.currentDeck.cards[saveData.cardIndex];
+        AssignImage();
     }
 }
