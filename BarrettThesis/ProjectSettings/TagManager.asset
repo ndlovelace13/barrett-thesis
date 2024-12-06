@@ -3,17 +3,22 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - TitleUI
+  - CardPool
+  - Checklist
+  - ObjectSlot
+  - PlaceableHandler
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - cardLayer
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Interactable
+  - ground
+  - Wall
   - 
   - 
   - 
