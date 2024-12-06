@@ -132,17 +132,18 @@ public class Flashcard
     {
         int newMastery = 0;
         if (daysTilNext >= 30)
-            newMastery = 5;
+            newMastery = 6;
         else if (daysTilNext >= 21)
-            newMastery = 4;
+            newMastery = 5;
         else if (daysTilNext >= 14)
-            newMastery = 3;
+            newMastery = 4;
         else if (daysTilNext >= 7)
-            newMastery = 2;
+            newMastery = 3;
         else if (daysTilNext >= 3)
+            newMastery = 2;
+        else if (daysTilNext >= 1)
             newMastery = 1;
-        else
-            newMastery = 0;
+   
         //trigger an event to reward the player for new mastery level here
         //mastery can never dip below its previous level
         if (newMastery > masteryLevel)

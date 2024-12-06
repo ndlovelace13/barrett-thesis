@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectMotion : MonoBehaviour
 {
-    [SerializeField] PlayerMovement player;
+    [SerializeField] protected PlayerMovement player;
     [SerializeField] public Vector3 heldRot;
 
     float currentY = 0f;

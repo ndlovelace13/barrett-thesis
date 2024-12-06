@@ -45,6 +45,24 @@ public class CardFill : MonoBehaviour
         return currentCard;
     }
 
+    public void StartHolding()
+    {
+        transform.SetParent(GameObject.FindWithTag("ObjectSlot").transform, false);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
+        //transform.localScale = transform.localScale / 2f; 
+        GetComponent<ObjectMotion>().held = true;
+        GetComponentInChildren<Collider>().enabled = false;
+    }
+
+    public void StopHolding()
+    {
+        transform.SetParent(null);
+        GetComponent<ObjectMotion>().held = false;
+        GetComponentInChildren<Collider>().enabled = true;
+        gameObject.SetActive(false);
+    }
+
     //for the full card information
     public virtual void CardAssign(Flashcard newCard)
     {

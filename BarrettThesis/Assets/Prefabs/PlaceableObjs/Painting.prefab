@@ -200,7 +200,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlight: 0
+  saveData:
+    type: 0
+    cardIndex: 0
+    location:
+      x: 0
+      y: 0
+      z: 0
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+  inPlace: 1
+  playerHand: {fileID: 0}
+  surface:
+    serializedVersion: 2
+    m_Bits: 0
+  associatedCard:
+    cardId: 0
+    fields: []
+    imgFields: 
+    audioFields: 
+    noteId: 
+    discovered: 0
+    masteryLevel: 0
+    daysTilNext: 0
+    prevInterval: 0
+    correctCount: 0
+    missedCount: 0
+    confusedIndexes: 
   image: {fileID: 5386638307850638960}
+  masteryMaterials:
+  - {fileID: 2100000, guid: 2d8c5a3a75699c04fa291b53b983d39f, type: 2}
+  - {fileID: 2100000, guid: 3a228c369a6366240b76892071d9fb96, type: 2}
+  - {fileID: 2100000, guid: ec778e1a99bdacd469b4e2074599f66d, type: 2}
+  - {fileID: 2100000, guid: e4741b571babc304a8a1153eae7fcd04, type: 2}
+  - {fileID: 2100000, guid: 30a8b8a33ee1ea34fb4880f19647692b, type: 2}
+  - {fileID: 2100000, guid: 550f2eb7f4df11a4da630d37c8360673, type: 2}
+  - {fileID: 2100000, guid: 08d4b6b52e743e142b286385d25ce773, type: 2}
 --- !u!114 &5163772616088425243
 MonoBehaviour:
   m_ObjectHideFlags: 0

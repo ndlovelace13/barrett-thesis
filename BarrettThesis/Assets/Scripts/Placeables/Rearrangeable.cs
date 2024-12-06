@@ -20,6 +20,7 @@ public class Rearrangeable : MonoBehaviour, IInteractable
     {
         saveData = new Placeable();
         playerHand = GameObject.FindWithTag("ObjectSlot");
+        DeactivateHighlight();
     }
 
     // Update is called once per frame
@@ -75,6 +76,39 @@ public class Rearrangeable : MonoBehaviour, IInteractable
         }
     }
 
+    public virtual void PlacementCheck()
+    {
+        RaycastHit hit = new RaycastHit();
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 3f, surface))
+            Place(hit);
+        else
+            Hold();
+        
+    }
+
+    public virtual void Place(RaycastHit hit)
+    {
+        inPlace = true;
+        GameObject currentWall = hit.collider.gameObject;
+        transform.rotation = Quaternion.Euler(currentWall.transform.rotation.eulerAngles + new Vector3(0, 90, 0));
+        transform.position = new Vector3(Round(hit.point.x), Round(hit.point.y), Round(hit.point.z)) + PlaceOffset(currentWall);
+        
+    }
+    
+    public virtual Vector3 PlaceOffset(GameObject wall)
+    {
+        //Debug.Log(wall.transform.forward);
+        return Vector3.zero;
+    }
+
+    public virtual void Hold()
+    {
+        if (inPlace)
+            transform.localPosition = Vector3.zero;
+        inPlace = false;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
+    }
+
     public virtual string GetPrompt()
     {
         return "Press E to Rearrange";
@@ -88,5 +122,10 @@ public class Rearrangeable : MonoBehaviour, IInteractable
     public virtual void DeactivateHighlight()
     {
         GetComponent<Outline>().enabled = false;
+    }
+
+    private float Round(float startVal)
+    {
+        return Mathf.Round(startVal * 2) / 2;
     }
 }

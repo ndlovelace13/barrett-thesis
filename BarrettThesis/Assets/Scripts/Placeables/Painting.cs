@@ -12,6 +12,8 @@ public class Painting : Rearrangeable, IInteractable
 
     [SerializeField] Image image;
 
+    public List<Material> masteryMaterials;
+
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -39,8 +41,7 @@ public class Painting : Rearrangeable, IInteractable
                 Debug.Log("Check 2");
                 CardFill card = playerHand.GetComponentInChildren<CardFill>();
                 associatedCard = card.GetFlashcard();
-                card.transform.SetParent(null, false);
-                card.gameObject.SetActive(false);
+                card.StopHolding();
                 AssignImage(true);
             }
         }
@@ -51,6 +52,13 @@ public class Painting : Rearrangeable, IInteractable
     {
         base.CancelInteract();
         Debug.Log("Painting Placed");
+    }
+
+    public override Vector3 PlaceOffset(GameObject wall)
+    {
+        Vector3 baseVector = wall.transform.right;
+        float offset = transform.localScale.z / 2f;
+        return baseVector * offset;
     }
 
     public override string GetPrompt()
@@ -88,6 +96,7 @@ public class Painting : Rearrangeable, IInteractable
             Texture2D tex = new Texture2D(2, 2);
             tex.LoadImage(fileData);
             image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+            UpdateFrame();
             if (save)
             {
                 saveData.SavePlacement(gameObject);
@@ -95,6 +104,12 @@ public class Painting : Rearrangeable, IInteractable
             }
                 
         }
+    }
+
+    public void UpdateFrame()
+    {
+        Debug.Log("Current Mastery Level: " + associatedCard.masteryLevel);
+        GetComponent<MeshRenderer>().material = masteryMaterials[associatedCard.masteryLevel];
     }
 
     public override void RestoreData(Placeable placedData)

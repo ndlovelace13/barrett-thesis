@@ -57,13 +57,10 @@ public class PlayerInteraction : MonoBehaviour
                 heldObj.GetComponent<IInteractable>().CancelInteract();
                 heldObj = null;
             }
-            else
-                Debug.Log(currentInteractable.name);
-                
         }
 
         if (rearranging)
-            RearrangeCheck();
+            heldObj.GetComponent<Rearrangeable>().PlacementCheck();
         UpdatePrompt();
     }
 
@@ -86,7 +83,7 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    private void RearrangeCheck()
+    /*private void RearrangeCheck()
     {
 
         //create a raycast, highlight any interactables that are within range
@@ -108,7 +105,7 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         
-    }
+    }*/
 
     private float Round(float startVal)
     {

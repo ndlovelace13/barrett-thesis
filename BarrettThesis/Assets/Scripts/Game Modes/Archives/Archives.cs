@@ -64,15 +64,15 @@ public class Archives : CoreGameMode, IInteractable
             GameObject handCard = GameObject.FindWithTag("ObjectSlot").GetComponentInChildren<CardFill>().gameObject;
             heldCard.Add(handCard);
             StartCoroutine(RemoveCard(heldCard));
+            handCard.GetComponent<CardFill>().StopHolding();
         }
         GameObject currentCard = displayedCards[0];
         displayedCards.Remove(currentCard);
-        currentCard.transform.SetParent(GameObject.FindWithTag("ObjectSlot").transform, false);
-        currentCard.transform.localPosition = Vector3.zero;
-        currentCard.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        //transform.localScale = transform.localScale / 2f; 
-        currentCard.GetComponent<ObjectMotion>().held = true;
-        currentCard.GetComponentInChildren<Collider>().enabled = false;
+
+        //place card in hand
+        currentCard.GetComponent<CardFill>().StartHolding();
+
+        //set rules of interacting
         player.GetComponent<PlayerInteraction>().isInteracting = false;
         CancelInteract();
     }

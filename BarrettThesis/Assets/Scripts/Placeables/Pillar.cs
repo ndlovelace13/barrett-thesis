@@ -16,4 +16,11 @@ public class Pillar : Rearrangeable, IInteractable
     {
         
     }
+
+    public override Vector3 PlaceOffset(GameObject wall)
+    {
+        Vector3 baseVector = wall.transform.up;
+        float offset = transform.localScale.y / 2f;
+        return baseVector * offset;
+    }
 }

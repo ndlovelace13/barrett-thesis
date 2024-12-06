@@ -157,6 +157,7 @@ public class Matching : CoreGameMode, IInteractable
             activeAnswers[i].SetActive(false);
         }
         flashcards.Clear();
+        SaveHandler.SaveSystem.SaveGame();
     }
 
     IEnumerator MainGameplay()
