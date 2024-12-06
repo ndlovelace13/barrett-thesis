@@ -10,10 +10,10 @@ public class ChecklistMotion : ObjectMotion
     [SerializeField] Transform inspectPos;
     [SerializeField] Transform offScreen;
 
-    public override void Start()
+    /*public override void Start()
     {
         held = true;
-    }
+    }*/
 
     public override void Update()
     {

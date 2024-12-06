@@ -42,9 +42,9 @@ public class PlayerInteraction : MonoBehaviour
             //if E pressed, call interact() on the interactable
             if (!rearranging && currentInteractable != null)
             {
-                
+                Debug.Log("other");
                 currentInteractable.GetComponent<IInteractable>().Interact();
-                currentInteractable.GetComponent<IInteractable>().DeactivateHighlight(currentInteractable);
+                currentInteractable.GetComponent<IInteractable>().DeactivateHighlight();
                 if (currentInteractable.GetComponent<ObjectMotion>() != null)
                     isInteracting = false;
                 else
@@ -52,15 +52,13 @@ public class PlayerInteraction : MonoBehaviour
             }
             else if (rearranging && (currentInteractable == heldObj || currentInteractable == null))
             {
-                Debug.Log("Check One");
-                if (heldObj.GetComponent<Painting>().inPlace)
-                {
-                    Debug.Log("Check Two");
-                    heldObj.GetComponent<Painting>().CancelInteract();
-                    rearranging = false;
-                    heldObj = null;
-                }
+                Debug.Log("placing");
+                rearranging = false;
+                heldObj.GetComponent<IInteractable>().CancelInteract();
+                heldObj = null;
             }
+            else
+                Debug.Log(currentInteractable.name);
                 
         }
 
@@ -76,7 +74,7 @@ public class PlayerInteraction : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 3f, layerMask))
         {
             currentInteractable = hit.collider.gameObject;
-            currentInteractable.GetComponent<IInteractable>().ActivateHighlight(currentInteractable);
+            currentInteractable.GetComponent<IInteractable>().ActivateHighlight();
             //Debug.Log("Intersecting an interactable!");
         }
         else
@@ -119,6 +117,7 @@ public class PlayerInteraction : MonoBehaviour
 
     public void RearrangeObj(GameObject painting)
     {
+        Debug.Log("Beginning Rearrange Mode");
         rearranging = true;
         heldObj = painting;
     }
@@ -134,7 +133,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Deselect()
     {
-        currentInteractable.GetComponent<IInteractable>().DeactivateHighlight(currentInteractable);
+        currentInteractable.GetComponent<IInteractable>().DeactivateHighlight();
         currentInteractable = null;
     }
 }

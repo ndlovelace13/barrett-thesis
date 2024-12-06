@@ -13,8 +13,9 @@ public class Painting : Rearrangeable, IInteractable
     [SerializeField] Image image;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Awake()
     {
+        base.Awake();
         surface = LayerMask.GetMask("Wall");
     }
 
@@ -30,10 +31,12 @@ public class Painting : Rearrangeable, IInteractable
     public override void Interact()
     {
         base.Interact();
+        Debug.Log("Check 1");
         if (playerHand.transform.childCount > 0)
         {
             if (playerHand.GetComponentInChildren<CardFill>() != null)
             {
+                Debug.Log("Check 2");
                 CardFill card = playerHand.GetComponentInChildren<CardFill>();
                 associatedCard = card.GetFlashcard();
                 card.transform.SetParent(null, false);
@@ -47,15 +50,7 @@ public class Painting : Rearrangeable, IInteractable
     public override void CancelInteract()
     {
         base.CancelInteract();
-        if (inPlace)
-        {
-            Debug.Log("Check Three");
-            transform.SetParent(null);
-            //transform.localScale = transform.localScale * 2f;
-            GetComponent<ObjectMotion>().held = false;
-            GetComponent<Collider>().enabled = true;
-            SaveHandler.SaveSystem.SaveGame();
-        }
+        Debug.Log("Painting Placed");
     }
 
     public override string GetPrompt()
@@ -94,7 +89,11 @@ public class Painting : Rearrangeable, IInteractable
             tex.LoadImage(fileData);
             image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
             if (save)
+            {
+                saveData.SavePlacement(gameObject);
                 SaveHandler.SaveSystem.SaveGame();
+            }
+                
         }
     }
 

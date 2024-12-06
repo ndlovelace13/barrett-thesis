@@ -10,6 +10,7 @@ public enum GameMode
     DEFAULT,
     ARCHIVE,
     MATCHING,
+    CREATING,
     INSPECTING
 }
 

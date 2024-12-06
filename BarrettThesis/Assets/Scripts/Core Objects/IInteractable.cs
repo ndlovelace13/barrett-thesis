@@ -11,13 +11,7 @@ public interface IInteractable
 
     public string GetPrompt();
 
-    public void ActivateHighlight(GameObject interactable)
-    {
-         interactable.GetComponent<Outline>().enabled = true;
-    }
+    public void ActivateHighlight();
 
-    public void DeactivateHighlight(GameObject interactable)
-    {
-        interactable.GetComponent<Outline>().enabled = false;
-    }
+    public void DeactivateHighlight();
 }

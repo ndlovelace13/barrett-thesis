@@ -16,7 +16,7 @@ public class ObjectMotion : MonoBehaviour
     
 
     // Start is called before the first frame update
-    public virtual void Start()
+    public virtual void Awake()
     {
         player = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
         held = false;

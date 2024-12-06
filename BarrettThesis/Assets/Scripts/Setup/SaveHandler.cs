@@ -58,16 +58,7 @@ public class SaveHandler : MonoBehaviour
             if (GameController.SaveData == null)
                 GameController.SaveData = new SaveData();
             //update the save time
-            GameController.SaveData.saveTime = DateTime.UtcNow.ToString();
-
-            //update all placeables here
-            Rearrangeable[] placedObjs = FindObjectsOfType<Rearrangeable>();
-            foreach (Rearrangeable obj in placedObjs)
-            {
-                obj.saveData.SavePlacement(obj.gameObject);
-                obj.saveData.Print();
-            }
-            
+            GameController.SaveData.saveTime = DateTime.UtcNow.ToString();    
 
             string playerData = JsonUtility.ToJson(GameController.SaveData);
             File.WriteAllText(saveFilePath, playerData);

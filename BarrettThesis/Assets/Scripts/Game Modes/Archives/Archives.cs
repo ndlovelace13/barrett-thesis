@@ -61,6 +61,8 @@ public class Archives : CoreGameMode, IInteractable
         if (GameObject.FindWithTag("ObjectSlot").GetComponentInChildren<CardFill>() != null)
         {
             List<GameObject> heldCard = new List<GameObject>();
+            GameObject handCard = GameObject.FindWithTag("ObjectSlot").GetComponentInChildren<CardFill>().gameObject;
+            heldCard.Add(handCard);
             StartCoroutine(RemoveCard(heldCard));
         }
         GameObject currentCard = displayedCards[0];

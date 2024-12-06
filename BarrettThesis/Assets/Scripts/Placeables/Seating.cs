@@ -6,8 +6,9 @@ public class Seating : Rearrangeable, IInteractable
 {
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Awake()
     {
+        base.Awake();
         surface = LayerMask.GetMask("ground");
     }
 

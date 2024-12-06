@@ -81,4 +81,14 @@ public class CoreGameMode : MonoBehaviour, IInteractable
         return "Game Mode Prompt Not Handled";
     }
 
+    public virtual void ActivateHighlight()
+    {
+        GetComponent<Outline>().enabled = true;
+    }
+
+    public virtual void DeactivateHighlight()
+    {
+        GetComponent<Outline>().enabled = false;
+    }
+
 }

@@ -10,13 +10,13 @@ public class PlaceableHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void PlaceableRestore()
@@ -36,14 +36,38 @@ public class PlaceableHandler : MonoBehaviour
                     newObj = Instantiate(seatingPrefab);
                     break;
                 case PlaceableType.Pillar:
+                    Debug.Log("pillar restored");
                     newObj = Instantiate(pillarPrefab);
                     break;
             }
             if (newObj != null)
             {
-                newObj.GetComponent<Painting>().RestoreData(GameController.SaveData.placeables[i]);
+                newObj.GetComponent<Rearrangeable>().RestoreData(GameController.SaveData.placeables[i]);
             }
         }
         SaveHandler.SaveSystem.SaveGame();
+    }
+
+    //DEBUG
+    public GameObject RandomPlaceable()
+    {
+        int choice = Random.Range(0, 3);
+        GameObject returnedObj = null;
+        switch (choice)
+        {
+            case 0:
+                returnedObj = Instantiate(paintingPrefab);
+                break;
+            case 1:
+                returnedObj = Instantiate(seatingPrefab);
+                break;
+            case 2:
+                returnedObj = Instantiate(pillarPrefab);
+                break;
+            default:
+                break;
+
+        }
+        return returnedObj;
     }
 }

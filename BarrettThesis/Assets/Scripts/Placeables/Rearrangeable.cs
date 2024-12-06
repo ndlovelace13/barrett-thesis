@@ -16,8 +16,9 @@ public class Rearrangeable : MonoBehaviour, IInteractable
 
     public LayerMask surface;
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Awake()
     {
+        saveData = new Placeable();
         playerHand = GameObject.FindWithTag("ObjectSlot");
     }
 
@@ -37,7 +38,8 @@ public class Rearrangeable : MonoBehaviour, IInteractable
     {
         if (playerHand.transform.childCount > 0)
         {
-            if (playerHand.GetComponentInChildren<Rearrangeable>().saveData.type == saveData.type)
+            Rearrangeable currentType = playerHand.GetComponentInChildren<Rearrangeable>();
+            if (currentType != null && currentType.saveData.type == this.saveData.type)
             {
                 Debug.Log("SWAP OBJECTS, THEY ARE THE SAME TYPE");
             }
@@ -61,11 +63,30 @@ public class Rearrangeable : MonoBehaviour, IInteractable
 
     public virtual void CancelInteract()
     {
-        Debug.Log("Canceling Interact");
+        if (inPlace)
+        {
+            Debug.Log("Check Three");
+            transform.SetParent(null);
+            //transform.localScale = transform.localScale * 2f;
+            GetComponent<ObjectMotion>().held = false;
+            GetComponent<Collider>().enabled = true;
+            saveData.SavePlacement(gameObject);
+            SaveHandler.SaveSystem.SaveGame();
+        }
     }
 
     public virtual string GetPrompt()
     {
         return "Press E to Rearrange";
+    }
+
+    public virtual void ActivateHighlight()
+    {
+        GetComponent<Outline>().enabled = true;
+    }
+
+    public virtual void DeactivateHighlight()
+    {
+        GetComponent<Outline>().enabled = false;
     }
 }
