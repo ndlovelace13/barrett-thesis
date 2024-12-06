@@ -4,10 +4,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Matching : Interactable
+public class Matching : CoreGameMode, IInteractable
 {
-    GameObject player;
-    PlayerCam cam;
 
     int newCardsCorrect;
     int cardsCorrect;
@@ -24,16 +22,14 @@ public class Matching : Interactable
     [SerializeField] GameObject promptHolder;
     [SerializeField] GameObject answerHolder;
 
-    [SerializeField] Transform playerLocation;
-
     List<GameObject> activePrompts;
     List<GameObject> activeAnswers;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        player = GameObject.FindWithTag("Player");
-        cam = Camera.main.GetComponent<PlayerCam>();
+        base.Start();
+        gameMode = GameMode.MATCHING;
         cardsCorrect = 0;
         newCardsCorrect = 0;
         cardRatio = 0;
@@ -48,47 +44,25 @@ public class Matching : Interactable
     public override void Interact()
     {
         base.Interact();
-        GameController.GameControl.lockPlayer = true;
-        GameController.GameControl.gameMode = GameMode.MATCHING;
-        StartCoroutine(MatchingCam());
     }
 
     public override void CancelInteract()
     {
         ExitCards();
         base.CancelInteract();
-        GameController.GameControl.lockPlayer = false;
-        GameController.GameControl.gameMode = GameMode.DEFAULT;
        
     }
 
-    IEnumerator MatchingCam()
+    /*public override IEnumerator CameraShift()
     {
-        float currentTime = 0f;
-        float duration = 0.5f;
-        float camStartX = cam.xRotation;
-        float camStartY = cam.yRotation;
-
-        Vector3 startingPos = player.transform.position;
-        Quaternion startingRot = player.transform.rotation;
-        //Quaternion startingRot = Camera.main.transform.rotation;
-        //Quaternion endingRot = new Quaternion(0f, startingRot.y, 0f, startingRot.w);
-        //lerp the camera to straight on
-        while (currentTime < duration)
-        {
-            player.transform.position = Vector3.Lerp(startingPos, playerLocation.position, currentTime / duration);
-            player.transform.rotation = Quaternion.Lerp(startingRot, playerLocation.rotation, currentTime / duration);
-            cam.xRotation = Mathf.Lerp(camStartX, 0f, currentTime / duration);
-            cam.yRotation = Mathf.Lerp(camStartY, 180, currentTime / duration);
-            //Camera.main.transform.rotation = Quaternion.Lerp(startingRot, endingRot, currentTime / 0.3f);
-            yield return new WaitForFixedUpdate();
-            currentTime += Time.fixedDeltaTime;
-        }
-        //Camera.main.transform.rotation = endingRot;
-        cam.xRotation = 0f;
-
+        base.CameraShift();
         StartCoroutine(MainGameplay());
         yield return null;
+    }*/
+
+    protected override void PostCameraShift()
+    {
+        StartCoroutine(MainGameplay());
     }
 
     public override string GetPrompt()

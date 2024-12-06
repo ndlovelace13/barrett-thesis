@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlaceableHandler : MonoBehaviour
 {
     [SerializeField] GameObject paintingPrefab;
+    [SerializeField] GameObject seatingPrefab;
+    [SerializeField] GameObject pillarPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,11 +22,28 @@ public class PlaceableHandler : MonoBehaviour
     public void PlaceableRestore()
     {
         Debug.Log("Placeables Detected: " + GameController.SaveData.placeables.Count);
-        foreach (var placeable in GameController.SaveData.placeables)
+        for (int i = 0; i < GameController.SaveData.placeables.Count; i++)
         {
-            Debug.Log("painting restored");
-            GameObject newPainting = Instantiate(paintingPrefab);
-            newPainting.GetComponent<Painting>().RestoreData(placeable);
+            GameObject newObj = null;
+            switch (GameController.SaveData.placeables[i].type)
+            {
+                case PlaceableType.Painting:
+                    Debug.Log("painting restored");
+                    newObj = Instantiate(paintingPrefab);
+                    break;
+                case PlaceableType.Seating:
+                    Debug.Log("seating restored");
+                    newObj = Instantiate(seatingPrefab);
+                    break;
+                case PlaceableType.Pillar:
+                    newObj = Instantiate(pillarPrefab);
+                    break;
+            }
+            if (newObj != null)
+            {
+                newObj.GetComponent<Painting>().RestoreData(GameController.SaveData.placeables[i]);
+            }
         }
+        SaveHandler.SaveSystem.SaveGame();
     }
 }

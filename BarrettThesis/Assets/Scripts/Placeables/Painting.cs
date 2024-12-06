@@ -4,20 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Unity.VisualScripting;
 
-public class Painting : Interactable
+public class Painting : Rearrangeable, IInteractable
 {
     public Flashcard associatedCard;
 
     [SerializeField] Image image;
 
-    public Placeable saveData;
-
-    public bool inPlace = true;
     // Start is called before the first frame update
     void Start()
     {
-        saveData = new Placeable();
+        surface = LayerMask.GetMask("Wall");
     }
 
     // Update is called once per frame
@@ -31,43 +29,24 @@ public class Painting : Interactable
     //interact to move it - snap to predefined locations
     public override void Interact()
     {
-        GameObject obj = GameObject.FindWithTag("ObjectSlot");
-        if (obj.transform.childCount > 0)
+        base.Interact();
+        if (playerHand.transform.childCount > 0)
         {
-            if (obj.GetComponentInChildren<CardFill>() != null)
+            if (playerHand.GetComponentInChildren<CardFill>() != null)
             {
-                CardFill card = obj.GetComponentInChildren<CardFill>();
+                CardFill card = playerHand.GetComponentInChildren<CardFill>();
                 associatedCard = card.GetFlashcard();
                 card.transform.SetParent(null, false);
                 card.gameObject.SetActive(false);
-                AssignImage();
+                AssignImage(true);
             }
-            else if (obj.GetComponentInChildren<Painting>() != null)
-            {
-                Debug.Log("Swap Painting Here");
-            }
-            Debug.Log("Painting Interact Case Not Assigned");
-        }
-        else
-        {
-            base.Interact();
-
-            transform.SetParent(obj.transform, false);
-            Debug.Log(transform.parent.name);
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.Euler(Vector3.zero);
-            //transform.localScale = transform.localScale / 2f; 
-            GetComponent<ObjectMotion>().held = true;
-            GetComponent<Collider>().enabled = false;
-            inPlace = false;
-            //StartCoroutine(MatchingCam());
-            GameObject.FindWithTag("Player").GetComponent<PlayerInteraction>().RearrangePainting(gameObject);
         }
 
     }
 
     public override void CancelInteract()
     {
+        base.CancelInteract();
         if (inPlace)
         {
             Debug.Log("Check Three");
@@ -77,8 +56,6 @@ public class Painting : Interactable
             GetComponent<Collider>().enabled = true;
             SaveHandler.SaveSystem.SaveGame();
         }
-        base.CancelInteract();
-        
     }
 
     public override string GetPrompt()
@@ -101,12 +78,12 @@ public class Painting : Interactable
         }
         else
         {
-            return "Press E to Rearrange";
+            return base.GetPrompt();
         }
         
     }
 
-    public void AssignImage()
+    public void AssignImage(bool save)
     {
         if (associatedCard != null)
         {
@@ -116,15 +93,15 @@ public class Painting : Interactable
             Texture2D tex = new Texture2D(2, 2);
             tex.LoadImage(fileData);
             image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-            SaveHandler.SaveSystem.SaveGame();
+            if (save)
+                SaveHandler.SaveSystem.SaveGame();
         }
     }
 
-    public void RestoreData(Placeable placedData)
+    public override void RestoreData(Placeable placedData)
     {
-        saveData = placedData;
-        saveData.Restore(gameObject);
+        base.RestoreData(placedData);
         associatedCard = GameController.SaveData.currentDeck.cards[saveData.cardIndex];
-        AssignImage();
+        AssignImage(false);
     }
 }

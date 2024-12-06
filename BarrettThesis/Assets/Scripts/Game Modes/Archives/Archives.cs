@@ -2,25 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Archives : Interactable
+public class Archives : CoreGameMode, IInteractable
 {
-    GameObject player;
-    PlayerCam cam;
     ObjectPool cardPool;
     public List<GameObject> displayedCards;
 
     //cam control
-    public Transform camControl;
+    //public Transform camControl;
 
     int currentIndex;
     int indexModAmount = 1;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        player = GameObject.FindWithTag("Player");
-        cam = Camera.main.GetComponent<PlayerCam>();
+        base.Start();
         cardPool = GameObject.FindWithTag("CardPool").GetComponent<ObjectPool>();
         displayedCards = new List<GameObject>();
+        gameMode = GameMode.ARCHIVE;
     }
 
     // Update is called once per frame
@@ -47,18 +45,14 @@ public class Archives : Interactable
     public override void Interact()
     {
         base.Interact();
-        GameController.GameControl.lockPlayer = true;
         currentIndex = 0;
-        GameController.GameControl.gameMode = GameMode.ARCHIVE;
-        StartCoroutine(ArchiveCam());
+        //StartCoroutine(ArchiveCam());
     }
 
     public override void CancelInteract()
     {
         base.CancelInteract();
-        GameController.GameControl.lockPlayer = false;
-        camControl.rotation = Camera.main.transform.rotation;
-        GameController.GameControl.gameMode = GameMode.DEFAULT;
+        //camControl.rotation = Camera.main.transform.rotation;
         StartCoroutine(RemoveCard(displayedCards));
     }
 
@@ -101,25 +95,16 @@ public class Archives : Interactable
         }
     }
 
-    IEnumerator ArchiveCam()
+    /*public override IEnumerator CameraShift()
     {
-        float currentTime = 0f;
-        float camStart = cam.xRotation;
-        //Quaternion startingRot = Camera.main.transform.rotation;
-        //Quaternion endingRot = new Quaternion(0f, startingRot.y, 0f, startingRot.w);
-        //lerp the camera to straight on
-        while (currentTime < 0.3f)
-        {
-            cam.xRotation = Mathf.Lerp(camStart, 0, currentTime / 0.3f);
-            //Camera.main.transform.rotation = Quaternion.Lerp(startingRot, endingRot, currentTime / 0.3f);
-            yield return new WaitForEndOfFrame();
-            currentTime += Time.deltaTime;
-        }
-        //Camera.main.transform.rotation = endingRot;
-        cam.xRotation = 0f;
-
+        base.CameraShift();
         StartCoroutine(SpawnCard(currentIndex, indexModAmount));
         yield return null;
+    }*/
+
+    protected override void PostCameraShift()
+    {
+        StartCoroutine(SpawnCard(currentIndex, indexModAmount));
     }
 
     IEnumerator SpawnCard(int cardIndex, int cardNum)

@@ -12,14 +12,12 @@ public class PlayerInteraction : MonoBehaviour
     string prompt;
     public bool isInteracting = false;
 
-    LayerMask wallMask;
     public bool rearranging = false;
-    GameObject heldPainting;
+    GameObject heldObj;
     // Start is called before the first frame update
     void Start()
     {
         layerMask = LayerMask.GetMask("Interactable");
-        wallMask = LayerMask.GetMask("Wall");
     }
 
     // Update is called once per frame
@@ -33,7 +31,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape) && currentInteractable != null && !rearranging)
             {
-                currentInteractable.GetComponent<Interactable>().CancelInteract();
+                currentInteractable.GetComponent<IInteractable>().CancelInteract();
                 isInteracting = false;
             }
         }
@@ -44,22 +42,23 @@ public class PlayerInteraction : MonoBehaviour
             //if E pressed, call interact() on the interactable
             if (!rearranging && currentInteractable != null)
             {
-                currentInteractable.GetComponent<Interactable>().Interact();
-                currentInteractable.GetComponent<Interactable>().highlight = false;
+                
+                currentInteractable.GetComponent<IInteractable>().Interact();
+                currentInteractable.GetComponent<IInteractable>().DeactivateHighlight(currentInteractable);
                 if (currentInteractable.GetComponent<ObjectMotion>() != null)
                     isInteracting = false;
                 else
                     isInteracting = true;
             }
-            else if (rearranging && (currentInteractable == heldPainting || currentInteractable == null))
+            else if (rearranging && (currentInteractable == heldObj || currentInteractable == null))
             {
                 Debug.Log("Check One");
-                if (heldPainting.GetComponent<Painting>().inPlace)
+                if (heldObj.GetComponent<Painting>().inPlace)
                 {
                     Debug.Log("Check Two");
-                    heldPainting.GetComponent<Painting>().CancelInteract();
+                    heldObj.GetComponent<Painting>().CancelInteract();
                     rearranging = false;
-                    heldPainting = null;
+                    heldObj = null;
                 }
             }
                 
@@ -77,7 +76,7 @@ public class PlayerInteraction : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 3f, layerMask))
         {
             currentInteractable = hit.collider.gameObject;
-            currentInteractable.GetComponent<Interactable>().highlight = true;
+            currentInteractable.GetComponent<IInteractable>().ActivateHighlight(currentInteractable);
             //Debug.Log("Intersecting an interactable!");
         }
         else
@@ -94,20 +93,20 @@ public class PlayerInteraction : MonoBehaviour
 
         //create a raycast, highlight any interactables that are within range
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 3f, wallMask))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 3f, heldObj.GetComponent<Rearrangeable>().surface))
         {
-            heldPainting.GetComponent<Painting>().inPlace = true;
+            heldObj.GetComponent<Rearrangeable>().inPlace = true;
             GameObject currentWall = hit.collider.gameObject;
-            heldPainting.transform.rotation = Quaternion.Euler(currentWall.transform.rotation.eulerAngles + new Vector3(0, 90, 0));
-            heldPainting.transform.position = new Vector3(Round(hit.point.x), Round(hit.point.y), Round(hit.point.z));
+            heldObj.transform.rotation = Quaternion.Euler(currentWall.transform.rotation.eulerAngles + new Vector3(0, 90, 0));
+            heldObj.transform.position = new Vector3(Round(hit.point.x), Round(hit.point.y), Round(hit.point.z));
             //Debug.Log(hit.point);
         }
         else
         {
-            if (heldPainting.GetComponent<Painting>().inPlace)
-                heldPainting.transform.localPosition = Vector3.zero;
-            heldPainting.GetComponent<Painting>().inPlace = false;
-            heldPainting.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            if (heldObj.GetComponent<Rearrangeable>().inPlace)
+                heldObj.transform.localPosition = Vector3.zero;
+            heldObj.GetComponent<Rearrangeable>().inPlace = false;
+            heldObj.transform.localRotation = Quaternion.Euler(Vector3.zero);
         }
 
         
@@ -118,10 +117,10 @@ public class PlayerInteraction : MonoBehaviour
         return Mathf.Round(startVal * 2) / 2;
     }
 
-    public void RearrangePainting(GameObject painting)
+    public void RearrangeObj(GameObject painting)
     {
         rearranging = true;
-        heldPainting = painting;
+        heldObj = painting;
     }
 
     private void UpdatePrompt()
@@ -129,13 +128,13 @@ public class PlayerInteraction : MonoBehaviour
         if (isInteracting || currentInteractable == null)
             prompt = "";
         else
-            prompt = currentInteractable.GetComponent<Interactable>().GetPrompt();
+            prompt = currentInteractable.GetComponent<IInteractable>().GetPrompt();
         interactUI.text = prompt;
     }
 
     private void Deselect()
     {
-        currentInteractable.GetComponent<Interactable>().highlight = false;
+        currentInteractable.GetComponent<IInteractable>().DeactivateHighlight(currentInteractable);
         currentInteractable = null;
     }
 }

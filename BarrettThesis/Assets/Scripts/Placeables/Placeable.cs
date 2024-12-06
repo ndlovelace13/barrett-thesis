@@ -7,6 +7,8 @@ using UnityEngine;
 public enum PlaceableType
 {
     Painting,
+    Seating,
+    Pillar,
     Other
 }
 
@@ -50,6 +52,14 @@ public class Placeable
         {
             cardIndex = obj.GetComponent<Painting>().associatedCard.cardId;
             return PlaceableType.Painting;
+        }
+        else if (obj.GetComponent<Seating>() != null)
+        {
+            return PlaceableType.Seating;
+        }
+        else if (obj.GetComponent<Pillar>() != null)
+        {
+            return PlaceableType.Pillar;
         }
         else
             return PlaceableType.Other;
