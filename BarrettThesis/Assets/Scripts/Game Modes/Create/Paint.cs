@@ -44,7 +44,7 @@ public class Paint : MonoBehaviour
 
     private void Update()
     {
-        
+
 
         if (paintingEnabled)
         {
@@ -53,7 +53,7 @@ public class Paint : MonoBehaviour
             else
                 pressedLastFrame = false;
 
-            if (Input.GetMouseButton(1))
+            /*if (Input.GetMouseButton(1))
                 StopPainting();
             
         }
@@ -64,6 +64,7 @@ public class Paint : MonoBehaviour
             {
                 StartPainting(GameController.SaveData.currentDeck.cards[0]);
             }
+        }*/
         }
         
     }
@@ -75,8 +76,9 @@ public class Paint : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 10f))
         {
             cursor.position = hit.point;
-            currentX = (int)((cursor.position.x - topLeftCorner.position.x) * xMult);
-            currentY = (int)((cursor.position.y - topLeftCorner.position.y) * yMult);
+            currentX = (int)Mathf.Abs((cursor.localPosition.x - topLeftCorner.localPosition.x) * xMult);
+            currentY = (int)Mathf.Abs((cursor.localPosition.z - bottomRightCorner.localPosition.z) * yMult);
+            //Debug.Log(currentX + " " + currentY);
             DrawAtPoint();
         }
         else
@@ -85,7 +87,7 @@ public class Paint : MonoBehaviour
 
     private void DrawAtPoint()
     {
-        //Debug.Log(currentX + " " + currentY);
+        Debug.Log(currentX + " " + currentY);
         if (pressedLastFrame && (prevX != currentX || prevY != currentY))
         {
             int dist = (int)Mathf.Sqrt((currentX - prevX) * (currentX - prevX) + (currentY - prevY) * (currentY - prevY));
@@ -129,7 +131,7 @@ public class Paint : MonoBehaviour
                 //we do a little radius checking
                 if ((i - xPix) * (i - xPix) + (j - yPix) * (j - yPix) <= brushSize * brushSize)
                 {
-                    colorMap[i * yPixels + j] = brushColor; //replace the color of the right pixel in the color map
+                    colorMap[j * yPixels + i] = brushColor; //replace the color of the right pixel in the color map
                 }
             }
         }
@@ -149,11 +151,23 @@ public class Paint : MonoBehaviour
         SetTexture();
     }
 
+    void RestorePainting()
+    {
+        for (int i = 0; i < xPixels; i++)
+        {
+            for (int j = 0; j < yPixels; j++)
+            {
+                colorMap[i * xPixels + j] = createdPainting.GetPixel(j, i);
+            }
+        }
+
+    }
+
     //call this when create mode is activated
     public void StartPainting(Flashcard card)
     {
         paintingEnabled = true;
-        GameController.GameControl.gameMode = GameMode.ARCHIVE;
+        //GameController.GameControl.gameMode = GameMode.ARCHIVE;
 
         currentCard = card;
 
@@ -164,21 +178,25 @@ public class Paint : MonoBehaviour
         {
             Debug.Log("painting loc: " + currentCard.customArt);
             createdPainting = SaveHandler.SaveSystem.GetPainting(currentCard.customArt);
+            RestorePainting();
         }
         else
         {
             createdPainting = new Texture2D(yPixels, xPixels, TextureFormat.RGBA32, false);
             createdPainting.filterMode = FilterMode.Point;
+            ResetPainting();
         }
 
-
+        mat = GetComponent<Painting>().RetrieveMat();
         mat.mainTexture = createdPainting;
+        createdPainting.Apply();
 
         //set the initial multipliers
-        xMult = xPixels / (bottomRightCorner.position.x - topLeftCorner.position.x);
-        yMult = yPixels / (bottomRightCorner.position.y - topLeftCorner.position.y);
+        xMult = xPixels / (topLeftCorner.localPosition.x - bottomRightCorner.localPosition.x);
+        yMult = yPixels / (topLeftCorner.localPosition.z - bottomRightCorner.localPosition.z);
+        Debug.Log(xMult  + ", " + yMult);
 
-        ResetPainting();
+        //ResetPainting();
     }
 
     //call this when painting is complete, store it to files and to the associated flashcard

@@ -13,7 +13,7 @@ public class PlayerInteraction : MonoBehaviour
     public bool isInteracting = false;
 
     public bool rearranging = false;
-    GameObject heldObj;
+    public GameObject heldObj;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,19 +43,23 @@ public class PlayerInteraction : MonoBehaviour
             if (!rearranging && currentInteractable != null)
             {
                 Debug.Log("other");
-                currentInteractable.GetComponent<IInteractable>().Interact();
-                currentInteractable.GetComponent<IInteractable>().DeactivateHighlight();
-                if (currentInteractable.GetComponent<ObjectMotion>() != null)
-                    isInteracting = false;
+                bool interactSuccess = currentInteractable.GetComponent<IInteractable>().Interact();
+                if (interactSuccess)
+                {
+                    currentInteractable.GetComponent<IInteractable>().DeactivateHighlight();
+                    if (currentInteractable.GetComponent<ObjectMotion>() != null)
+                        isInteracting = false;
+                    else
+                        isInteracting = true;
+                }
                 else
-                    isInteracting = true;
+                    Debug.Log("Interaction Unsuccessful");
+                
             }
             else if (rearranging && (currentInteractable == heldObj || currentInteractable == null))
             {
                 Debug.Log("placing");
-                rearranging = false;
-                heldObj.GetComponent<IInteractable>().CancelInteract();
-                heldObj = null;
+                ResetHeldObj();
             }
         }
 
@@ -81,6 +85,15 @@ public class PlayerInteraction : MonoBehaviour
                 Deselect();
             }
         }
+    }
+
+    public void ResetHeldObj()
+    {
+        rearranging = false;
+        heldObj.GetComponent<ObjectMotion>().held = false;
+        if (heldObj.GetComponent<IInteractable>() != null)
+            heldObj.GetComponent<IInteractable>().CancelInteract();
+        heldObj = null;
     }
 
     /*private void RearrangeCheck()

@@ -13,12 +13,15 @@ public class Painting : Rearrangeable, IInteractable
     [SerializeField] Image image;
 
     [SerializeField] MeshRenderer displayMat;
+    Material paintMat;
 
     // Start is called before the first frame update
     protected override void Awake()
     {
         base.Awake();
         surface = LayerMask.GetMask("Wall");
+        paintMat = new Material(displayMat.material);
+        displayMat.material = paintMat;
     }
 
     // Update is called once per frame
@@ -30,7 +33,7 @@ public class Painting : Rearrangeable, IInteractable
     //function to assign a card
 
     //interact to move it - snap to predefined locations
-    public override void Interact()
+    public override bool Interact()
     {
         base.Interact();
         Debug.Log("Check 1");
@@ -45,7 +48,7 @@ public class Painting : Rearrangeable, IInteractable
                 AssignImage(true);
             }
         }
-
+        return true;
     }
 
     public override void CancelInteract()
@@ -92,16 +95,16 @@ public class Painting : Rearrangeable, IInteractable
         {
             if (associatedCard.useCustom)
             {
-                displayMat.material.mainTexture = SaveHandler.SaveSystem.GetPainting(associatedCard.customArt);
+                paintMat.mainTexture = SaveHandler.SaveSystem.GetPainting(associatedCard.customArt);
             }
             else
             {
                 string filePath = GameController.SaveData.currentDeck.mediaPath + associatedCard.fields[associatedCard.imgFields[0]];
                 //Debug.Log(filePath);
                 byte[] fileData = File.ReadAllBytes(filePath);
-                Texture2D tex = new Texture2D(2, 2);
+                Texture2D tex = new Texture2D(1024, 1024);
                 tex.LoadImage(fileData);
-                displayMat.material.mainTexture = tex;
+                paintMat.mainTexture = tex;
                 UpdateFrame();
             }
             
@@ -118,6 +121,11 @@ public class Painting : Rearrangeable, IInteractable
     {
         Debug.Log("Current Mastery Level: " + associatedCard.masteryLevel);
         GetComponent<MeshRenderer>().material = DeckManager.DeckManage.masteryMaterials[associatedCard.masteryLevel];
+    }
+
+    public Material RetrieveMat()
+    {
+        return paintMat;
     }
 
     public override void RestoreData(Placeable placedData)

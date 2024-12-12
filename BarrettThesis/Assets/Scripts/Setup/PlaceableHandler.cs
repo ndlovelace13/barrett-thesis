@@ -70,4 +70,9 @@ public class PlaceableHandler : MonoBehaviour
         }
         return returnedObj;
     }
+
+    public GameObject RetrievePainting()
+    {
+        return Instantiate(paintingPrefab);
+    }
 }

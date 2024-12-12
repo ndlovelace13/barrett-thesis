@@ -26,6 +26,7 @@ public class Archives : CoreGameMode, IInteractable
     {
         if (GameController.GameControl.gameMode == GameMode.ARCHIVE)
         {
+            //Debug.Log("Still in Archive???");
             //get archive increment
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
                 cardIncrement(-indexModAmount);
@@ -42,10 +43,10 @@ public class Archives : CoreGameMode, IInteractable
         
     }
 
-    public override void Interact()
+    public override bool Interact()
     {
-        base.Interact();
         currentIndex = 0;
+        return base.Interact();
         //StartCoroutine(ArchiveCam());
     }
 
@@ -73,6 +74,7 @@ public class Archives : CoreGameMode, IInteractable
         currentCard.GetComponent<CardFill>().StartHolding();
 
         //set rules of interacting
+        player.GetComponent<PlayerInteraction>().heldObj = currentCard;
         player.GetComponent<PlayerInteraction>().isInteracting = false;
         CancelInteract();
     }

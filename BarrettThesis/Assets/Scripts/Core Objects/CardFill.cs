@@ -69,6 +69,7 @@ public class CardFill : MonoBehaviour
     {
         //assign the card
         currentCard = newCard;
+        GetComponent<Rigidbody>().useGravity = false;
 
         //retrieve the important fields from the note
         string noteType = currentCard.noteId;

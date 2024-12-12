@@ -41,9 +41,9 @@ public class Matching : CoreGameMode, IInteractable
         
     }
 
-    public override void Interact()
+    public override bool Interact()
     {
-        base.Interact();
+        return base.Interact();
     }
 
     public override void CancelInteract()

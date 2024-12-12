@@ -25,11 +25,12 @@ public class CoreGameMode : MonoBehaviour, IInteractable
         
     }
 
-    public virtual void Interact()
+    public virtual bool Interact()
     {
         GameController.GameControl.lockPlayer = true;
         GameController.GameControl.gameMode = gameMode;
         StartCoroutine(CameraShift());
+        return true;
 
     }
 
@@ -89,6 +90,11 @@ public class CoreGameMode : MonoBehaviour, IInteractable
     public virtual void DeactivateHighlight()
     {
         GetComponent<Outline>().enabled = false;
+    }
+
+    protected GameObject GetHeldObject()
+    {
+        return player.GetComponent<PlayerInteraction>().heldObj;
     }
 
 }

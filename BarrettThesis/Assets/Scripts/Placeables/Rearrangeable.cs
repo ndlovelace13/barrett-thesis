@@ -35,7 +35,7 @@ public class Rearrangeable : MonoBehaviour, IInteractable
         saveData.Restore(gameObject);
     }
 
-    public virtual void Interact()
+    public virtual bool Interact()
     {
         if (playerHand.transform.childCount > 0)
         {
@@ -43,9 +43,13 @@ public class Rearrangeable : MonoBehaviour, IInteractable
             if (currentType != null && currentType.saveData.type == this.saveData.type)
             {
                 Debug.Log("SWAP OBJECTS, THEY ARE THE SAME TYPE");
+                return true;
             }
             else
+            {
                 Debug.Log("Interact Case Not Handled");
+                return false;
+            }
         }
         else
         {
@@ -59,6 +63,7 @@ public class Rearrangeable : MonoBehaviour, IInteractable
             GetComponent<Collider>().enabled = false;
             inPlace = false;
             GameObject.FindWithTag("Player").GetComponent<PlayerInteraction>().RearrangeObj(gameObject);
+            return true;
         }
     }
 
