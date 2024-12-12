@@ -12,6 +12,9 @@ public class Flashcard
     public List<int> audioFields;
     public string noteId;
 
+    public string customArt;
+    public bool useCustom = false;
+
     //progression elements
     public bool discovered;
     public int masteryLevel;
@@ -128,6 +131,7 @@ public class Flashcard
         Debug.Log(cardId + " was confused with" + index);
     }
 
+    //Mastery only updated on Card Correct
     private void MasteryCheck()
     {
         int newMastery = 0;

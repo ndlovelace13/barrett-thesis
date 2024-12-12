@@ -12,7 +12,7 @@ public class Painting : Rearrangeable, IInteractable
 
     [SerializeField] Image image;
 
-    public List<Material> masteryMaterials;
+    [SerializeField] MeshRenderer displayMat;
 
     // Start is called before the first frame update
     protected override void Awake()
@@ -90,13 +90,21 @@ public class Painting : Rearrangeable, IInteractable
     {
         if (associatedCard != null)
         {
-            string filePath = GameController.SaveData.currentDeck.mediaPath + associatedCard.fields[associatedCard.imgFields[0]];
-            //Debug.Log(filePath);
-            byte[] fileData = File.ReadAllBytes(filePath);
-            Texture2D tex = new Texture2D(2, 2);
-            tex.LoadImage(fileData);
-            image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-            UpdateFrame();
+            if (associatedCard.useCustom)
+            {
+                displayMat.material.mainTexture = SaveHandler.SaveSystem.GetPainting(associatedCard.customArt);
+            }
+            else
+            {
+                string filePath = GameController.SaveData.currentDeck.mediaPath + associatedCard.fields[associatedCard.imgFields[0]];
+                //Debug.Log(filePath);
+                byte[] fileData = File.ReadAllBytes(filePath);
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(fileData);
+                displayMat.material.mainTexture = tex;
+                UpdateFrame();
+            }
+            
             if (save)
             {
                 saveData.SavePlacement(gameObject);
@@ -109,7 +117,7 @@ public class Painting : Rearrangeable, IInteractable
     public void UpdateFrame()
     {
         Debug.Log("Current Mastery Level: " + associatedCard.masteryLevel);
-        GetComponent<MeshRenderer>().material = masteryMaterials[associatedCard.masteryLevel];
+        GetComponent<MeshRenderer>().material = DeckManager.DeckManage.masteryMaterials[associatedCard.masteryLevel];
     }
 
     public override void RestoreData(Placeable placedData)

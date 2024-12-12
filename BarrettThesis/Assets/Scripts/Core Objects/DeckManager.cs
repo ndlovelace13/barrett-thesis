@@ -9,6 +9,8 @@ public class DeckManager : MonoBehaviour
 {
     public static DeckManager DeckManage;
 
+    public List<Material> masteryMaterials;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +47,7 @@ public class DeckManager : MonoBehaviour
 
         int counter = 0;
         //retrieve all cards that are meant to appear (daysTilNext <= 1)
-        foreach (var card in GameController.SaveData.currentDeck.cards)
+        foreach (Flashcard card in GameController.SaveData.currentDeck.cards)
         {
             if (card.discovered && card.daysTilNext <= 1)
             {
@@ -57,8 +59,9 @@ public class DeckManager : MonoBehaviour
                 card.daysTilNext--;
         }
 
+        Debug.Log("Before dupe removal: " + GameController.SaveData.cardQueue.Count);
         GameController.SaveData.cardQueue = GameController.SaveData.cardQueue.Distinct().ToList();
-        Debug.Log(counter + " old cards added to queue");
+        Debug.Log("After dupe removal: " + GameController.SaveData.cardQueue.Count);
         GameController.SaveData.cardCount = GameController.SaveData.cardQueue.Count + GameController.SaveData.newQueue.Count;
 
         //Debug.Log(cardQueue.Count + " total queue");

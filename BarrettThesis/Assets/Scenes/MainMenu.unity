@@ -824,7 +824,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.95
+  m_fontSize: 52.9
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1091,7 +1091,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.95
+  m_fontSize: 52.9
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2089,7 +2089,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.95
+  m_fontSize: 52.9
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2381,7 +2381,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.95
+  m_fontSize: 52.9
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2986,6 +2986,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 289107f9d996d4b4391a7c5ff2de614b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masteryMaterials:
+  - {fileID: 2100000, guid: 2d8c5a3a75699c04fa291b53b983d39f, type: 2}
+  - {fileID: 2100000, guid: 3a228c369a6366240b76892071d9fb96, type: 2}
+  - {fileID: 2100000, guid: ec778e1a99bdacd469b4e2074599f66d, type: 2}
+  - {fileID: 2100000, guid: e4741b571babc304a8a1153eae7fcd04, type: 2}
+  - {fileID: 2100000, guid: 30a8b8a33ee1ea34fb4880f19647692b, type: 2}
+  - {fileID: 2100000, guid: 550f2eb7f4df11a4da630d37c8360673, type: 2}
+  - {fileID: 2100000, guid: 08d4b6b52e743e142b286385d25ce773, type: 2}
 --- !u!1001 &1703033544362799679
 PrefabInstance:
   m_ObjectHideFlags: 0

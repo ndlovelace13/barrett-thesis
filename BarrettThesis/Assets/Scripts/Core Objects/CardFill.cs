@@ -18,6 +18,7 @@ public class CardFill : MonoBehaviour
     [SerializeField] protected GameObject textObj;
     [SerializeField] protected GameObject imgPlane;
     [SerializeField] protected GameObject audioCue;
+    [SerializeField] protected MeshRenderer mesh;
 
     protected bool cardAssigned = false;
     protected string prevNoteId;
@@ -85,6 +86,8 @@ public class CardFill : MonoBehaviour
 
     protected virtual void FillDecision(NoteType noteInfo)
     {
+        //set the mesh mat to match the mastery level
+        mesh.material = DeckManager.DeckManage.masteryMaterials[currentCard.masteryLevel];
         if (cardAssigned && prevNoteId.Equals(currentCard.noteId))
         {
             //fields already set, just need to fill them in

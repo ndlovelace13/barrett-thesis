@@ -5,13 +5,16 @@ using System.IO;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System;
+using System.Linq;
+using System.Security.Cryptography;
 
 public class SaveHandler : MonoBehaviour
 {
     public static SaveHandler SaveSystem;
 
+    string saveFolderPath;
     string saveFilePath;
-    string deckFilePath;
+    string paintingPath;
 
     int saveIndex;
     public int saveCount;
@@ -31,9 +34,8 @@ public class SaveHandler : MonoBehaviour
 
     void Start()
     {
-        //TO DO: allow this to be flexible for multiple save files (add a number at the end of playerData to indicate which save they want to access)
         RetrieveSaves();
-        if (existingSaves.Length > 0)
+        if (saveCount > 0)
         {
             SetSaveFile();
             //LoadGame();
@@ -44,8 +46,8 @@ public class SaveHandler : MonoBehaviour
     {
         if (GameController.GameControl.testingMode)
         {
-            if (Input.GetKey(KeyCode.Keypad9))
-                DeleteGame();
+            //if (Input.GetKey(KeyCode.Keypad9))
+                //DeleteGame();
             if (Input.GetKey(KeyCode.Keypad7))
                 SaveGame();
         }
@@ -72,6 +74,36 @@ public class SaveHandler : MonoBehaviour
         
     }
 
+    public void SavePainting(Texture2D painting, Flashcard card)
+    {
+        if (!Directory.Exists(paintingPath))
+        {
+            Directory.CreateDirectory(paintingPath);
+            Debug.Log("Painting Directory Created");
+        }
+
+        //store to bytes and write to a png
+        byte[] paintingBytes = painting.EncodeToPNG();
+
+        //establish the path for this particular painting
+        string currentPainting = card.cardId + ".png";
+        string writePath = Path.Combine(paintingPath, currentPainting);
+        File.WriteAllBytes(writePath, paintingBytes);
+
+        card.customArt = currentPainting;
+        card.useCustom = true;
+    }
+
+    public Texture2D GetPainting(string paintFile)
+    {
+        string paintPath = Path.Combine(paintingPath, paintFile);
+        byte[] paintBytes = File.ReadAllBytes(paintPath);
+        Texture2D returnedPainting = new Texture2D(1024, 1024, TextureFormat.RGBA32, false);
+        returnedPainting.filterMode = FilterMode.Point;
+        returnedPainting.LoadImage(paintBytes);
+        return returnedPainting;
+    }
+
     public void LoadGame()
     {
         if (File.Exists(saveFilePath))
@@ -92,8 +124,9 @@ public class SaveHandler : MonoBehaviour
 
     public bool FindGame(int fileIndex)
     {
-        string tempFilePath = Application.persistentDataPath + "/PlayerData" + fileIndex + ".json";
-        if (File.Exists(tempFilePath))
+        string tempPath = Path.Combine(Application.persistentDataPath, "Slot" + (fileIndex + 1));
+        tempPath = Path.Combine(tempPath, "PlayerData.json");
+        if (File.Exists(tempPath))
             return true;
         else
             return false;
@@ -102,18 +135,39 @@ public class SaveHandler : MonoBehaviour
     public void SetSaveFile()
     {
         saveIndex = PlayerPrefs.GetInt("recentSave");
-        saveFilePath = Application.persistentDataPath + "/PlayerData" + saveIndex + ".json";
+        saveFolderPath = Path.Combine(Application.persistentDataPath, "Slot" + (saveIndex + 1));
+        saveFilePath = Path.Combine(saveFolderPath, "PlayerData.json");
+        paintingPath = Path.Combine(saveFolderPath, "Paintings");
     }
 
     public void RetrieveSaves()
     {
-        existingSaves = Directory.GetFiles(Application.persistentDataPath, "*.json");
-        saveCount = existingSaves.Length;
-        foreach (string file in existingSaves)
-            Debug.Log(file);
+        if (Directory.GetDirectories(Application.persistentDataPath).Length < 1)
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                string dirPath = Path.Combine(Application.persistentDataPath, "Slot" + i);
+                Directory.CreateDirectory(dirPath);
+            }
+        }
+        else
+        {
+            Debug.Log("Save Slot Directories exist");
+        }
+
+        saveCount = 0;
+        string[] paths = Directory.GetDirectories(Application.persistentDataPath);
+        for (int i = 0; i < paths.Length; i++)
+        {
+            string[] temp = Directory.GetFiles(paths[i], "*.json");
+            saveCount += temp.Length;
+        }
+
+        //existingSaves = Directory.GetFiles(Application.persistentDataPath, "*.json");
+        //saveCount = existingSaves.Length;
     }
 
-    public void DeleteGame()
+    /*public void DeleteGame()
     {
         if (File.Exists(existingSaves[0]))
         {
@@ -122,7 +176,7 @@ public class SaveHandler : MonoBehaviour
         }
         else
             Debug.Log("There is no file to delete!");
-    }
+    }*/
 
     /*public void UpdateText()
     {

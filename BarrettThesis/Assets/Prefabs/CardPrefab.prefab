@@ -82,6 +82,7 @@ MonoBehaviour:
     type: 3}
   audioCue: {fileID: 8863821780513240316, guid: bb820e7fe7375a748b5996007b4bce64,
     type: 3}
+  mesh: {fileID: 2661173549300852554}
 --- !u!114 &429490507851368456
 MonoBehaviour:
   m_ObjectHideFlags: 0
