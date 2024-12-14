@@ -60,10 +60,28 @@ public class Rearrangeable : MonoBehaviour, IInteractable
             transform.localRotation = Quaternion.Euler(Vector3.zero);
             //transform.localScale = transform.localScale / 2f; 
             GetComponent<ObjectMotion>().held = true;
-            GetComponent<Collider>().enabled = false;
+            ColliderDisable();
             inPlace = false;
             GameObject.FindWithTag("Player").GetComponent<PlayerInteraction>().RearrangeObj(gameObject);
             return true;
+        }
+    }
+
+    public void ColliderEnable()
+    {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = true;
+        }
+    }
+
+    private void ColliderDisable()
+    {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = false;
         }
     }
 

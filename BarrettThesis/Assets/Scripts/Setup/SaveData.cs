@@ -25,6 +25,9 @@ public class SaveData
 
     //museum orientation
     public List<Placeable> placeables;
+    public int maxPaintings = 2;
+    public int maxPillars = 0;
+    public int maxSeating = 0;
 
     //settings
     public int newPerDay = 15;

@@ -26,6 +26,18 @@ public class Create : CoreGameMode, IInteractable
 
     [SerializeField] ObjectPool cardPool;
 
+    //brushes
+    [SerializeField] Transform brushStart;
+    [SerializeField] Transform brushEnd;
+
+    [SerializeField] GameObject brushHolder;
+    [SerializeField] Brush currentBrush;
+
+    [SerializeField] Eraser eraser;
+    public bool eraserToggled = false;
+
+    [SerializeField] ColorSelect colorSelect;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -36,7 +48,14 @@ public class Create : CoreGameMode, IInteractable
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Q) && GameController.GameControl.gameMode == GameMode.CREATING)
+        {
+            PaintingRetrieve();
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            eraser.EraserToggle();
+        }
     }
 
     public override bool Interact()
@@ -52,13 +71,32 @@ public class Create : CoreGameMode, IInteractable
         return false;
     }
 
+    private void PaintingRetrieve()
+    {
+        if (GameObject.FindObjectsOfType<Painting>().Length <= GameController.SaveData.maxPaintings)
+        {
+            painting.GetComponent<Paint>().StopPainting();
+            painting.GetComponent<Rearrangeable>().Interact();
+            painting = null;
+            CancelInteract();
+        }
+        else
+        {
+            Debug.Log("Max Paintings Reached");
+        }
+    }
+
     //TODO - rework so that the player could retrieve the painting or card if they wanted to?
     public override void CancelInteract()
     {
-        painting.GetComponent<Paint>().StopPainting();
-        Destroy(painting);
+        if (painting != null)
+        {
+            painting.GetComponent<Paint>().StopPainting();
+            Destroy(painting);
+        }
         cardFront.SetActive(false);
         cardBack.SetActive(false);
+        brushHolder.SetActive(false);
         base.CancelInteract();
         
     }
@@ -119,6 +157,11 @@ public class Create : CoreGameMode, IInteractable
         {
             Debug.Log("You're boned buddy");
         }
+
+        //turn on brush objects
+        brushHolder.SetActive(true);
+
+        heldObj.transform.parent = null;
         player.GetComponent<PlayerInteraction>().ResetHeldObj();
 
         StartCoroutine(ObjectLerp());
@@ -131,6 +174,7 @@ public class Create : CoreGameMode, IInteractable
         TransformTransfer(cardFront.transform, frontStart);
         TransformTransfer(cardBack.transform, backStart);
         TransformTransfer(painting.transform, paintStart);
+        TransformTransfer(brushHolder.transform, brushStart);
         
         //set up the timer
         float timer = 0f;
@@ -142,10 +186,12 @@ public class Create : CoreGameMode, IInteractable
             cardFront.transform.position = Vector3.Lerp(frontStart.position, frontEnd.position, timer / lerpTime);
             cardBack.transform.position = Vector3.Lerp(backStart.position, backEnd.position, timer / lerpTime);
             painting.transform.position = Vector3.Lerp(paintStart.position, paintEnd.position, timer / lerpTime);
+            brushHolder.transform.position = Vector3.Lerp(brushStart.position, brushEnd.position, timer / lerpTime);
 
             cardFront.transform.rotation = Quaternion.Lerp(frontStart.rotation, frontEnd.rotation, timer / lerpTime);
             cardBack.transform.rotation = Quaternion.Lerp(backStart.rotation, backEnd.rotation, timer / lerpTime);
             painting.transform.rotation = Quaternion.Lerp(paintStart.rotation, paintEnd.rotation, timer / lerpTime);
+            brushHolder.transform.rotation = Quaternion.Lerp(brushStart.rotation, brushEnd.rotation, timer / lerpTime);
 
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
@@ -155,8 +201,33 @@ public class Create : CoreGameMode, IInteractable
         TransformTransfer(cardFront.transform, frontEnd);
         TransformTransfer(cardBack.transform, backEnd);
         TransformTransfer(painting.transform, paintEnd);
+        TransformTransfer(brushHolder.transform, brushEnd);
+
         //activate painting mode here
+        painting.GetComponent<Painting>().ColliderEnable();
         painting.GetComponent<Paint>().StartPainting(associatedCard);
+
+        //select the current brush
+        currentBrush.Select();
+    }
+
+    public void BrushSelect(Brush newBrush)
+    {
+        currentBrush.Deselect();
+        currentBrush = newBrush;
+        painting.GetComponent<Paint>().brushSize = currentBrush.GetSize();
+    }
+
+    public void ColorSelect()
+    {
+        Color newColor;
+        if (eraserToggled)
+            newColor = Color.white;
+        else
+            newColor = colorSelect.selectedCol;
+
+        //assign the color to the painting
+        painting.GetComponent<Paint>().brushColor = newColor;
     }
 
     //Debugging

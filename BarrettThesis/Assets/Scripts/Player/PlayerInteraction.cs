@@ -40,7 +40,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             Debug.Log("E pressed");
             //if E pressed, call interact() on the interactable
-            if (!rearranging && currentInteractable != null)
+            if (currentInteractable != null)
             {
                 Debug.Log("other");
                 bool interactSuccess = currentInteractable.GetComponent<IInteractable>().Interact();
@@ -130,6 +130,7 @@ public class PlayerInteraction : MonoBehaviour
         Debug.Log("Beginning Rearrange Mode");
         rearranging = true;
         heldObj = painting;
+        isInteracting = false;
     }
 
     private void UpdatePrompt()

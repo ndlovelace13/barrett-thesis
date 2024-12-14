@@ -17,32 +17,33 @@ public class Paint : MonoBehaviour
     public Transform cursor;
 
     public Material mat;
+    protected LayerMask paintable;
 
     public Texture2D createdPainting;
 
     Color[] colorMap;
 
-    int currentX = 0;
-    int currentY = 0;
+    protected int currentX = 0;
+    protected int currentY = 0;
 
-    float xMult;
-    float yMult;
+    protected float xMult;
+    protected float yMult;
 
     //missedFrameChecking
     bool pressedLastFrame = false;
     int prevX;
     int prevY;
 
-    bool paintingEnabled = false;
+    protected bool paintingEnabled = false;
 
     Flashcard currentCard;
 
-    private void Start()
+    protected virtual void Start()
     {
-        
+        paintable = LayerMask.GetMask("paintable");
     }
 
-    private void Update()
+    protected void Update()
     {
 
 
@@ -69,13 +70,14 @@ public class Paint : MonoBehaviour
         
     }
 
-    private void CalculatePixel()
+    protected void CalculatePixel()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 10f))
+        if (Physics.Raycast(ray, out hit, 5f, paintable))
         {
             cursor.position = hit.point;
+            Debug.Log(hit.collider.gameObject.name);
             currentX = (int)Mathf.Abs((cursor.localPosition.x - topLeftCorner.localPosition.x) * xMult);
             currentY = (int)Mathf.Abs((cursor.localPosition.z - bottomRightCorner.localPosition.z) * yMult);
             //Debug.Log(currentX + " " + currentY);
@@ -85,7 +87,7 @@ public class Paint : MonoBehaviour
             pressedLastFrame= false;
     }
 
-    private void DrawAtPoint()
+    protected virtual void DrawAtPoint()
     {
         Debug.Log(currentX + " " + currentY);
         if (pressedLastFrame && (prevX != currentX || prevY != currentY))
