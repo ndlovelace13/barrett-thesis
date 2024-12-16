@@ -9,10 +9,8 @@ public enum TaskType
 {
     NewCards,
     ReviewCards,
-    TipCollection,
+    Donation,
     Delivery,
-    Order
-
 }
 
 public class ChecklistDisplay : MonoBehaviour
@@ -64,8 +62,12 @@ public class ChecklistDisplay : MonoBehaviour
         //add in other necessary tasks for the day here
 
         //pickup delivery
+        if (GameController.SaveData.orderedPlaceables.Count > 0)
+            GameController.SaveData.taskMenu.Add(TaskType.Delivery);
 
         //claim donations
+        if (GameController.SaveData.jarBalance > 0)
+            GameController.SaveData.taskMenu.Add(TaskType.Donation);
 
         //place new art
 

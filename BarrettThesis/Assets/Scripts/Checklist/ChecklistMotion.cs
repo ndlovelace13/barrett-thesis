@@ -123,6 +123,7 @@ public class ChecklistMotion : ObjectMotion
         }
         transform.localPosition = offScreen.localPosition;
         GetComponent<MeshRenderer>().enabled = false;
+        held = false;
         yield return null;
 
     }
@@ -143,6 +144,7 @@ public class ChecklistMotion : ObjectMotion
                 yield break;
         }
         transform.localPosition = startingPos.localPosition;
+        held = true;
         yield return null;
         Debug.Log("Done Enabling Checklist");
     }

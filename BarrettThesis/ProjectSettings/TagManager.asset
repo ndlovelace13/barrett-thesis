@@ -9,6 +9,7 @@ TagManager:
   - Checklist
   - ObjectSlot
   - PlaceableHandler
+  - donation
   layers:
   - Default
   - TransparentFX

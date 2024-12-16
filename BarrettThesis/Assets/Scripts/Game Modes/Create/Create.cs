@@ -231,14 +231,14 @@ public class Create : CoreGameMode, IInteractable
     }
 
     //Debugging
-    private void SpawnNewObj()
+    /*private void SpawnNewObj()
     {
         CancelInteract();
         GameObject newObj = allPlaceable.RandomPlaceable();
         newObj.GetComponent<IInteractable>().Interact();
         player.GetComponent<PlayerInteraction>().RearrangeObj(newObj);
         player.GetComponent<PlayerInteraction>().isInteracting = false;
-    }
+    }*/
 
     public void TransformTransfer(Transform ogTrans, Transform newTrans)
     {

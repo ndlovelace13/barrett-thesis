@@ -69,6 +69,8 @@ public class DeckManager : MonoBehaviour
         //update all progression variables
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(24).ToString();
         GameController.SaveData.tasksComplete = false;
+        GameController.SaveData.orderedPlaceables.AddRange(GameController.SaveData.newOrders);
+        GameController.SaveData.newOrders.Clear();
         GameController.SaveData.dayIndex++;
 
         //instantiate the tasks and checklist here

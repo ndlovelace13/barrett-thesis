@@ -121,6 +121,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  heldRot: {x: 0, y: 0, z: 0}
+  inspecting: 0
+  held: 0
   startingPos: {fileID: 0}
   inspectPos: {fileID: 0}
   offScreen: {fileID: 0}
@@ -143,6 +146,8 @@ MonoBehaviour:
   taskControls:
   - {fileID: 1966949245133582211, guid: c9f2709547b9a6741ade45976d9c2846, type: 3}
   - {fileID: -887703222073215468, guid: 305e9bae45599d54e8f936a7b4bcc239, type: 3}
+  - {fileID: 1966949245133582211, guid: 1cd456a4c89856c42b964422e2bbef6a, type: 3}
+  - {fileID: 1966949245133582211, guid: 632da7a5da9d06140a98568affd9ffea, type: 3}
 --- !u!1 &6734944007977140832
 GameObject:
   m_ObjectHideFlags: 0

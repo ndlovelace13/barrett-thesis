@@ -7,6 +7,9 @@ public class PlaceableHandler : MonoBehaviour
     [SerializeField] GameObject paintingPrefab;
     [SerializeField] GameObject seatingPrefab;
     [SerializeField] GameObject pillarPrefab;
+    [SerializeField] GameObject donationPrefab;
+
+    [SerializeField] GameObject deliveryBox;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +24,12 @@ public class PlaceableHandler : MonoBehaviour
 
     public void PlaceableRestore()
     {
+        //enable delivery boxes if there are any items in orderedPlaceables
+        if (GameController.SaveData.orderedPlaceables.Count > 0)
+            deliveryBox.SetActive(true);
+        else
+            deliveryBox.SetActive(false);
+
         Debug.Log("Placeables Detected: " + GameController.SaveData.placeables.Count);
         for (int i = 0; i < GameController.SaveData.placeables.Count; i++)
         {
@@ -39,6 +48,10 @@ public class PlaceableHandler : MonoBehaviour
                     Debug.Log("pillar restored");
                     newObj = Instantiate(pillarPrefab);
                     break;
+                case PlaceableType.Donation:
+                    Debug.Log("donation pillar restored");
+                    newObj = Instantiate(donationPrefab);
+                    break;
             }
             if (newObj != null)
             {
@@ -49,20 +62,22 @@ public class PlaceableHandler : MonoBehaviour
     }
 
     //DEBUG
-    public GameObject RandomPlaceable()
+    public GameObject RetrieveOrder(Placeable order)
     {
-        int choice = Random.Range(0, 3);
         GameObject returnedObj = null;
-        switch (choice)
+        switch (order.type)
         {
-            case 0:
+            case PlaceableType.Painting:
                 returnedObj = Instantiate(paintingPrefab);
                 break;
-            case 1:
+            case PlaceableType.Seating:
                 returnedObj = Instantiate(seatingPrefab);
                 break;
-            case 2:
+            case PlaceableType.Pillar:
                 returnedObj = Instantiate(pillarPrefab);
+                break;
+            case PlaceableType.Donation:
+                returnedObj = Instantiate(donationPrefab);
                 break;
             default:
                 break;

@@ -11,7 +11,8 @@ public enum GameMode
     ARCHIVE,
     MATCHING,
     CREATING,
-    INSPECTING
+    INSPECTING,
+    ORDERING
 }
 
 public class GameController : MonoBehaviour

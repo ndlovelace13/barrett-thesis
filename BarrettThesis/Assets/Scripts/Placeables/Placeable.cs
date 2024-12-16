@@ -9,6 +9,7 @@ public enum PlaceableType
     Painting,
     Seating,
     Pillar,
+    Donation,
     Other
 }
 
@@ -17,15 +18,29 @@ public class Placeable
 {
     public PlaceableType type;
     public int cardIndex;
+    public bool donationPillar;
 
     public JsonVector location;
     public JsonVector rotation;
+    public JsonVector scale;
+
+    public Placeable(GameObject obj)
+    {
+        type = GetType(obj);
+    }
+
+    public Placeable(PlaceableType givenType)
+    {
+        type = givenType;
+    }
 
     public virtual void SavePlacement(GameObject placeableObj)
     {
         type = GetType(placeableObj);
         location = new JsonVector(placeableObj.transform.position);
         rotation = new JsonVector(placeableObj.transform.rotation.eulerAngles);
+        scale = new JsonVector(placeableObj.transform.localScale);
+
         if (!GameController.SaveData.placeables.Contains(this))
             GameController.SaveData.placeables.Add(this);
     }
@@ -34,6 +49,7 @@ public class Placeable
     {
         placeableObj.transform.position = location.ToVector();
         placeableObj.transform.rotation = Quaternion.Euler(rotation.ToVector());
+        placeableObj.transform.localScale = scale.ToVector();
     }
 
 
@@ -59,7 +75,11 @@ public class Placeable
         }
         else if (obj.GetComponent<Pillar>() != null)
         {
-            return PlaceableType.Pillar;
+            donationPillar = obj.GetComponent<Pillar>().donation;
+            if (donationPillar)
+                return PlaceableType.Donation;
+            else
+                return PlaceableType.Pillar;
         }
         else
             return PlaceableType.Other;

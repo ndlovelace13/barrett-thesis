@@ -14,6 +14,7 @@ public class SaveData
     public int newestIndex;
     public int cardCount;
     public int balance;
+    public int jarBalance;
     public int completeDays;
     public int dayIndex = 0;
 
@@ -29,6 +30,11 @@ public class SaveData
     public int maxPillars = 0;
     public int maxSeating = 0;
 
+    //orders
+    public List<Placeable> orderedPlaceables;
+    public List<Placeable> newOrders;
+    //public bool ordersReady = false;
+
     //settings
     public int newPerDay = 15;
 
@@ -43,6 +49,7 @@ public class SaveData
 
         tasksComplete = false;
         balance = 0;
+        jarBalance = 0;
         playerName = "Hugh Mungus";
         completeDays = 0;
         saveTime = DateTime.UtcNow.ToString();
@@ -51,6 +58,8 @@ public class SaveData
         newQueue = new List<Flashcard>();
         cardQueue = new List<Flashcard>();
         placeables = new List<Placeable>();
+        orderedPlaceables = new List<Placeable>();
+        newOrders = new List<Placeable>();
     }
 
     // Start is called before the first frame update

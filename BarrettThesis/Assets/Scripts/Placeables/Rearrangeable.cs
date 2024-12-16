@@ -18,7 +18,7 @@ public class Rearrangeable : MonoBehaviour, IInteractable
     // Start is called before the first frame update
     protected virtual void Awake()
     {
-        saveData = new Placeable();
+        saveData = new Placeable(gameObject);
         playerHand = GameObject.FindWithTag("ObjectSlot");
         DeactivateHighlight();
     }
@@ -93,7 +93,7 @@ public class Rearrangeable : MonoBehaviour, IInteractable
             transform.SetParent(null);
             //transform.localScale = transform.localScale * 2f;
             GetComponent<ObjectMotion>().held = false;
-            GetComponent<Collider>().enabled = true;
+            ColliderEnable();
             saveData.SavePlacement(gameObject);
             SaveHandler.SaveSystem.SaveGame();
         }
