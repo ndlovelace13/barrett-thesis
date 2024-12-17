@@ -24,11 +24,7 @@ public class PlaceableHandler : MonoBehaviour
 
     public void PlaceableRestore()
     {
-        //enable delivery boxes if there are any items in orderedPlaceables
-        if (GameController.SaveData.orderedPlaceables.Count > 0)
-            deliveryBox.SetActive(true);
-        else
-            deliveryBox.SetActive(false);
+        Delivery();
 
         Debug.Log("Placeables Detected: " + GameController.SaveData.placeables.Count);
         for (int i = 0; i < GameController.SaveData.placeables.Count; i++)
@@ -59,6 +55,15 @@ public class PlaceableHandler : MonoBehaviour
             }
         }
         SaveHandler.SaveSystem.SaveGame();
+    }
+
+    public void Delivery()
+    {
+        //enable delivery boxes if there are any items in orderedPlaceables
+        if (GameController.SaveData.orderedPlaceables.Count > 0)
+            deliveryBox.SetActive(true);
+        else
+            deliveryBox.SetActive(false);
     }
 
     //DEBUG

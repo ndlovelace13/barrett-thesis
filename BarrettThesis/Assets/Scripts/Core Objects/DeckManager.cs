@@ -11,6 +11,8 @@ public class DeckManager : MonoBehaviour
 
     public List<Material> masteryMaterials;
 
+    //[SerializeField] PlaceableHandler placeableHandler;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,32 +71,38 @@ public class DeckManager : MonoBehaviour
         //update all progression variables
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(24).ToString();
         GameController.SaveData.tasksComplete = false;
+        GameController.SaveData.museumOpen = false;
         GameController.SaveData.orderedPlaceables.AddRange(GameController.SaveData.newOrders);
         GameController.SaveData.newOrders.Clear();
+        GameController.SaveData.deliveriesToday = GameController.SaveData.orderedPlaceables.Count;
         GameController.SaveData.dayIndex++;
+        GameController.SaveData.donationsToday = GameController.SaveData.jarBalance;
 
         //instantiate the tasks and checklist here
         GameObject test = GameObject.FindWithTag("Checklist");
-        Debug.Log(SceneManager.GetActiveScene().name);
+        //Debug.Log(SceneManager.GetActiveScene().name);
 
         test.GetComponent<ChecklistDisplay>().TaskMenu();
+
+        GameObject.FindWithTag("PlaceableHandler").GetComponent<PlaceableHandler>().Delivery();
     }
 
     //call this when the player completes their tasks for the day (when the museum opens)
     public void TasksComplete()
     {
+        GameController.SaveData.museumOpen = true;
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(8).ToString();
         GameController.SaveData.completeDays++;
-        GameController.SaveData.tasksComplete = true;
     }
 
     //IMPORTANT - this function checks current time vs. last login, decides the state of current tasks
     public void DateCheck()
     {
         //check the lastLogin vs. currentTime
-        DateTime refreshTime = DateTime.Parse(GameController.SaveData.refreshTime);
+        DateTime refreshTime = GameController.SaveData.GetRefreshTime();
         TimeSpan diff = refreshTime - DateTime.UtcNow;
         double hourCount = diff.TotalHours;
+        Debug.Log("Hour Count: " + hourCount);
 
         //previous day was finished
         if (GameController.SaveData.tasksComplete)
@@ -122,13 +130,15 @@ public class DeckManager : MonoBehaviour
             //case for museum is still open, come back later - set the clock to trigger AssignTasks when museum closes
             else
             {
+                //restore checklist progress
+                GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskMenu();
                 Debug.Log("STATUS: museum still open, come back later for new tasks");
             }
         }
         else
         {
             //case for too long since last login - assign tasks and retain unfinished work
-            if (hourCount > 0)
+            if (hourCount < 0)
             {
                 //reset streak
                 Debug.Log("STATUS: tasks not completed, streak reset, assigning new tasks");
@@ -137,7 +147,10 @@ public class DeckManager : MonoBehaviour
             else
             {
                 //allow the user to continue their progress
-               
+
+                //restore the checklist progress
+                GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskMenu();
+
 
                 //if this is the first day, assignTasks for the first time
                 if (GameController.SaveData.dayIndex == 0 || GameController.SaveData.newQueue == null)

@@ -105,9 +105,9 @@ public class Painting : Rearrangeable, IInteractable
                 Texture2D tex = new Texture2D(1024, 1024);
                 tex.LoadImage(fileData);
                 paintMat.mainTexture = tex;
-                UpdateFrame();
             }
-            
+            UpdateFrame();
+
             if (save)
             {
                 saveData.SavePlacement(gameObject);

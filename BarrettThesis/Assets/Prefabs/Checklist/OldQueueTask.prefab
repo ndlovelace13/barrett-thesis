@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkBox: {fileID: 856919079062666906}
   taskText: {fileID: 6545742267051774532}
-  taskType: {fileID: 0}
+  taskType: {fileID: -887703222073215468}
 --- !u!114 &949817000936870267
 MonoBehaviour:
   m_ObjectHideFlags: 0

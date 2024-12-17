@@ -21,12 +21,13 @@ public class OldQueueTask : TaskControl
         
     }
 
-    public override void UpdateTask()
+    public override bool UpdateTask()
     {
-        base.UpdateTask();
         taskDescription = "Archives Reviewed";
         tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count - GameController.SaveData.newQueue.Count;
         tasksTotal = GameController.SaveData.cardCount;
         Debug.Log("OldQueueTask Updated");
+        return base.UpdateTask();
+
     }
 }

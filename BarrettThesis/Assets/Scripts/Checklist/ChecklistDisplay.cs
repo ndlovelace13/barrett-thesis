@@ -16,6 +16,7 @@ public enum TaskType
 public class ChecklistDisplay : MonoBehaviour
 {
     [SerializeField] TMP_Text dayCounter;
+    [SerializeField] TMP_Text currentFunds;
 
     [SerializeField] GameObject listHolder;
 
@@ -40,6 +41,7 @@ public class ChecklistDisplay : MonoBehaviour
                 counter++;
             }
         }
+        Debug.Log("Counter at " + counter);
 
         //move this to the current scene controller when created
         GameController.GameControl.GameStart();
@@ -55,18 +57,23 @@ public class ChecklistDisplay : MonoBehaviour
     {
         Debug.Log("Task Menu Reached");
         //set the necessary task menu for the day (for saving and retrieval)
-        GameController.SaveData.taskMenu = new List<TaskType>();
+        if (GameController.SaveData.taskMenu != null)
+            GameController.SaveData.taskMenu.Clear();
+        else
+            GameController.SaveData.taskMenu = new List<TaskType>();
+
+        //always add these two as there will always be cards to study
         GameController.SaveData.taskMenu.Add(TaskType.NewCards);
         GameController.SaveData.taskMenu.Add(TaskType.ReviewCards);
 
         //add in other necessary tasks for the day here
 
         //pickup delivery
-        if (GameController.SaveData.orderedPlaceables.Count > 0)
+        if (GameController.SaveData.deliveriesToday > 0)
             GameController.SaveData.taskMenu.Add(TaskType.Delivery);
 
         //claim donations
-        if (GameController.SaveData.jarBalance > 0)
+        if (GameController.SaveData.donationsToday > 0)
             GameController.SaveData.taskMenu.Add(TaskType.Donation);
 
         //place new art
@@ -81,7 +88,16 @@ public class ChecklistDisplay : MonoBehaviour
     public void TaskFill()
     {
         dayCounter.text = "Day " + GameController.SaveData.dayIndex;
-        currentTasks = new List<ChecklistItem>();
+        currentFunds.text = "Current Funding: " + ((float)(GameController.SaveData.balance / 100f)).ToString("C0");
+        
+        if (currentTasks == null)
+            currentTasks = new List<ChecklistItem>();
+        else
+            currentTasks.Clear();
+
+        //Destroy any current tasks on the board
+        foreach (Transform child in listHolder.transform)
+            Destroy(child.gameObject);
 
         foreach (TaskType task in GameController.SaveData.taskMenu)
         {
@@ -102,10 +118,21 @@ public class ChecklistDisplay : MonoBehaviour
     //function to update the values of the checklist everytime it is enabled
     public void TaskUpdate()
     {
-       Debug.Log("UpdatingTasks");
-       foreach (ChecklistItem item in currentTasks)
-       {
-            item.UpdateItem();
-       }
+        currentFunds.text = "Current Funding: " + ((float)(GameController.SaveData.balance / 100f)).ToString("C0");
+        Debug.Log("UpdatingTasks");
+
+        bool taskCompletion = true;
+        foreach (ChecklistItem item in currentTasks)
+        {
+            //update each task and check whether the task is complete
+            bool complete = item.UpdateItem();
+            if (!complete)
+                taskCompletion = false;
+        }
+        //Task Completion will be true only if all tasks are complete
+        GameController.SaveData.tasksComplete = taskCompletion;
+        
+        //This should be the only place the game is saved to minimize redundancy
+        SaveHandler.SaveSystem.SaveGame();
     }
 }

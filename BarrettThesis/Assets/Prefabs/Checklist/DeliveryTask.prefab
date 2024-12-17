@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5999266891510735505}
   - component: {fileID: 4783609635401228409}
   - component: {fileID: 949817000936870267}
-  - component: {fileID: 1966949245133582211}
+  - component: {fileID: -3865974193718225835}
   m_Layer: 5
   m_Name: DeliveryTask
   m_TagString: Untagged
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkBox: {fileID: 856919079062666906}
   taskText: {fileID: 6545742267051774532}
-  taskType: {fileID: 1966949245133582211}
+  taskType: {fileID: -3865974193718225835}
 --- !u!114 &949817000936870267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &1966949245133582211
+--- !u!114 &-3865974193718225835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,10 +130,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1865133587892255724}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc1368105e3a7af4c9d223f6434a9e76, type: 3}
+  m_Script: {fileID: 11500000, guid: 0944adc5d3419a049b71adc7f8752ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taskDescription: Collect Donations
+  taskDescription: Unbox New Deliveries
   tasksComplete: 0
   tasksTotal: 0
 --- !u!1 &4189881214314884794

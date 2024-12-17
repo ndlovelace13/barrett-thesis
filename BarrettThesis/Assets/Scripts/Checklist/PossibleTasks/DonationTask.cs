@@ -19,12 +19,13 @@ public class DonationTask : TaskControl
         
     }
 
-    public override void UpdateTask()
+    public override bool UpdateTask()
     {
-        base.UpdateTask();
         if (GameController.SaveData.jarBalance == 0)
         {
             tasksComplete = 1;
         }
+        Debug.Log("Donation Task Updated");
+        return base.UpdateTask();
     }
 }

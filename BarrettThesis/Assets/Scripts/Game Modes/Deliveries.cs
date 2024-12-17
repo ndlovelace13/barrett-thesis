@@ -18,7 +18,7 @@ public class Deliveries : CoreGameMode, IInteractable
         }
     }
 
-    //update the player's balance
+    //equip a new item from the ordered list
     private void UnboxDelivery()
     {
         Placeable newOrder = GameController.SaveData.orderedPlaceables[0];
@@ -27,6 +27,8 @@ public class Deliveries : CoreGameMode, IInteractable
         newObj.GetComponent<IInteractable>().Interact();
         player.GetComponent<PlayerInteraction>().RearrangeObj(newObj);
         player.GetComponent<PlayerInteraction>().isInteracting = false;
+        //update the checklist on unbox
+        GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskUpdate();
     }
 
     private void SpawnNewObj()

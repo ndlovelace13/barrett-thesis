@@ -22,10 +22,11 @@ public class ChecklistItem : MonoBehaviour
         
     }
 
-    public void UpdateItem()
+    public bool UpdateItem()
     {
-        taskType.UpdateTask();
+        bool taskComplete = taskType.UpdateTask();
         Debug.Log("Checklist Item Updated");
         taskText.text = taskType.taskDescription + "(" + taskType.tasksComplete + "/" + taskType.tasksTotal + ")";
+        return taskComplete;
     }
 }

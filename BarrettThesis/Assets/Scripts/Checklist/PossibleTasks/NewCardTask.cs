@@ -20,12 +20,12 @@ public class NewCardTask : TaskControl
         
     }
 
-    public override void UpdateTask()
+    public override bool UpdateTask()
     {
-        base.UpdateTask();
         taskDescription = "Acquire New Works";
         tasksComplete = GameController.SaveData.newPerDay - GameController.SaveData.newQueue.Count;
         tasksTotal = GameController.SaveData.newPerDay;
-        Debug.Log("NewCardTask Updated");
+        return base.UpdateTask();
+
     }
 }

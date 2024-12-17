@@ -50,6 +50,10 @@ public class SaveHandler : MonoBehaviour
                 //DeleteGame();
             if (Input.GetKey(KeyCode.Keypad7))
                 SaveGame();
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+                TimeSkip(new TimeSpan(1, 0, 0));
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+                TimeSkip(new TimeSpan(0, 1, 0));
         }
     }
 
@@ -165,6 +169,14 @@ public class SaveHandler : MonoBehaviour
 
         //existingSaves = Directory.GetFiles(Application.persistentDataPath, "*.json");
         //saveCount = existingSaves.Length;
+    }
+
+    public void TimeSkip(TimeSpan skippedTime)
+    {
+        DateTime currentRefresh = GameController.SaveData.GetRefreshTime();
+        DateTime newRefresh = currentRefresh - skippedTime;
+        GameController.SaveData.refreshTime = newRefresh.ToString();
+        SaveGame();
     }
 
     /*public void DeleteGame()

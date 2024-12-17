@@ -17,6 +17,7 @@ public class SaveData
     public int jarBalance;
     public int completeDays;
     public int dayIndex = 0;
+    public int donationsToday;
 
     public List<Flashcard> newQueue;
     public List<Flashcard> cardQueue;
@@ -33,7 +34,13 @@ public class SaveData
     //orders
     public List<Placeable> orderedPlaceables;
     public List<Placeable> newOrders;
+    public int deliveriesToday;
     //public bool ordersReady = false;
+
+    //visitors
+    public bool museumOpen;
+    public int maxVisitors;
+    public int visitorsToday;
 
     //settings
     public int newPerDay = 15;
@@ -48,6 +55,8 @@ public class SaveData
         dayIndex = 0;
 
         tasksComplete = false;
+        museumOpen = false;
+
         balance = 0;
         jarBalance = 0;
         playerName = "Hugh Mungus";
@@ -58,6 +67,8 @@ public class SaveData
         newQueue = new List<Flashcard>();
         cardQueue = new List<Flashcard>();
         placeables = new List<Placeable>();
+
+        //order init
         orderedPlaceables = new List<Placeable>();
         newOrders = new List<Placeable>();
     }
@@ -78,5 +89,11 @@ public class SaveData
     {
         DateTime lastSave = DateTime.Parse(saveTime);
         return lastSave;
+    }
+
+    public DateTime GetRefreshTime()
+    {
+        DateTime refreshDate = DateTime.Parse(refreshTime);
+        return refreshDate;
     }
 }

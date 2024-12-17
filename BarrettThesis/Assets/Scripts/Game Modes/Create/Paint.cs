@@ -77,7 +77,7 @@ public class Paint : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 5f, paintable))
         {
             cursor.position = hit.point;
-            Debug.Log(hit.collider.gameObject.name);
+            //Debug.Log(hit.collider.gameObject.name);
             currentX = (int)Mathf.Abs((cursor.localPosition.x - topLeftCorner.localPosition.x) * xMult);
             currentY = (int)Mathf.Abs((cursor.localPosition.z - bottomRightCorner.localPosition.z) * yMult);
             //Debug.Log(currentX + " " + currentY);
@@ -89,7 +89,7 @@ public class Paint : MonoBehaviour
 
     protected virtual void DrawAtPoint()
     {
-        Debug.Log(currentX + " " + currentY);
+        //Debug.Log(currentX + " " + currentY);
         if (pressedLastFrame && (prevX != currentX || prevY != currentY))
         {
             int dist = (int)Mathf.Sqrt((currentX - prevX) * (currentX - prevX) + (currentY - prevY) * (currentY - prevY));
