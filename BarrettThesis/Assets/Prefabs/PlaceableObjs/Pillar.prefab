@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 4473084573762775571}
   m_Layer: 6
   m_Name: Pillar
-  m_TagString: Untagged
+  m_TagString: VisitorDestination
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -196,6 +196,10 @@ MonoBehaviour:
       y: 0
       z: 0
     rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
       x: 0
       y: 0
       z: 0

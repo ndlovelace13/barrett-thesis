@@ -10,6 +10,8 @@ TagManager:
   - ObjectSlot
   - PlaceableHandler
   - donation
+  - VisitorDestination
+  - VisitorSpawn
   layers:
   - Default
   - TransparentFX

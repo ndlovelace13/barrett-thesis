@@ -93,6 +93,7 @@ public class DeckManager : MonoBehaviour
         GameController.SaveData.museumOpen = true;
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(8).ToString();
         GameController.SaveData.completeDays++;
+        GameObject.FindWithTag("VisitorSpawn").GetComponent<VisitorHandler>().VisitorSpawn();
     }
 
     //IMPORTANT - this function checks current time vs. last login, decides the state of current tasks
@@ -132,6 +133,7 @@ public class DeckManager : MonoBehaviour
             {
                 //restore checklist progress
                 GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskMenu();
+                GameObject.FindWithTag("VisitorSpawn").GetComponent<VisitorHandler>().VisitorSpawn();
                 Debug.Log("STATUS: museum still open, come back later for new tasks");
             }
         }

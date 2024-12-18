@@ -64,6 +64,8 @@ public class SaveData
         saveTime = DateTime.UtcNow.ToString();
         refreshTime = DateTime.UtcNow.AddHours(24).ToString();
 
+        maxVisitors = 2;
+
         newQueue = new List<Flashcard>();
         cardQueue = new List<Flashcard>();
         placeables = new List<Placeable>();

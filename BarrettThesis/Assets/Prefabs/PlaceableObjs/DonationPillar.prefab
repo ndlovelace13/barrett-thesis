@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 5069136410516711535}
   m_Layer: 6
   m_Name: DonationPillar
-  m_TagString: Untagged
+  m_TagString: donation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
