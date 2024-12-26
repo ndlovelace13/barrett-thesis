@@ -151,6 +151,14 @@ public class Flashcard
         //trigger an event to reward the player for new mastery level here
         //mastery can never dip below its previous level
         if (newMastery > masteryLevel)
+        {
             masteryLevel = newMastery;
+            Debug.Log("Mastery upgraded on card + " + cardId + ": Level " + masteryLevel);
+        }
+        else
+        {
+            Debug.Log("Mastery retained on card " + cardId + ": Level " + masteryLevel);
+        }
+            
     }
 }

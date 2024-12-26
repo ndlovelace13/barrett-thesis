@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Order : CoreGameMode, IInteractable
 {
+
+    [SerializeField] Canvas orderMenu;
+    [SerializeField] GameObject orderPanel;
+
     // Start is called before the first frame update
     protected override void Start()
     {

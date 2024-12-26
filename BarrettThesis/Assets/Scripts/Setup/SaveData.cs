@@ -27,6 +27,7 @@ public class SaveData
 
     //museum orientation
     public List<Placeable> placeables;
+    public List<PlaceableControl> placeableControls;
     public int maxPaintings = 2;
     public int maxPillars = 0;
     public int maxSeating = 0;
@@ -73,6 +74,7 @@ public class SaveData
         //order init
         orderedPlaceables = new List<Placeable>();
         newOrders = new List<Placeable>();
+        placeableControls = new List<PlaceableControl>();
     }
 
     // Start is called before the first frame update

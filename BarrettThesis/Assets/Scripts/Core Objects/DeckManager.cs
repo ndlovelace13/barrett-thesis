@@ -90,6 +90,8 @@ public class DeckManager : MonoBehaviour
     //call this when the player completes their tasks for the day (when the museum opens)
     public void TasksComplete()
     {
+        if (GameController.GameControl.testingMode)
+            GameController.SaveData.tasksComplete = true;
         GameController.SaveData.museumOpen = true;
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(8).ToString();
         GameController.SaveData.completeDays++;
@@ -126,14 +128,15 @@ public class DeckManager : MonoBehaviour
                 {
                     //enable habit bonus
                 }
+                GameObject.FindWithTag("VisitorSpawn").GetComponent<VisitorHandler>().VisitorsAway(false);
                 AssignTasks();
             }
             //case for museum is still open, come back later - set the clock to trigger AssignTasks when museum closes
             else
             {
+                GameObject.FindWithTag("VisitorSpawn").GetComponent<VisitorHandler>().VisitorsAway(true);
                 //restore checklist progress
                 GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskMenu();
-                GameObject.FindWithTag("VisitorSpawn").GetComponent<VisitorHandler>().VisitorSpawn();
                 Debug.Log("STATUS: museum still open, come back later for new tasks");
             }
         }

@@ -30,13 +30,12 @@ public class DonationJar : CoreGameMode, IInteractable
         GameController.SaveData.balance += GameController.SaveData.jarBalance;
         GameController.SaveData.jarBalance = 0;
         GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskUpdate();
-        SaveHandler.SaveSystem.SaveGame();
     }
 
     public override string GetPrompt()
     {
         if (GameController.SaveData.jarBalance > 0)
-            return "Press E to retrieve " + ((float)(GameController.SaveData.jarBalance / 100f)).ToString("C0");
+            return "Press E to retrieve " + ((float)(GameController.SaveData.jarBalance / 100f)).ToString("C2");
         else
             return "No Donations to retrieve";
 

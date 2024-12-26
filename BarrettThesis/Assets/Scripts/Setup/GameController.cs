@@ -29,6 +29,9 @@ public class GameController : MonoBehaviour
     public int habitRange = 2; //in hours
 
     public GameMode gameMode = GameMode.DEFAULT;
+
+    //generic prefabs that will get called a lot
+    [SerializeField] public GameObject popup;
     
 
     // Start is called before the first frame update
@@ -63,8 +66,8 @@ public class GameController : MonoBehaviour
 
     public void GameStart()
     {
-        DeckManager.DeckManage.DateCheck();
         FindObjectOfType<PlaceableHandler>().PlaceableRestore();
+        DeckManager.DeckManage.DateCheck();
     }
 
 }

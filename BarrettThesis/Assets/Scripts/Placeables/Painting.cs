@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using Unity.VisualScripting;
+using Random = UnityEngine.Random;
 
-public class Painting : Rearrangeable, IInteractable
+public class Painting : Rearrangeable, IInteractable, IVisitable
 {
     public Flashcard associatedCard;
 
@@ -14,6 +15,9 @@ public class Painting : Rearrangeable, IInteractable
 
     [SerializeField] MeshRenderer displayMat;
     Material paintMat;
+
+    float minVisit;
+    float maxVisit;
 
     // Start is called before the first frame update
     protected override void Awake()
@@ -121,6 +125,13 @@ public class Painting : Rearrangeable, IInteractable
     {
         Debug.Log("Current Mastery Level: " + associatedCard.masteryLevel);
         GetComponent<MeshRenderer>().material = DeckManager.DeckManage.masteryMaterials[associatedCard.masteryLevel];
+        VisitCalc();
+    }
+
+    private void VisitCalc()
+    {
+        minVisit = 5 + (associatedCard.masteryLevel * 1.5f);
+        maxVisit = 10 + (associatedCard.masteryLevel * 1.5f);
     }
 
     public Material RetrieveMat()
@@ -133,5 +144,22 @@ public class Painting : Rearrangeable, IInteractable
         base.RestoreData(placedData);
         associatedCard = GameController.SaveData.currentDeck.cards[saveData.cardIndex];
         AssignImage(false);
+    }
+
+    public float RetrieveHappiness()
+    {
+        return 1 + (associatedCard.masteryLevel * 0.5f);
+    }
+
+    public float VisitTime()
+    {
+        float visitTime = Random.Range(minVisit, maxVisit);
+        Debug.Log(minVisit + " " + maxVisit + "= Range | Decided Time: " + visitTime);
+        return visitTime;
+    }
+
+    public float AvgVisitTime()
+    {
+        return minVisit + maxVisit / 2f;
     }
 }

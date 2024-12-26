@@ -1,9 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public class PlaceableControl
+{
+    public PlaceableType type;
+    public bool unlocked;
+    public int currentPlaced;
+    public int currentMax;
+    public int absoluteMax;
+
+    //UI stuff
+    public string title;
+    public string description;
+
+    public PlaceableControl(PlaceableDefault ogSpecs)
+    {
+        type = ogSpecs.type;
+        unlocked = ogSpecs.unlocked;
+        currentPlaced = 0;
+        currentMax = ogSpecs.startingMax;
+        absoluteMax = ogSpecs.absoluteMax;
+
+        title = ogSpecs.title;
+        description = ogSpecs.description;
+    }
+}
+
 public class PlaceableHandler : MonoBehaviour
 {
+    [SerializeField] List<PlaceableDefault> defaultControls;
+    Dictionary<PlaceableType, PlaceableControl> controlDict;
+
     [SerializeField] GameObject paintingPrefab;
     [SerializeField] GameObject seatingPrefab;
     [SerializeField] GameObject pillarPrefab;
@@ -24,6 +54,9 @@ public class PlaceableHandler : MonoBehaviour
 
     public void PlaceableRestore()
     {
+        //setup control objects for each if doesn't exist
+            ControlSetup();
+
         Delivery();
 
         Debug.Log("Placeables Detected: " + GameController.SaveData.placeables.Count);
@@ -54,7 +87,30 @@ public class PlaceableHandler : MonoBehaviour
                 newObj.GetComponent<Rearrangeable>().RestoreData(GameController.SaveData.placeables[i]);
             }
         }
-        SaveHandler.SaveSystem.SaveGame();
+        //SaveHandler.SaveSystem.SaveGame();
+    }
+
+    public void ControlSetup()
+    {
+        Debug.Log("Setting Up Placeable Controllers");
+        //fill in the control list with defaults if it is not already filled
+        if (GameController.SaveData.placeableControls.Count == 0)
+        {
+            foreach (PlaceableDefault control in defaultControls)
+            {
+                PlaceableControl newControl = new PlaceableControl(control);
+                GameController.SaveData.placeableControls.Add(newControl);
+            }
+            Debug.Log(GameController.SaveData.placeableControls.Count + " defaults have been added to the list");
+        }
+        
+        controlDict = new Dictionary<PlaceableType, PlaceableControl>();
+        //create a dictionary entry for each item in the list - more easy to retrieve based on type
+        foreach (PlaceableControl control in GameController.SaveData.placeableControls)
+        {
+            controlDict.Add(control.type, control);
+        }
+        Debug.Log(controlDict.Count + " placeable controllers are in the dictionary");
     }
 
     public void Delivery()

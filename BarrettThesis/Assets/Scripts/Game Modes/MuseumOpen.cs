@@ -13,16 +13,22 @@ public class MuseumOpen : CoreGameMode, IInteractable
     public override string GetPrompt()
     {
         //TO DO - Only allow prompt and interact if tasks are completed
-        return "Press E to Open Museum to the Public";
+        if (GameController.SaveData.tasksComplete || GameController.GameControl.testingMode)
+            return "Press E to Open Museum to the Public";
+        else
+            return "The Museum is Not Ready for Visitors!";
     }
 
     public override bool Interact()
     {
         //TO DO - Only allow interact if tasks are completed
-        GameController.SaveData.museumOpen = true;
-        DeckManager.DeckManage.TasksComplete();
-        
-        //TO DO - Flip the Open Sign
+        if (GameController.SaveData.tasksComplete || GameController.GameControl.testingMode)
+        {
+            GameController.SaveData.museumOpen = true;
+            DeckManager.DeckManage.TasksComplete();
+
+            //TO DO - Flip the Open Sign
+        }
         return false;
     }
 }

@@ -175,6 +175,8 @@ public class SaveHandler : MonoBehaviour
     {
         DateTime currentRefresh = GameController.SaveData.GetRefreshTime();
         DateTime newRefresh = currentRefresh - skippedTime;
+        GameController.SaveData.saveTime = (GameController.SaveData.GetSaveTime() - skippedTime).ToString();
+        GameObject.FindWithTag("VisitorSpawn").GetComponent<VisitorHandler>().VisitorsAway(true);
         GameController.SaveData.refreshTime = newRefresh.ToString();
         SaveGame();
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
 //enum to store all possible tasks 
 public enum TaskType
@@ -118,7 +119,7 @@ public class ChecklistDisplay : MonoBehaviour
     //function to update the values of the checklist everytime it is enabled
     public void TaskUpdate()
     {
-        currentFunds.text = "Current Funding: " + ((float)(GameController.SaveData.balance / 100f)).ToString("C0");
+        currentFunds.text = "Current Funding: " + ((float)(GameController.SaveData.balance / 100f)).ToString("c2");
         Debug.Log("UpdatingTasks");
 
         bool taskCompletion = true;

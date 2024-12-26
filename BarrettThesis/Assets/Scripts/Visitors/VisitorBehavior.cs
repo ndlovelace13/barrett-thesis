@@ -22,6 +22,7 @@ public class VisitorBehavior : MonoBehaviour
         //reset vars
         happiness = 0f;
         looking = false;
+        agent.speed = Random.Range(1f, 3f);
 
         //acquire destinations
         destinations = GameObject.FindGameObjectsWithTag("VisitorDestination").ToList<GameObject>();
@@ -63,7 +64,7 @@ public class VisitorBehavior : MonoBehaviour
     IEnumerator Looking()
     {
         Debug.Log("Now Looking");
-        float lookTime = 5f;
+        float lookTime = currentDest.GetComponent<IVisitable>().VisitTime();
         float currentTime = 0f;
         while (currentTime < lookTime)
         {
@@ -77,8 +78,13 @@ public class VisitorBehavior : MonoBehaviour
     //do the happiness calculations here
     private float HappinessCalc()
     {
-        float deltaHappiness = 1f;
+        float deltaHappiness = currentDest.GetComponent<IVisitable>().RetrieveHappiness();
         Debug.Log("Happiness Increased by " + deltaHappiness);
+
+        //new popup to display final donation amt
+        GameObject happyPopup = Instantiate(GameController.GameControl.popup, transform);
+        happyPopup.GetComponent<PopupBehavior>().NewPopup("+" + deltaHappiness + " Happiness", Color.yellow);
+
         return deltaHappiness;
     }
 
@@ -87,12 +93,17 @@ public class VisitorBehavior : MonoBehaviour
         int totalDonation = HappyToDollar();
         Debug.Log("Donated " + totalDonation + " for " + happiness + " seconds of happiness");
         GameController.SaveData.jarBalance += totalDonation;
+
+        //new popup to display final donation amt
+        GameObject moneyPopup = Instantiate(GameController.GameControl.popup, currentDest.transform);
+        moneyPopup.GetComponent<PopupBehavior>().NewPopup("+" + ((float)(totalDonation / 100f)).ToString("C2"), Color.green);
+        
         gameObject.SetActive(false);
     }
 
     private int HappyToDollar()
     {
-        int donation = Mathf.CeilToInt(happiness / 60 * 100);
+        int donation = Mathf.CeilToInt(happiness / 60f * 100f);
         return donation;
     }
 
@@ -102,8 +113,9 @@ public class VisitorBehavior : MonoBehaviour
         //if there are still destinations to visit, select the next and remove from the array
         if (destinations.Count > 0)
         {
-            currentDest = destinations.First();
-            destinations.RemoveAt(0);
+            int selection = Random.Range(0, destinations.Count);
+            currentDest = destinations[selection];
+            destinations.RemoveAt(selection);
         }
         //otherwise go to the donation terminal
         else
