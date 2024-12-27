@@ -10,6 +10,7 @@ public enum PlaceableType
     Seating,
     Pillar,
     Donation,
+    Lighting,
     Other
 }
 

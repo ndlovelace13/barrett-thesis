@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e331794594cdd1468b7ccc4245e54f6, type: 3}
-  m_Name: PaintingDefault
+  m_Name: LightingDefault
   m_EditorClassIdentifier: Assembly-CSharp::PlaceableDefault
-  type: 0
+  type: 4
   unlocked: 1
-  startingMax: 2
+  startingMax: 0
   absoluteMax: 100
-  title: Painting Frame
-  description: Allows you to display an additional work in your museum
+  title: Lighting
+  description: Enhances the visibility of a work, multiplying the happiness of visitors

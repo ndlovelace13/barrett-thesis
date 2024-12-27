@@ -29,6 +29,8 @@ public class OrderPanel : MonoBehaviour
         
     }
 
+    
+
     //called by order game mode when the user needs to see all available placeables
     public void AssignPlaceable(PlaceableControl newControl)
     {
@@ -36,6 +38,12 @@ public class OrderPanel : MonoBehaviour
 
         title.text = associatedControl.title;
         description.text = associatedControl.description;
+
+        UpdatePanel();
+    }
+
+    public void UpdatePanel()
+    {
         ownedAvailable.text = associatedControl.currentPlaced + " Owned | " + associatedControl.currentMax + " Available";
         if (associatedControl.currentPlaced < associatedControl.currentMax)
         {
@@ -47,6 +55,22 @@ public class OrderPanel : MonoBehaviour
             price.text = "Not Currently Available";
             orderButton.interactable = false;
         }
+    }
+
+    public void OrderObject()
+    {
+        associatedControl.currentPlaced++;
+        UpdatePrice();
+        UpdatePanel();
+
+
+        Placeable newPlaceable = new Placeable(associatedControl.type);
+        GameController.SaveData.newOrders.Add(newPlaceable);
+        SaveHandler.SaveSystem.SaveGame();
+    }
+
+    public void UpdatePrice()
+    {
 
     }
 }

@@ -32,7 +32,7 @@ public class PlaceableControl
 public class PlaceableHandler : MonoBehaviour
 {
     [SerializeField] List<PlaceableDefault> defaultControls;
-    Dictionary<PlaceableType, PlaceableControl> controlDict;
+    public Dictionary<PlaceableType, PlaceableControl> controlDict;
 
     [SerializeField] GameObject paintingPrefab;
     [SerializeField] GameObject seatingPrefab;
@@ -55,7 +55,7 @@ public class PlaceableHandler : MonoBehaviour
     public void PlaceableRestore()
     {
         //setup control objects for each if doesn't exist
-            ControlSetup();
+        ControlSetup();
 
         Delivery();
 
