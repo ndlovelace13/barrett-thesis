@@ -11,7 +11,8 @@ public class PlaceableDefault : ScriptableObject
     public int absoluteMax;
 
     //money stuff here?
-
+    public int startingCost;
+    public float costMod;
 
     //UI stuff
     public string title;

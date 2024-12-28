@@ -16,6 +16,8 @@ MonoBehaviour:
   unlocked: 1
   startingMax: 1
   absoluteMax: 1
+  startingCost: 1500
+  costMod: 0
   title: Donation Box
   description: Allows visitors to leave donations to your museum - you won't make
     any income without one!

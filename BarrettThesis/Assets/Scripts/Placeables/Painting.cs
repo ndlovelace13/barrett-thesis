@@ -160,6 +160,6 @@ public class Painting : Rearrangeable, IInteractable, IVisitable
 
     public float AvgVisitTime()
     {
-        return minVisit + maxVisit / 2f;
+        return (minVisit + maxVisit) / 2f;
     }
 }

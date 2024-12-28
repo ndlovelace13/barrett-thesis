@@ -9,12 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 0e331794594cdd1468b7ccc4245e54f6, type: 3}
   m_Name: PillarDefault
   m_EditorClassIdentifier: Assembly-CSharp::PlaceableDefault
   type: 2
   unlocked: 1
   startingMax: 1
   absoluteMax: 20
+  startingCost: 2000
+  costMod: 1.25
   title: Display Pillar
-  description: Allows an additional artifact to be displayed in your museum
+  description: Allows you to display coveted artifacts in your museum for visitors
+    to witness and enjoy

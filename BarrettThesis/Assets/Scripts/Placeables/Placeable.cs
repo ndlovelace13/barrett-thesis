@@ -11,6 +11,7 @@ public enum PlaceableType
     Pillar,
     Donation,
     Lighting,
+    Artifact,
     Other
 }
 
@@ -81,6 +82,10 @@ public class Placeable
                 return PlaceableType.Donation;
             else
                 return PlaceableType.Pillar;
+        }
+        else if (obj.GetComponent<Artifact>() != null)
+        {
+            return PlaceableType.Artifact;
         }
         else
             return PlaceableType.Other;

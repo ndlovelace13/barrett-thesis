@@ -2,31 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DonationTask : TaskControl
+public class ShipmentTask : TaskControl
 {
     // Start is called before the first frame update
     void Start()
     {
-        taskDescription = "Collect Visitor Donations";
+        taskDescription = "Unbox New Card Shipment";
         tasksComplete = 0;
         tasksTotal = 1;
-        Debug.Log("Donation Task Exists");
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public override bool UpdateTask()
     {
-        taskDescription = "Collect Visitor Donations";
-        if (GameController.SaveData.jarBalance == 0)
-        {
+        taskDescription = "Unbox New Card Shipment";
+        if (GameController.SaveData.cardsUnboxed)
             tasksComplete = 1;
-        }
-        Debug.Log("Donation Task Updated");
+        Debug.Log("Shipment Task Updated");
         return base.UpdateTask();
     }
 }

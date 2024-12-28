@@ -16,5 +16,7 @@ MonoBehaviour:
   unlocked: 1
   startingMax: 2
   absoluteMax: 100
+  startingCost: 500
+  costMod: 1.5
   title: Painting Frame
   description: Allows you to display an additional work in your museum

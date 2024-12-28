@@ -125,11 +125,11 @@ public class PlayerInteraction : MonoBehaviour
         return Mathf.Round(startVal * 2) / 2;
     }
 
-    public void RearrangeObj(GameObject painting)
+    public void RearrangeObj(GameObject newHeld)
     {
         Debug.Log("Beginning Rearrange Mode");
         rearranging = true;
-        heldObj = painting;
+        heldObj = newHeld;
         isInteracting = false;
     }
 

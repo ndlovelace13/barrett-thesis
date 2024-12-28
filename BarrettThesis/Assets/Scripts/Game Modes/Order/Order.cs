@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Localization.LocalizationTableCollection;
@@ -17,6 +18,8 @@ public class Order : CoreGameMode, IInteractable
 
     [SerializeField] PlaceableHandler objectHandler;
 
+    [SerializeField] TMP_Text budgetDisplay;
+
     private List<OrderPanel> orderPanels;
 
     // Start is called before the first frame update
@@ -31,7 +34,7 @@ public class Order : CoreGameMode, IInteractable
     // Update is called once per frame
     void Update()
     {
-        
+        budgetDisplay.text = "Budget: " + ((float)(GameController.SaveData.balance / 100f)).ToString("C2");
     }
     
     public override void CancelInteract()
@@ -44,6 +47,7 @@ public class Order : CoreGameMode, IInteractable
     {
         base.PostCameraShift();
 
+        orderMenu.enabled = true;
         if (orderPanels.Count > 0)
         {
             PanelUpdate();
@@ -54,7 +58,7 @@ public class Order : CoreGameMode, IInteractable
 
     private void PanelFill()
     {
-        orderMenu.enabled = true;
+        //orderMenu.enabled = true;
         foreach (PlaceableControl control in GameController.SaveData.placeableControls)
         {
             GameObject newPanel = Instantiate(orderPanel);

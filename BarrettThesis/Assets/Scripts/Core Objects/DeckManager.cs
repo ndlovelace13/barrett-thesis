@@ -71,6 +71,7 @@ public class DeckManager : MonoBehaviour
         //update all progression variables
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(24).ToString();
         GameController.SaveData.tasksComplete = false;
+        GameController.SaveData.cardsUnboxed = false;
         GameController.SaveData.museumOpen = false;
         GameController.SaveData.orderedPlaceables.AddRange(GameController.SaveData.newOrders);
         GameController.SaveData.newOrders.Clear();

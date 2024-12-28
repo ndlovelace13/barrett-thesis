@@ -38,6 +38,8 @@ public class Create : CoreGameMode, IInteractable
 
     [SerializeField] ColorSelect colorSelect;
 
+    [SerializeField] PlaceableHandler placeableHandler;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -73,7 +75,7 @@ public class Create : CoreGameMode, IInteractable
 
     private void PaintingRetrieve()
     {
-        if (GameObject.FindObjectsOfType<Painting>().Length <= GameController.SaveData.maxPaintings)
+        if (GameObject.FindObjectsOfType<Painting>().Length < placeableHandler.controlDict[PlaceableType.Painting].currentMax)
         {
             painting.GetComponent<Paint>().StopPainting();
             painting.GetComponent<Rearrangeable>().Interact();

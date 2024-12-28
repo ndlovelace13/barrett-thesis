@@ -53,18 +53,23 @@ public class Rearrangeable : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.Log("Interact called on Rearrangeable");
-            transform.SetParent(playerHand.transform, false);
-            Debug.Log(transform.parent.name);
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.Euler(Vector3.zero);
-            //transform.localScale = transform.localScale / 2f; 
-            GetComponent<ObjectMotion>().held = true;
-            ColliderDisable();
-            inPlace = false;
-            GameObject.FindWithTag("Player").GetComponent<PlayerInteraction>().RearrangeObj(gameObject);
+            BeginHold();
             return true;
         }
+    }
+
+    public void BeginHold()
+    {
+        Debug.Log("Interact called on Rearrangeable");
+        transform.SetParent(playerHand.transform, false);
+        Debug.Log(transform.parent.name);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
+        //transform.localScale = transform.localScale / 2f; 
+        GetComponent<ObjectMotion>().held = true;
+        ColliderDisable();
+        inPlace = false;
+        GameObject.FindWithTag("Player").GetComponent<PlayerInteraction>().RearrangeObj(gameObject);
     }
 
     public void ColliderEnable()

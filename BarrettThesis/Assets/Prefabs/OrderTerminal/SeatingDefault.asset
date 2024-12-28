@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: SeatingDefault
   m_EditorClassIdentifier: Assembly-CSharp::PlaceableDefault
   type: 1
-  unlocked: 1
-  startingMax: 0
-  absoluteMax: 10
+  unlocked: 0
+  startingMax: 2
+  absoluteMax: 20
+  startingCost: 3000
+  costMod: 1.5
   title: Visitor Seating
   description: Allows visitors to take a seat while touring your museum - this will
     increase their happiness

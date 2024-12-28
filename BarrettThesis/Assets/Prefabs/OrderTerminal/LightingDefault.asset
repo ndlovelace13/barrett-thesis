@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: LightingDefault
   m_EditorClassIdentifier: Assembly-CSharp::PlaceableDefault
   type: 4
-  unlocked: 1
+  unlocked: 0
   startingMax: 0
   absoluteMax: 100
+  startingCost: 5000
+  costMod: 1.2
   title: Lighting
   description: Enhances the visibility of a work, multiplying the happiness of visitors

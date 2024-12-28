@@ -47,11 +47,21 @@ public class OrderPanel : MonoBehaviour
         ownedAvailable.text = associatedControl.currentPlaced + " Owned | " + associatedControl.currentMax + " Available";
         if (associatedControl.currentPlaced < associatedControl.currentMax)
         {
-            price.text = "Purchase now for " + ((float)(0)).ToString("C2");
-            orderButton.interactable = true;
+            price.text = "Purchase now for " + ((float)(associatedControl.currentCost / 100f)).ToString("C2");
+            if (associatedControl.currentCost <= GameController.SaveData.balance)
+            {
+                orderButton.GetComponentInChildren<TMP_Text>().text = "Place Order";
+                orderButton.interactable = true;
+            }
+            else
+            {
+                orderButton.GetComponentInChildren<TMP_Text>().text = "Insufficient Funds";
+                orderButton.interactable = false;
+            }
         }
         else
         {
+            orderButton.GetComponentInChildren<TMP_Text>().text = "Out of Stock";
             price.text = "Not Currently Available";
             orderButton.interactable = false;
         }
@@ -71,6 +81,7 @@ public class OrderPanel : MonoBehaviour
 
     public void UpdatePrice()
     {
-
+        GameController.SaveData.balance -= associatedControl.currentCost;
+        associatedControl.UpdateCost();
     }
 }

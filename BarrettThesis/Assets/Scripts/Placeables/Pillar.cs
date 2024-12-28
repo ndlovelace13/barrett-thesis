@@ -7,7 +7,7 @@ public class Pillar : Rearrangeable, IInteractable
     public bool donation;
 
     public GameObject displayedObj;
-    [SerializeField] Transform displayedLoc;
+    [SerializeField] public Transform displayedLoc;
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -17,6 +17,24 @@ public class Pillar : Rearrangeable, IInteractable
         //deprecated now that Donation has its own type
         /*if (donation && GameController.SaveData.placeables.Count == 0)
             DonationCheck(saveData);*/
+    }
+
+    //check for artifact
+    public override bool Interact()
+    {
+        base.Interact();
+        Debug.Log("Check 1");
+        if (playerHand.transform.childCount > 0)
+        {
+            if (playerHand.GetComponentInChildren<Artifact>() != null)
+            {
+                Debug.Log("Check 2");
+                Artifact artifact = playerHand.GetComponentInChildren<Artifact>();
+                displayedObj = artifact.gameObject;
+                GameObject.FindWithTag("Player").GetComponent<PlayerInteraction>().ResetHeldObj();
+            }
+        }
+        return true;
     }
 
     // Update is called once per frame

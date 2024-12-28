@@ -21,6 +21,7 @@ public class PopupBehavior : MonoBehaviour
     public void NewPopup(string text, Color textColor)
     {
         transform.LookAt(Camera.main.transform);
+        transform.localScale = Vector3.one;
         notifText.text = text;
         notifText.color = textColor;
         StartCoroutine(PopupLerp());

@@ -8,6 +8,7 @@ using UnityEngine.Localization.SmartFormat.PersistentVariables;
 //enum to store all possible tasks 
 public enum TaskType
 {
+    UnboxShipment,
     NewCards,
     ReviewCards,
     Donation,
@@ -63,9 +64,13 @@ public class ChecklistDisplay : MonoBehaviour
         else
             GameController.SaveData.taskMenu = new List<TaskType>();
 
+        //always add new card delivery
+        GameController.SaveData.taskMenu.Add(TaskType.UnboxShipment);
+
         //always add these two as there will always be cards to study
         GameController.SaveData.taskMenu.Add(TaskType.NewCards);
         GameController.SaveData.taskMenu.Add(TaskType.ReviewCards);
+
 
         //add in other necessary tasks for the day here
 
@@ -89,7 +94,7 @@ public class ChecklistDisplay : MonoBehaviour
     public void TaskFill()
     {
         dayCounter.text = "Day " + GameController.SaveData.dayIndex;
-        currentFunds.text = "Current Funding: " + ((float)(GameController.SaveData.balance / 100f)).ToString("C0");
+        currentFunds.text = "Current Funding: " + ((float)(GameController.SaveData.balance / 100f)).ToString("C2");
         
         if (currentTasks == null)
             currentTasks = new List<ChecklistItem>();

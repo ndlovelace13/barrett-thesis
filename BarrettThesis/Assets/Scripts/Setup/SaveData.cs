@@ -18,6 +18,7 @@ public class SaveData
     public int completeDays;
     public int dayIndex = 0;
     public int donationsToday;
+    public bool cardsUnboxed;
 
     public List<Flashcard> newQueue;
     public List<Flashcard> cardQueue;
@@ -28,9 +29,6 @@ public class SaveData
     //museum orientation
     public List<Placeable> placeables;
     public List<PlaceableControl> placeableControls;
-    public int maxPaintings = 2;
-    public int maxPillars = 0;
-    public int maxSeating = 0;
 
     //orders
     public List<Placeable> orderedPlaceables;
@@ -64,6 +62,7 @@ public class SaveData
         completeDays = 0;
         saveTime = DateTime.UtcNow.ToString();
         refreshTime = DateTime.UtcNow.AddHours(24).ToString();
+        cardsUnboxed = false;
 
         maxVisitors = 2;
 

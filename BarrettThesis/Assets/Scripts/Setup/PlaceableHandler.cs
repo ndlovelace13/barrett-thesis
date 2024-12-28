@@ -12,6 +12,10 @@ public class PlaceableControl
     public int currentMax;
     public int absoluteMax;
 
+    //cost
+    public int currentCost;
+    public float costMod;
+
     //UI stuff
     public string title;
     public string description;
@@ -24,8 +28,17 @@ public class PlaceableControl
         currentMax = ogSpecs.startingMax;
         absoluteMax = ogSpecs.absoluteMax;
 
+        currentCost = ogSpecs.startingCost;
+        costMod = ogSpecs.costMod;
+
         title = ogSpecs.title;
         description = ogSpecs.description;
+    }
+
+    public void UpdateCost()
+    {
+        currentCost = Mathf.CeilToInt(currentCost * costMod);
+        Debug.Log("Price increased to " + ((float)(currentCost / 100f)).ToString("C2"));
     }
 }
 
