@@ -8,6 +8,8 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
     float minVisit;
     float maxVisit;
 
+    GameObject currentPillar;
+
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -20,13 +22,24 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
     public override bool Interact()
     {
         Debug.Log("Artifact Interact Reached");
+        //reset the parent behavior
+        if (currentPillar != null)
+        {
+            currentPillar.GetComponent<Pillar>().displayedObj = null;
+            transform.SetParent(null, true);
+            currentPillar = null;
+        }
+
         base.Interact();
+
         return true;
     }
 
     public override void CancelInteract()
     {
         base.CancelInteract();
+        currentPillar.GetComponent<Pillar>().displayedObj = gameObject;
+        transform.SetParent(currentPillar.transform, true);
         Debug.Log("Artifact Placed");
     }
 
@@ -51,7 +64,7 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
     public override void Place(RaycastHit hit)
     {
         inPlace = true;
-        GameObject currentPillar = hit.collider.gameObject;
+        currentPillar = hit.collider.gameObject;
         transform.rotation = Quaternion.Euler(currentPillar.transform.rotation.eulerAngles + new Vector3(0, 90, 0));
         transform.position = currentPillar.GetComponent<Pillar>().displayedLoc.position + PlaceOffset(currentPillar);
     }

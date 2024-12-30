@@ -26,7 +26,7 @@ public class Pillar : Rearrangeable, IInteractable
         Debug.Log("Check 1");
         if (playerHand.transform.childCount > 0)
         {
-            if (playerHand.GetComponentInChildren<Artifact>() != null)
+            if (playerHand.GetComponentInChildren<Artifact>() != null && playerHand.GetComponentInChildren<Pillar>() == null)
             {
                 Debug.Log("Check 2");
                 Artifact artifact = playerHand.GetComponentInChildren<Artifact>();
