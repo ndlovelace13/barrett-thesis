@@ -19,7 +19,8 @@ public enum PlaceableType
 public class Placeable
 {
     public PlaceableType type;
-    public int cardIndex;
+    public int cardIndex = -1;
+    public int pillarIndex = -1;
     public bool donationPillar;
 
     public JsonVector location;
@@ -81,10 +82,23 @@ public class Placeable
             if (donationPillar)
                 return PlaceableType.Donation;
             else
+            {
+                if (obj.GetComponent<Pillar>().displayedObj == null)
+                    pillarIndex = -1;
                 return PlaceableType.Pillar;
+            }
+                
         }
         else if (obj.GetComponent<Artifact>() != null)
         {
+            Placeable pillarData = obj.GetComponent<Artifact>().GetPillarData();
+            if (pillarData != null)
+            {
+                pillarIndex = GameController.SaveData.placeables.IndexOf(pillarData);
+                pillarData.pillarIndex = pillarIndex;
+            }
+            else
+                pillarIndex = -1;
             return PlaceableType.Artifact;
         }
         else

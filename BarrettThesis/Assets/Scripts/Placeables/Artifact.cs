@@ -90,6 +90,16 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
 
     }
 
+    public Placeable GetPillarData()
+    {
+        Placeable returnData = null;
+        if (currentPillar != null)
+        {
+            returnData = currentPillar.GetComponent<Rearrangeable>().saveData;
+        }
+        return returnData;
+    }
+
     private void VisitCalc()
     {
         minVisit = 7 + (level * 1.5f);
@@ -111,5 +121,26 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
     public float AvgVisitTime()
     {
         return (minVisit + maxVisit) / 2f;
+    }
+
+    public override void RestoreData(Placeable placedData)
+    {
+        Debug.Log("We got here");
+        if (placedData.pillarIndex != -1)
+        {
+            List<Pillar> allPillars = GameObject.FindWithTag("PlaceableHandler").GetComponent<PlaceableHandler>().pillarStorage;
+            for (int i = 0; i < allPillars.Count; i++)
+            {
+                if (allPillars[i].saveData.pillarIndex == placedData.pillarIndex)
+                {
+                    currentPillar = allPillars[i].gameObject;
+                    CancelInteract();
+                    Debug.Log("Pillar Parent Found");
+                    break;
+                }
+            }
+        }
+        base.RestoreData(placedData);
+        
     }
 }

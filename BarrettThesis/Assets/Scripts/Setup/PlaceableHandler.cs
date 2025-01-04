@@ -51,6 +51,9 @@ public class PlaceableHandler : MonoBehaviour
     [SerializeField] GameObject seatingPrefab;
     [SerializeField] GameObject pillarPrefab;
     [SerializeField] GameObject donationPrefab;
+    [SerializeField] GameObject artifactPrefab;
+
+    public List<Pillar> pillarStorage;
 
     [SerializeField] GameObject deliveryBox;
     // Start is called before the first frame update
@@ -69,6 +72,8 @@ public class PlaceableHandler : MonoBehaviour
     {
         //setup control objects for each if doesn't exist
         ControlSetup();
+
+        StorageSetup();
 
         Delivery();
 
@@ -89,10 +94,15 @@ public class PlaceableHandler : MonoBehaviour
                 case PlaceableType.Pillar:
                     Debug.Log("pillar restored");
                     newObj = Instantiate(pillarPrefab);
+                    pillarStorage.Add(newObj.GetComponent<Pillar>());
                     break;
                 case PlaceableType.Donation:
                     Debug.Log("donation pillar restored");
                     newObj = Instantiate(donationPrefab);
+                    break;
+                case PlaceableType.Artifact:
+                    Debug.Log("artifact restored");
+                    newObj = Instantiate(artifactPrefab);
                     break;
             }
             if (newObj != null)
@@ -101,6 +111,11 @@ public class PlaceableHandler : MonoBehaviour
             }
         }
         //SaveHandler.SaveSystem.SaveGame();
+    }
+
+    public void StorageSetup()
+    {
+        pillarStorage = new List<Pillar>();   
     }
 
     public void ControlSetup()

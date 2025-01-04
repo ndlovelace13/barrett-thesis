@@ -4079,6 +4079,8 @@ MonoBehaviour:
     type: 3}
   donationPrefab: {fileID: 8301440225449798079, guid: bf7296bd91717814abf629777856807c,
     type: 3}
+  artifactPrefab: {fileID: 3968978537332690983, guid: 6c0fd612c2bc4f5499b1408bd2bf80b5,
+    type: 3}
   deliveryBox: {fileID: 402747501}
 --- !u!4 &1154578669
 Transform:
