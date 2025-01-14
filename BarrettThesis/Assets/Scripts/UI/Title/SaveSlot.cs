@@ -76,6 +76,7 @@ public class SaveSlot : MonoBehaviour
         SaveHandler.SaveSystem.SetSaveFile();
         if (SaveHandler.SaveSystem.loading)
         {
+            Debug.Log("Game Loading");
             SaveHandler.SaveSystem.LoadGame();
             SceneManager.LoadScene("Museum");
         }

@@ -42,7 +42,7 @@ public class Placeable
         type = GetType(placeableObj);
         location = new JsonVector(placeableObj.transform.position);
         rotation = new JsonVector(placeableObj.transform.rotation.eulerAngles);
-        scale = new JsonVector(placeableObj.transform.localScale);
+        scale = new JsonVector(placeableObj.transform.lossyScale);
 
         if (!GameController.SaveData.placeables.Contains(this))
             GameController.SaveData.placeables.Add(this);
@@ -53,6 +53,7 @@ public class Placeable
         placeableObj.transform.position = location.ToVector();
         placeableObj.transform.rotation = Quaternion.Euler(rotation.ToVector());
         placeableObj.transform.localScale = scale.ToVector();
+
     }
 
 

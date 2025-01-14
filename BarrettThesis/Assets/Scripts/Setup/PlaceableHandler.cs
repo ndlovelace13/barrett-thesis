@@ -168,6 +168,9 @@ public class PlaceableHandler : MonoBehaviour
             case PlaceableType.Donation:
                 returnedObj = Instantiate(donationPrefab);
                 break;
+            case PlaceableType.Artifact:
+                returnedObj = Instantiate(artifactPrefab);
+                break;
             default:
                 break;
 
@@ -178,5 +181,10 @@ public class PlaceableHandler : MonoBehaviour
     public GameObject RetrievePainting()
     {
         return Instantiate(paintingPrefab);
+    }
+
+    public GameObject RetrieveArtifact()
+    {
+        return Instantiate(artifactPrefab);
     }
 }

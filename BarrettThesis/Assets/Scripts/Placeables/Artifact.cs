@@ -38,8 +38,15 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
     public override void CancelInteract()
     {
         base.CancelInteract();
+        PillarPlace();
+    }
+
+    private void PillarPlace()
+    {
+        saveData.Print();
         currentPillar.GetComponent<Pillar>().displayedObj = gameObject;
         transform.SetParent(currentPillar.transform, true);
+        saveData.Print();
         Debug.Log("Artifact Placed");
     }
 
@@ -125,22 +132,24 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
 
     public override void RestoreData(Placeable placedData)
     {
+        base.RestoreData(placedData);
         Debug.Log("We got here");
         if (placedData.pillarIndex != -1)
         {
             List<Pillar> allPillars = GameObject.FindWithTag("PlaceableHandler").GetComponent<PlaceableHandler>().pillarStorage;
+            Debug.Log("no. of pillars: " + allPillars.Count);
             for (int i = 0; i < allPillars.Count; i++)
             {
                 if (allPillars[i].saveData.pillarIndex == placedData.pillarIndex)
                 {
                     currentPillar = allPillars[i].gameObject;
-                    CancelInteract();
+                    //CancelInteract();
                     Debug.Log("Pillar Parent Found");
+                    PillarPlace();
                     break;
                 }
             }
         }
-        base.RestoreData(placedData);
-        
+        Debug.Log("This pillar index: " + placedData.pillarIndex);
     }
 }
