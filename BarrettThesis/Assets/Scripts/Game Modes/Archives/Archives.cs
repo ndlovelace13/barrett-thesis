@@ -50,11 +50,12 @@ public class Archives : CoreGameMode, IInteractable
         //StartCoroutine(ArchiveCam());
     }
 
-    public override void CancelInteract()
+    public override bool CancelInteract()
     {
         base.CancelInteract();
         //camControl.rotation = Camera.main.transform.rotation;
         StartCoroutine(RemoveCard(displayedCards));
+        return true;
     }
 
     public void CardRetrieve()

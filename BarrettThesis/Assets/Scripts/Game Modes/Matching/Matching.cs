@@ -46,10 +46,10 @@ public class Matching : CoreGameMode, IInteractable
         return base.Interact();
     }
 
-    public override void CancelInteract()
+    public override bool CancelInteract()
     {
         ExitCards();
-        base.CancelInteract();
+        return base.CancelInteract();
        
     }
 

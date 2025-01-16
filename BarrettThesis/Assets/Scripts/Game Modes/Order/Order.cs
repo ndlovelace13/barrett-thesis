@@ -12,9 +12,13 @@ public class Order : CoreGameMode, IInteractable
 
     [SerializeField] Canvas orderMenu;
     [SerializeField] GameObject orderHolderRow;
-    [SerializeField] GameObject orderHolderCol;
+    [SerializeField] GameObject itemOrderHolder;
     [SerializeField] GameObject currentOrderHolder;
     [SerializeField] GameObject orderPanel;
+    [SerializeField] GameObject expansionOrderHolder;
+
+    [SerializeField] Button itemMode;
+    [SerializeField] Button expansionMode;
 
     [SerializeField] PlaceableHandler objectHandler;
 
@@ -22,11 +26,14 @@ public class Order : CoreGameMode, IInteractable
 
     private List<OrderPanel> orderPanels;
 
+    public bool itemsDisplayed = true;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         gameMode = GameMode.ORDERING;
+        ItemMode();
         orderMenu.enabled = false;
         orderPanels = new List<OrderPanel>();
     }
@@ -37,10 +44,11 @@ public class Order : CoreGameMode, IInteractable
         budgetDisplay.text = "Budget: " + ((float)(GameController.SaveData.balance / 100f)).ToString("C2");
     }
     
-    public override void CancelInteract()
+    public override bool CancelInteract()
     {
         base.CancelInteract();
         orderMenu.enabled = false;
+        return true;
     }
 
     protected override void PostCameraShift()
@@ -74,7 +82,7 @@ public class Order : CoreGameMode, IInteractable
         Debug.Log("Sorting " + orderPanels.Count + " panels");
         int counter = 0;
         int rowNum = 0;
-        List<HorizontalLayoutGroup> rows = orderHolderCol.GetComponentsInChildren<HorizontalLayoutGroup>().ToList();
+        List<HorizontalLayoutGroup> rows = itemOrderHolder.GetComponentsInChildren<HorizontalLayoutGroup>().ToList();
         if (rows.Count > 0)
             currentOrderHolder = rows[rowNum].gameObject;
         else
@@ -118,7 +126,7 @@ public class Order : CoreGameMode, IInteractable
     private void NewRow(List<HorizontalLayoutGroup> rows)
     {
         GameObject newRow = Instantiate(orderHolderRow);
-        newRow.transform.SetParent(orderHolderCol.transform);
+        newRow.transform.SetParent(itemOrderHolder.transform);
         newRow.transform.localScale = Vector3.one;
         rows.Add(newRow.GetComponent<HorizontalLayoutGroup>());
         currentOrderHolder = newRow;
@@ -136,5 +144,25 @@ public class Order : CoreGameMode, IInteractable
     public override string GetPrompt()
     {
         return "Press E to Place an Order";
+    }
+
+    //when the item tab is clicked
+    public void ItemMode()
+    {
+        itemMode.interactable = false;
+        expansionMode.interactable = true;
+
+        itemOrderHolder.SetActive(true);
+        expansionOrderHolder.SetActive(false);
+    }
+
+    //when the expansion tab is clicked
+    public void ExpansionMode()
+    {
+        itemMode.interactable = true;
+        expansionMode.interactable = false;
+
+        itemOrderHolder.SetActive(false);
+        expansionOrderHolder.SetActive(true);
     }
 }

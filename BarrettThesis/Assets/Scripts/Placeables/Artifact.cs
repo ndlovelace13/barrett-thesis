@@ -35,18 +35,22 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
         return true;
     }
 
-    public override void CancelInteract()
+    public override bool CancelInteract()
     {
-        base.CancelInteract();
-        PillarPlace();
+        if (base.CancelInteract())
+        {
+            PillarPlace();
+            return true;
+        }
+        return false;
     }
 
     private void PillarPlace()
     {
-        saveData.Print();
+        //saveData.Print();
         currentPillar.GetComponent<Pillar>().displayedObj = gameObject;
         transform.SetParent(currentPillar.transform, true);
-        saveData.Print();
+        //saveData.Print();
         Debug.Log("Artifact Placed");
     }
 

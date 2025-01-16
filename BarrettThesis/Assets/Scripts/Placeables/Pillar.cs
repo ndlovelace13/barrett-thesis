@@ -37,6 +37,22 @@ public class Pillar : Rearrangeable, IInteractable
         return true;
     }
 
+    public override bool CancelInteract()
+    {
+        if (base.CancelInteract())
+        {
+            //save the artifact's location if the pillar is currently displaying one
+            if (displayedObj != null)
+            {
+                displayedObj.GetComponent<Rearrangeable>().saveData.SavePlacement(displayedObj);
+                SaveHandler.SaveSystem.SaveGame();
+            }
+            return true;
+        }
+        else
+            return false;
+    }
+
     // Update is called once per frame
     void Update()
     {

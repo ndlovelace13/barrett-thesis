@@ -55,10 +55,10 @@ public class Painting : Rearrangeable, IInteractable, IVisitable
         return true;
     }
 
-    public override void CancelInteract()
+    public override bool CancelInteract()
     {
-        base.CancelInteract();
         Debug.Log("Painting Placed");
+        return base.CancelInteract();
     }
 
     public override Vector3 PlaceOffset(GameObject wall)

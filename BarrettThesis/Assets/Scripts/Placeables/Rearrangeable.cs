@@ -90,7 +90,7 @@ public class Rearrangeable : MonoBehaviour, IInteractable
         }
     }
 
-    public virtual void CancelInteract()
+    public virtual bool CancelInteract()
     {
         if (inPlace)
         {
@@ -101,7 +101,10 @@ public class Rearrangeable : MonoBehaviour, IInteractable
             ColliderEnable();
             saveData.SavePlacement(gameObject);
             SaveHandler.SaveSystem.SaveGame();
+            return true;
         }
+        else
+            return false;
     }
 
     public virtual void PlacementCheck()

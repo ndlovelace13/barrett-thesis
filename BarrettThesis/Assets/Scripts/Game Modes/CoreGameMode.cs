@@ -34,10 +34,11 @@ public class CoreGameMode : MonoBehaviour, IInteractable
 
     }
 
-    public virtual void CancelInteract()
+    public virtual bool CancelInteract()
     {
         GameController.GameControl.lockPlayer = false;
         GameController.GameControl.gameMode = GameMode.DEFAULT;
+        return true;
     }
 
     public IEnumerator CameraShift()

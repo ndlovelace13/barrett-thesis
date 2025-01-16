@@ -7,7 +7,7 @@ public interface IInteractable
 
     public bool Interact();
 
-    public void CancelInteract();
+    public bool CancelInteract();
 
     public string GetPrompt();
 

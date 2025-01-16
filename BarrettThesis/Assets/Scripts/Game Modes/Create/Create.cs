@@ -89,7 +89,7 @@ public class Create : CoreGameMode, IInteractable
     }
 
     //TODO - rework so that the player could retrieve the painting or card if they wanted to?
-    public override void CancelInteract()
+    public override bool CancelInteract()
     {
         if (painting != null)
         {
@@ -99,7 +99,7 @@ public class Create : CoreGameMode, IInteractable
         cardFront.SetActive(false);
         cardBack.SetActive(false);
         brushHolder.SetActive(false);
-        base.CancelInteract();
+        return base.CancelInteract();
         
     }
 
