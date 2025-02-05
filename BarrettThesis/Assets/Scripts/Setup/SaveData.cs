@@ -30,6 +30,9 @@ public class SaveData
     public List<Placeable> placeables;
     public List<PlaceableControl> placeableControls;
 
+    //museum expansions
+    public List<RoomData> roomData;
+
     //orders
     public List<Placeable> orderedPlaceables;
     public List<Placeable> newOrders;
@@ -69,6 +72,9 @@ public class SaveData
         newQueue = new List<Flashcard>();
         cardQueue = new List<Flashcard>();
         placeables = new List<Placeable>();
+
+        //expansion init
+        roomData = new List<RoomData>();
 
         //order init
         orderedPlaceables = new List<Placeable>();

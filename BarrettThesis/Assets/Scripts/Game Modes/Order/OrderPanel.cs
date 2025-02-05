@@ -17,6 +17,9 @@ public class OrderPanel : MonoBehaviour
     //Variables
     public PlaceableControl associatedControl;
 
+    //State
+    public bool itemMode = true;
+
     // Start is called before the first frame update
     void Start()
     {
