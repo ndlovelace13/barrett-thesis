@@ -67,6 +67,7 @@ public class GameController : MonoBehaviour
 
     public void GameStart()
     {
+        FindObjectOfType<MuseumLoader>().MuseumRestore();
         FindObjectOfType<PlaceableHandler>().PlaceableRestore();
         DeckManager.DeckManage.DateCheck();
     }
