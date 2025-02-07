@@ -12,6 +12,9 @@ TagManager:
   - donation
   - VisitorDestination
   - VisitorSpawn
+  - PromptPool
+  - AnswerPool
+  - AnswerHolder
   layers:
   - Default
   - TransparentFX

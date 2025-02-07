@@ -90,6 +90,7 @@ public class RoomData
             roomType = RoomType.DEFAULT;
     }
 
+    //called when the currentRoom is to the TOP of the otherRoom
     public void LinkAbove(RoomData otherRoom)
     {
         southRoom = otherRoom.roomId;
@@ -101,6 +102,7 @@ public class RoomData
         EdgeCheck();
     }
 
+    //called when the currentRoom is to the BOTTOM of the otherRoom
     public void LinkBelow(RoomData otherRoom)
     {
         northRoom = otherRoom.roomId;
@@ -112,6 +114,7 @@ public class RoomData
         EdgeCheck();
     }
 
+    //called when the currentRoom is to the LEFT of the otherRoom
     public void LinkLeft(RoomData otherRoom)
     {
         eastRoom = otherRoom.roomId;
@@ -123,6 +126,7 @@ public class RoomData
         EdgeCheck();
     }
 
+    //called when the currentRoom is to the RIGHT of the otherRoom
     public void LinkRight(RoomData otherRoom)
     {
         westRoom = otherRoom.roomId;

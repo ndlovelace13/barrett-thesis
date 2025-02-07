@@ -28,6 +28,7 @@ public class MuseumLoader : MonoBehaviour
     //call to place all museum rooms at their assigned grid locations
     public void MuseumRestore()
     {
+        Debug.Log("Restoring " + GameController.SaveData.roomData.Count + " Rooms");
         //might cause a problem if passing a ref - CHECK ON THIS
         foreach (RoomData room in GameController.SaveData.roomData)
         {

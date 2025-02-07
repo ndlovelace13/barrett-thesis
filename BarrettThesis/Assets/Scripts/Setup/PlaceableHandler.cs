@@ -59,7 +59,7 @@ public class PlaceableHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -70,6 +70,8 @@ public class PlaceableHandler : MonoBehaviour
 
     public void PlaceableRestore()
     {
+        deliveryBox = FindObjectOfType<Deliveries>().gameObject;
+
         //setup control objects for each if doesn't exist
         ControlSetup();
 

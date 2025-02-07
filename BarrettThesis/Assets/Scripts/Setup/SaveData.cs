@@ -75,6 +75,7 @@ public class SaveData
 
         //expansion init
         roomData = new List<RoomData>();
+        InitRoom();
 
         //order init
         orderedPlaceables = new List<Placeable>();
@@ -104,5 +105,25 @@ public class SaveData
     {
         DateTime refreshDate = DateTime.Parse(refreshTime);
         return refreshDate;
+    }
+
+    public void InitRoom()
+    {
+        if (roomData.Count == 0)
+        {
+            //instantiate the starting room
+            RoomData firstRoom = new RoomData(0, 0, 0);
+            roomData.Add(firstRoom);
+
+            //instantiate the office
+            RoomData office = new RoomData(1);
+            roomData.Add(office);
+
+            //connect the two
+            firstRoom.LinkLeft(office);
+
+            //save game
+            //SaveHandler.SaveSystem.SaveGame();
+        }
     }
 }

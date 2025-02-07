@@ -20,7 +20,7 @@ public class RoomPanelControl : MonoBehaviour
         rowList = new List<GameObject>();
         tempRooms = new Dictionary<Vector2, RoomData>();
         rowList.Add(housingPanel.GetComponentInChildren<HorizontalLayoutGroup>().gameObject);
-        InitRoom();
+        //InitRoom();
         RoomFill(GameController.SaveData.roomData[0]);
     }
 
@@ -28,26 +28,6 @@ public class RoomPanelControl : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void InitRoom()
-    {
-        if (GameController.SaveData.roomData.Count == 0)
-        {
-            //instantiate the starting room
-            RoomData firstRoom = new RoomData(0, 0, 0);
-            GameController.SaveData.roomData.Add(firstRoom);
-
-            //instantiate the office
-            RoomData office = new RoomData(1);
-            GameController.SaveData.roomData.Add(office);
-
-            //connect the two
-            firstRoom.LinkRight(office);
-
-            //save game
-            SaveHandler.SaveSystem.SaveGame();
-        }
     }
 
     public void RoomFill(RoomData room)
@@ -59,7 +39,7 @@ public class RoomPanelControl : MonoBehaviour
             Debug.Log(tempRooms.Count + " temp rooms exist");
 
             GameObject newPanel = Instantiate(roomPanelPrefab);
-            newPanel.GetComponent<RoomPanel>().currentRoom = room;
+            newPanel.GetComponent<RoomPanel>().AssignRoom(room);
 
             //add another row if necessary
             if (room.rowId > rowList.Count - 1)
