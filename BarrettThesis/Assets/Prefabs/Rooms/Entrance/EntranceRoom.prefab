@@ -65,6 +65,7 @@ MonoBehaviour:
     westRoom: 0
     tempRoom: 0
     analyzed: 0
+    dayFinished: 0
   northWall: {fileID: 9215394121493916867}
   southWall: {fileID: 6421771405670013550}
   eastWall: {fileID: 7037377632316509473}
@@ -73,6 +74,10 @@ MonoBehaviour:
   defaultDoor: {fileID: 7898252742742412400, guid: b98955ce99821524eb2904ddad55a613,
     type: 3}
   officeDoor: {fileID: 7898252742742412400, guid: b98955ce99821524eb2904ddad55a613,
+    type: 3}
+  constructionDoor: {fileID: 471215215936431087, guid: 25d82cb27464a874b9e4f880f27cb123,
+    type: 3}
+  officeConstruction: {fileID: 471215215936431087, guid: 25d82cb27464a874b9e4f880f27cb123,
     type: 3}
 --- !u!1 &4841436098245157480
 GameObject:

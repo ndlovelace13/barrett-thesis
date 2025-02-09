@@ -32,23 +32,28 @@ public class MuseumLoader : MonoBehaviour
         //might cause a problem if passing a ref - CHECK ON THIS
         foreach (RoomData room in GameController.SaveData.roomData)
         {
-            GameObject newRoom;
-            switch (room.roomType)
-            {
-                case RoomType.ENTRANCE:
-                    newRoom = Instantiate(entrancePrefab);
-                    break;
-                case RoomType.OFFICE:
-                    newRoom = Instantiate(officePrefab);
-                    break;
-                default:
-                    newRoom = Instantiate(defaultPrefab);
-                    break;
-            }
-            newRoom.transform.SetParent(transform, false);
-            newRoom.transform.localPosition = new Vector3(room.colId, 0, room.rowId);
-            newRoom.transform.localScale = Vector3.one * 0.1f;
-            newRoom.GetComponent<RoomControl>().PlaceRoom(room);
+            NewRoomCreate(room);
         }
+    }
+
+    public void NewRoomCreate(RoomData room)
+    {
+        GameObject newRoom;
+        switch (room.roomType)
+        {
+            case RoomType.ENTRANCE:
+                newRoom = Instantiate(entrancePrefab);
+                break;
+            case RoomType.OFFICE:
+                newRoom = Instantiate(officePrefab);
+                break;
+            default:
+                newRoom = Instantiate(defaultPrefab);
+                break;
+        }
+        newRoom.transform.SetParent(transform, false);
+        newRoom.transform.localPosition = new Vector3(room.colId, 0, room.rowId);
+        newRoom.transform.localScale = Vector3.one * 0.1f;
+        newRoom.GetComponent<RoomControl>().PlaceRoom(room);
     }
 }

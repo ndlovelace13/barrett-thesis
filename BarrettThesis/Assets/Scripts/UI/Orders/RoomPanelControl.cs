@@ -66,7 +66,7 @@ public class RoomPanelControl : MonoBehaviour
 
     public void AdjacentRooms(RoomData room)
     {
-        //-100 means the edge is unaccessible
+        //-100 means the edge is inaccessible
         //-99 means the edge is unassigned but accessible
 
         //check north
@@ -86,6 +86,10 @@ public class RoomPanelControl : MonoBehaviour
                     RoomData northTemp = new RoomData(tempLoc);
                     tempRooms.Add(new Vector2(northTemp.rowId, northTemp.colId), northTemp);
                     RoomFill(northTemp);
+                }
+                else
+                {
+                    tempRooms[tempLoc].PotentialSouth(room.roomId);
                 }
             }
         }
@@ -108,6 +112,10 @@ public class RoomPanelControl : MonoBehaviour
                     tempRooms.Add(new Vector2(eastTemp.rowId, eastTemp.colId), eastTemp);
                     RoomFill(eastTemp);
                 }
+                else
+                {
+                    tempRooms[tempLoc].PotentialWest(room.roomId);
+                }
             }
         }
 
@@ -128,6 +136,10 @@ public class RoomPanelControl : MonoBehaviour
                     RoomData southTemp = new RoomData(tempLoc);
                     tempRooms.Add(new Vector2(southTemp.rowId, southTemp.colId), southTemp);
                     RoomFill(southTemp);
+                }
+                else if (tempLoc.x > -1)
+                {
+                    tempRooms[tempLoc].PotentialNorth(room.roomId);
                 }
             }
         }
@@ -150,6 +162,10 @@ public class RoomPanelControl : MonoBehaviour
                     tempRooms.Add(new Vector2(westTemp.rowId, westTemp.colId), westTemp);
                     RoomFill(westTemp);
                 }
+                else
+                {
+                    tempRooms[tempLoc].PotentialEast(room.roomId);
+                }
             }
         }
 
@@ -164,5 +180,15 @@ public class RoomPanelControl : MonoBehaviour
         rowList.Add(newRow);
 
         Debug.Log(rowList.Count + " rows now available");
+    }
+
+    //called whenever a new room is added
+    public void RoomAddition(Vector2 coords)
+    {
+        RoomData addedRoom;
+        tempRooms.Remove(coords, out addedRoom);
+        RoomFill(addedRoom);
+        
+        //may need to completely rebuild the mapping here, in case a tempRoom gets added that is adjacent to a preexisting room
     }
 }

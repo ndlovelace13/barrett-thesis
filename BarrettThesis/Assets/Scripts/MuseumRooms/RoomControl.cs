@@ -16,6 +16,9 @@ public class RoomControl : MonoBehaviour
     [SerializeField] GameObject defaultDoor;
     [SerializeField] GameObject officeDoor;
 
+    [SerializeField] GameObject constructionDoor;
+    [SerializeField] GameObject officeConstruction;
+
 
     // Start is called before the first frame update
     void Start()
@@ -37,31 +40,36 @@ public class RoomControl : MonoBehaviour
 
     public void DoorwayUpdate()
     {
+        bool construction;
+        if (roomData.roomType == RoomType.CONSTRUCTION)
+            construction = true;
+        else
+            construction = false;
         //check north doorway
         if (roomData.northRoom > -99)
         {
-            GameObject newDoor = DoorRetrieve(roomData.northRoom);
+            GameObject newDoor = DoorRetrieve(roomData.northRoom, construction);
             DoorwayReplace(northWall, newDoor, 0);
         }
 
         //check east doorway
         if (roomData.eastRoom > -99)
         {
-            GameObject newDoor = DoorRetrieve(roomData.eastRoom);
+            GameObject newDoor = DoorRetrieve(roomData.eastRoom, construction);
             DoorwayReplace(eastWall, newDoor, 1);
         }
 
         //check south doorway
         if (roomData.southRoom > -99)
         {
-            GameObject newDoor = DoorRetrieve(roomData.southRoom);
+            GameObject newDoor = DoorRetrieve(roomData.southRoom, construction);
             DoorwayReplace(southWall, newDoor, 2);
         }
 
         //check west doorway
         if (roomData.westRoom > -99)
         {
-            GameObject newDoor = DoorRetrieve(roomData.westRoom);
+            GameObject newDoor = DoorRetrieve(roomData.westRoom, construction);
             DoorwayReplace(westWall, newDoor, 3);
         }
     }
@@ -100,16 +108,26 @@ public class RoomControl : MonoBehaviour
         }
     }
 
-    public GameObject DoorRetrieve(int index)
+    public GameObject DoorRetrieve(int index, bool underConstruction)
     {
         GameObject newDoor;
         if (index == 1)
         {
-            newDoor = Instantiate(officeDoor);
+            if (underConstruction)
+            {
+                newDoor = Instantiate(officeConstruction);
+            }
+            else
+                newDoor = Instantiate(officeDoor);
         }
         else
         {
-            newDoor = Instantiate(defaultDoor);
+            if (underConstruction)
+            {
+                newDoor = Instantiate(constructionDoor);
+            }
+            else
+                newDoor = Instantiate(defaultDoor);
         }
         return newDoor;
     }

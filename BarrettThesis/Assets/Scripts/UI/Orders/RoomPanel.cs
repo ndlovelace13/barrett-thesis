@@ -40,7 +40,7 @@ public class RoomPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (currentRoom.tempRoom)
         {
-            while (gameObject.activeSelf)
+            while (currentRoom.tempRoom && gameObject.activeSelf)
             {
                 float currentAlpha = sprite.color.a;
 
@@ -87,8 +87,30 @@ public class RoomPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         RoomPurchase();
     }
 
+    //execute the code here to add a room, both in blueprint space and physical space
     public void RoomPurchase()
     {
         Debug.Log("Room Purchased");
+        if (GameController.SaveData.balance >= GameController.SaveData.currentRoomCost)
+        {
+            GameController.SaveData.balance -= GameController.SaveData.currentRoomCost;
+            StartCoroutine(PurchaseExec());
+        }
+    }
+
+    IEnumerator PurchaseExec()
+    {
+        //convert current room object to a real one, linking all existing rooms
+        currentRoom.RealizeRoom();
+
+        //remove the tempRoom from the list in the control & update panels
+        GameObject.FindObjectOfType<RoomPanelControl>().RoomAddition(new Vector2(currentRoom.rowId, currentRoom.colId));
+
+        //place the object in the real world
+        GameObject.FindObjectOfType<MuseumLoader>().NewRoomCreate(currentRoom);
+
+        //save game
+        SaveHandler.SaveSystem.SaveGame();
+        yield return null;
     }
 }

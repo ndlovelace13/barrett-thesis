@@ -32,6 +32,7 @@ public class SaveData
 
     //museum expansions
     public List<RoomData> roomData;
+    public int currentRoomCost;
 
     //orders
     public List<Placeable> orderedPlaceables;
@@ -75,6 +76,7 @@ public class SaveData
 
         //expansion init
         roomData = new List<RoomData>();
+        currentRoomCost = 100f;
         InitRoom();
 
         //order init

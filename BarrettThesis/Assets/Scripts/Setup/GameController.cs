@@ -70,6 +70,8 @@ public class GameController : MonoBehaviour
         FindObjectOfType<MuseumLoader>().MuseumRestore();
         FindObjectOfType<PlaceableHandler>().PlaceableRestore();
         DeckManager.DeckManage.DateCheck();
+
+        //open new rooms here if there are any that finish today - cut a ribbon maybe?
     }
 
 }

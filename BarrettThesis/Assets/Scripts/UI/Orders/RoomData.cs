@@ -31,11 +31,15 @@ public class RoomData
 
     public bool analyzed;
 
+    public int dayFinished;
+
 
     public RoomData(Vector2 gridId)
     {
         tempRoom = true;
         analyzed = false;
+
+        dayFinished = 0;
 
         rowId = (int)gridId.x;
         colId = (int)gridId.y;
@@ -53,6 +57,8 @@ public class RoomData
         tempRoom = false;
         analyzed = false;
 
+        dayFinished = 0;
+
         roomId = id;
 
         northRoom = -99;
@@ -69,6 +75,8 @@ public class RoomData
         analyzed = false;
         roomId = id;
 
+        dayFinished = 0;
+
         this.rowId = rowId;
         this.colId = colId;
 
@@ -78,6 +86,63 @@ public class RoomData
         westRoom = -99;
 
         TypeAssign();
+    }
+
+    public void RealizeRoom()
+    {
+        roomId = GameController.SaveData.roomData.Count;
+        tempRoom = false;
+        analyzed = false;
+        GameController.SaveData.roomData.Add(this);
+
+        //set the conditions for fully built
+        roomType = RoomType.CONSTRUCTION;
+        dayFinished = GameController.SaveData.dayIndex + 1;
+
+        LinkNewRoom();
+    }
+
+    public void LinkNewRoom()
+    {
+        if (northRoom > -100)
+        {
+            RoomData roomBelow = GameController.SaveData.roomData[northRoom];
+            LinkBelow(roomBelow);
+        }
+        else
+        {
+            northRoom = -99;
+        }
+
+        if (eastRoom > -100)
+        {
+            RoomData roomRight = GameController.SaveData.roomData[eastRoom];
+            LinkLeft(roomRight);
+        }
+        else
+        {
+            eastRoom = -99;
+        }
+
+        if (southRoom > -100)
+        {
+            RoomData roomAbove = GameController.SaveData.roomData[southRoom];
+            LinkAbove(roomAbove);
+        }
+        else
+        {
+            southRoom = -99;
+        }
+
+        if (westRoom > -100)
+        {
+            RoomData roomLeft = GameController.SaveData.roomData[westRoom];
+            LinkRight(roomLeft);
+        }
+        else
+        {
+            westRoom = -99;
+        }
     }
 
     private void TypeAssign()
@@ -149,5 +214,25 @@ public class RoomData
     public void ResetAnalyzed()
     {
         analyzed = false;
+    }
+
+    public void PotentialNorth(int id)
+    {
+        northRoom = id;
+    }
+
+    public void PotentialEast(int id)
+    {
+        eastRoom = id;
+    }
+
+    public void PotentialSouth(int id)
+    {
+        southRoom = id;
+    }
+
+    public void PotentialWest(int id)
+    {
+        westRoom = id;
     }
 }

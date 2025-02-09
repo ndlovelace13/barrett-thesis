@@ -66,6 +66,7 @@ MonoBehaviour:
     westRoom: 0
     tempRoom: 0
     analyzed: 0
+    dayFinished: 0
   northWall: {fileID: 9215394121493916867}
   southWall: {fileID: 6421771405670013550}
   eastWall: {fileID: 7037377632316509473}
@@ -74,6 +75,10 @@ MonoBehaviour:
   defaultDoor: {fileID: 7898252742742412400, guid: b98955ce99821524eb2904ddad55a613,
     type: 3}
   officeDoor: {fileID: 7898252742742412400, guid: b98955ce99821524eb2904ddad55a613,
+    type: 3}
+  constructionDoor: {fileID: 471215215936431087, guid: 25d82cb27464a874b9e4f880f27cb123,
+    type: 3}
+  officeConstruction: {fileID: 471215215936431087, guid: 25d82cb27464a874b9e4f880f27cb123,
     type: 3}
 --- !u!1 &4841436098245157480
 GameObject:
@@ -1171,6 +1176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ExpansionMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528535277793679230, guid: 82af69a4ac606154fa9b5f447dfb8edc,
+        type: 3}
+      propertyPath: m_TagString
+      value: RoomPanelControl
       objectReference: {fileID: 0}
     - target: {fileID: 3850166008210786594, guid: 82af69a4ac606154fa9b5f447dfb8edc,
         type: 3}
