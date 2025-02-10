@@ -12,6 +12,8 @@ public class MuseumLoader : MonoBehaviour
     [SerializeField] GameObject officePrefab;
     [SerializeField] GameObject defaultPrefab;
 
+    public List<GameObject> roomReference;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,8 @@ public class MuseumLoader : MonoBehaviour
     //call to place all museum rooms at their assigned grid locations
     public void MuseumRestore()
     {
+        roomReference = new List<GameObject>();
+
         Debug.Log("Restoring " + GameController.SaveData.roomData.Count + " Rooms");
         //might cause a problem if passing a ref - CHECK ON THIS
         foreach (RoomData room in GameController.SaveData.roomData)
@@ -55,5 +59,15 @@ public class MuseumLoader : MonoBehaviour
         newRoom.transform.localPosition = new Vector3(room.colId, 0, room.rowId);
         newRoom.transform.localScale = Vector3.one * 0.1f;
         newRoom.GetComponent<RoomControl>().PlaceRoom(room);
+
+        //add to the room reference
+        roomReference.Add(newRoom);
+
+        //update all doorways
+        foreach (GameObject roomControl in roomReference)
+        {
+            roomControl.GetComponent<RoomControl>().DoorwayUpdate();
+        }
+            
     }
 }

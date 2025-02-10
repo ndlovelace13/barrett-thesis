@@ -76,7 +76,7 @@ public class SaveData
 
         //expansion init
         roomData = new List<RoomData>();
-        currentRoomCost = 100f;
+        currentRoomCost = 100;
         InitRoom();
 
         //order init

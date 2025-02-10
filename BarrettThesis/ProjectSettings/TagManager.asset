@@ -15,6 +15,7 @@ TagManager:
   - PromptPool
   - AnswerPool
   - AnswerHolder
+  - RoomPanelControl
   layers:
   - Default
   - TransparentFX

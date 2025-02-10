@@ -19,7 +19,7 @@ public class RoomPanelControl : MonoBehaviour
     {
         rowList = new List<GameObject>();
         tempRooms = new Dictionary<Vector2, RoomData>();
-        rowList.Add(housingPanel.GetComponentInChildren<HorizontalLayoutGroup>().gameObject);
+        RoomReset();
         //InitRoom();
         RoomFill(GameController.SaveData.roomData[0]);
     }
@@ -28,6 +28,28 @@ public class RoomPanelControl : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void RoomReset()
+    {
+        //reset analysis in each roomData object
+        for (int i = 0; i < GameController.SaveData.roomData.Count; i++)
+        {
+            GameController.SaveData.roomData[i].analyzed = false;
+        }
+
+        //reset tempList
+        tempRooms.Clear();
+
+        //reset rowList
+        for (int i = rowList.Count - 1; i >= 0; i--)
+        {
+            Destroy(rowList[i]);
+        }
+        rowList.Clear();
+
+        //add the first row
+        RowAddition();
     }
 
     public void RoomFill(RoomData room)
@@ -45,7 +67,7 @@ public class RoomPanelControl : MonoBehaviour
             if (room.rowId > rowList.Count - 1)
                 RowAddition();
 
-            Debug.Log(room.rowId + " may have broke things");
+            //Debug.Log(room.rowId + " may have broke things");
             //add the current roomPanel to the associated row
             newPanel.transform.SetParent(rowList[room.rowId].transform, false);
 
@@ -87,10 +109,7 @@ public class RoomPanelControl : MonoBehaviour
                     tempRooms.Add(new Vector2(northTemp.rowId, northTemp.colId), northTemp);
                     RoomFill(northTemp);
                 }
-                else
-                {
-                    tempRooms[tempLoc].PotentialSouth(room.roomId);
-                }
+                tempRooms[tempLoc].PotentialSouth(room.roomId);
             }
         }
 
@@ -112,10 +131,7 @@ public class RoomPanelControl : MonoBehaviour
                     tempRooms.Add(new Vector2(eastTemp.rowId, eastTemp.colId), eastTemp);
                     RoomFill(eastTemp);
                 }
-                else
-                {
-                    tempRooms[tempLoc].PotentialWest(room.roomId);
-                }
+                tempRooms[tempLoc].PotentialWest(room.roomId);
             }
         }
 
@@ -137,7 +153,7 @@ public class RoomPanelControl : MonoBehaviour
                     tempRooms.Add(new Vector2(southTemp.rowId, southTemp.colId), southTemp);
                     RoomFill(southTemp);
                 }
-                else if (tempLoc.x > -1)
+                if (tempLoc.x > -1)
                 {
                     tempRooms[tempLoc].PotentialNorth(room.roomId);
                 }
@@ -162,10 +178,7 @@ public class RoomPanelControl : MonoBehaviour
                     tempRooms.Add(new Vector2(westTemp.rowId, westTemp.colId), westTemp);
                     RoomFill(westTemp);
                 }
-                else
-                {
-                    tempRooms[tempLoc].PotentialEast(room.roomId);
-                }
+                tempRooms[tempLoc].PotentialEast(room.roomId);
             }
         }
 
@@ -187,8 +200,10 @@ public class RoomPanelControl : MonoBehaviour
     {
         RoomData addedRoom;
         tempRooms.Remove(coords, out addedRoom);
-        RoomFill(addedRoom);
-        
+        RoomReset();
+        RoomFill(GameController.SaveData.roomData[0]);
+
         //may need to completely rebuild the mapping here, in case a tempRoom gets added that is adjacent to a preexisting room
+
     }
 }

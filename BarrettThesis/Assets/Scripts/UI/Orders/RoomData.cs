@@ -111,6 +111,7 @@ public class RoomData
         }
         else
         {
+            Debug.Log("new edge");
             northRoom = -99;
         }
 
@@ -121,6 +122,7 @@ public class RoomData
         }
         else
         {
+            Debug.Log("new edge");
             eastRoom = -99;
         }
 
@@ -131,6 +133,7 @@ public class RoomData
         }
         else
         {
+            Debug.Log("new edge");
             southRoom = -99;
         }
 
@@ -141,6 +144,7 @@ public class RoomData
         }
         else
         {
+            Debug.Log("new edge");
             westRoom = -99;
         }
     }
