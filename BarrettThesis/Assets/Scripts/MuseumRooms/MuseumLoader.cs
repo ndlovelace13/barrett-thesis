@@ -63,11 +63,17 @@ public class MuseumLoader : MonoBehaviour
         //add to the room reference
         roomReference.Add(newRoom);
 
-        //update all doorways
+        
+        AllDoorsUpdate();
+            
+    }
+
+    //update all doorways
+    public void AllDoorsUpdate()
+    {
         foreach (GameObject roomControl in roomReference)
         {
             roomControl.GetComponent<RoomControl>().DoorwayUpdate();
         }
-            
     }
 }

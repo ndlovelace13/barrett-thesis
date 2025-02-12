@@ -102,6 +102,11 @@ public class RoomData
         LinkNewRoom();
     }
 
+    public void FinishConstruction()
+    {
+        roomType = RoomType.DEFAULT;
+    }
+
     public void LinkNewRoom()
     {
         if (northRoom > -100)

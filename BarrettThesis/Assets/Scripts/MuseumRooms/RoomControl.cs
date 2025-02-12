@@ -70,29 +70,37 @@ public class RoomControl : MonoBehaviour
         }
     }
 
-    public bool ConstructionCheck(RoomData room, int whichDoor)
+    public int ConstructionCheck(RoomData room, int whichDoor)
     {
-        bool construction = false;
+        int constructionIndex = -1;
         switch (whichDoor)
         {
             case 0:
-                if (roomData.roomType == RoomType.CONSTRUCTION || GameController.SaveData.roomData[roomData.northRoom].roomType == RoomType.CONSTRUCTION)
-                    construction = true;
+                if (roomData.roomType == RoomType.CONSTRUCTION)
+                    constructionIndex = roomData.roomId;
+                else if (GameController.SaveData.roomData[roomData.northRoom].roomType == RoomType.CONSTRUCTION)
+                    constructionIndex = roomData.northRoom;
                 break;
             case 1:
-                if (roomData.roomType == RoomType.CONSTRUCTION || GameController.SaveData.roomData[roomData.eastRoom].roomType == RoomType.CONSTRUCTION)
-                    construction = true;
+                if (roomData.roomType == RoomType.CONSTRUCTION)
+                    constructionIndex = roomData.roomId;
+                else if (GameController.SaveData.roomData[roomData.eastRoom].roomType == RoomType.CONSTRUCTION)
+                    constructionIndex = roomData.eastRoom;
                 break;
             case 2:
-                if (roomData.roomType == RoomType.CONSTRUCTION || GameController.SaveData.roomData[roomData.southRoom].roomType == RoomType.CONSTRUCTION)
-                    construction = true;
+                if (roomData.roomType == RoomType.CONSTRUCTION)
+                    constructionIndex = roomData.roomId;
+                else if (GameController.SaveData.roomData[roomData.southRoom].roomType == RoomType.CONSTRUCTION)
+                    constructionIndex = roomData.southRoom;
                 break;
             case 3:
-                if (roomData.roomType == RoomType.CONSTRUCTION || GameController.SaveData.roomData[roomData.westRoom].roomType == RoomType.CONSTRUCTION)
-                    construction = true;
+                if (roomData.roomType == RoomType.CONSTRUCTION)
+                    constructionIndex = roomData.roomId;
+                else if (GameController.SaveData.roomData[roomData.westRoom].roomType == RoomType.CONSTRUCTION)
+                    constructionIndex = roomData.westRoom;
                 break;
         }
-        return construction;
+        return constructionIndex;
     }
 
     public void DoorwayReplace(GameObject oldDoorway, GameObject newDoorway, int whichWall)
@@ -133,25 +141,27 @@ public class RoomControl : MonoBehaviour
         }
     }
 
-    public GameObject DoorRetrieve(int index, bool underConstruction)
+    public GameObject DoorRetrieve(int index, int constructionIndex)
     {
         GameObject newDoor;
         if (index == 1)
         {
-            if (underConstruction)
+            if (constructionIndex > -1)
             {
                 Debug.Log("Double bruh");
                 newDoor = Instantiate(officeConstruction);
+                newDoor.GetComponentInChildren<ConstructionTape>().AssignData(constructionIndex);
             }
             else
                 newDoor = Instantiate(officeDoor);
         }
         else
         {
-            if (underConstruction)
+            if (constructionIndex > -1)
             {
                 Debug.Log("Triple bruh");
                 newDoor = Instantiate(constructionDoor);
+                newDoor.GetComponentInChildren<ConstructionTape>().AssignData(constructionIndex);
             }
             else
                 newDoor = Instantiate(defaultDoor);
