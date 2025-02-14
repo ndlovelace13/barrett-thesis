@@ -19,12 +19,17 @@ public class RoomControl : MonoBehaviour
     [SerializeField] GameObject constructionDoor;
     [SerializeField] GameObject officeConstruction;
 
+    //card stuff
+    public List<Flashcard> assignedCards;
+    [SerializeField] Transform cardSpawn;
+    public LayerMask hitLayers;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
+        hitLayers = LayerMask.GetMask("ground") | LayerMask.GetMask("Wall") | LayerMask.GetMask("Ceiling");
+}
 
     // Update is called once per frame
     void Update()
@@ -35,6 +40,8 @@ public class RoomControl : MonoBehaviour
     public void PlaceRoom(RoomData newData)
     {
         roomData = newData;
+
+        assignedCards = new List<Flashcard>();
         //DoorwayUpdate();
     }
 
@@ -167,5 +174,39 @@ public class RoomControl : MonoBehaviour
                 newDoor = Instantiate(defaultDoor);
         }
         return newDoor;
+    }
+
+    //place all the cards assigned into the environment at a random position determined by a raycast from the center
+    public void ScatterCards()
+    {
+        Debug.Log("Room No. " + roomData.roomId + " has " + assignedCards.Count + " cards");
+        Debug.Log("Room No. " + roomData.roomId + " at " + transform.position);
+
+        for (int i = 0; i < assignedCards.Count; i++)
+        {
+            //calculate a random angle
+
+            Vector3 finalAngle = new Vector3(Random.Range(-180f, 180f), Random.Range(-30f, 30f), Random.Range(-180f, 180f));
+            finalAngle.Normalize();
+
+            Debug.Log("Stupid fucking angle --> " + finalAngle);
+
+            //calculate magnitude
+            //Vector3 ceilingCorner = ceiling.GetComponent<MeshRenderer>().bounds.max;
+            float mag = 15f;
+
+            Debug.Log("Raycasting from " + cardSpawn.position + " to " + (cardSpawn.position + (finalAngle * mag)));
+            RaycastHit hit;
+            if (Physics.Raycast(cardSpawn.position, cardSpawn.position + (finalAngle * mag), out hit, mag, hitLayers))
+            {
+                Debug.Log(hit.collider.gameObject.name);
+                GameObject newCard = Instantiate(GameController.GameControl.scatteredCard, hit.point, Quaternion.identity);
+                newCard.GetComponent<ScatteredCard>().Place(hit);
+                //newCard.GetComponent<Rigidbody>().useGravity = false;
+            }
+            else
+                Debug.Log("NO OBJECT HIT");
+        }
+        
     }
 }

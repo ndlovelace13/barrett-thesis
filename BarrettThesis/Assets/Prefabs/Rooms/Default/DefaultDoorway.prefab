@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6158838276586316929}
   m_Layer: 8
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 2179019371699688318}
   m_Layer: 8
   m_Name: Wall (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 8017769649739606136}
   m_Layer: 8
   m_Name: Wall (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -408,7 +408,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7823681183709337106}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DefaultDoorway
   m_TagString: Untagged
   m_Icon: {fileID: 0}

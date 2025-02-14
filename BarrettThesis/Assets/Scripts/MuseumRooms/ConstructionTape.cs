@@ -12,6 +12,11 @@ public class ConstructionTape : MonoBehaviour, IInteractable
 
     //[SerializeField] GameObject nonTapedDoor;
     // Start is called before the first frame update
+
+    public void Start()
+    {
+        DeactivateHighlight();
+    }
     public bool Interact()
     {
         //check whether the room is ready
@@ -38,7 +43,10 @@ public class ConstructionTape : MonoBehaviour, IInteractable
 
     public string GetPrompt()
     {
-        return "Area still under construction";
+        if (GameController.SaveData.roomData[constructionRoomIndex].dayFinished <= GameController.SaveData.dayIndex)
+            return "Press E to Expand Your Museum!";
+        else
+            return "Area still under construction";
     }
 
     public void ActivateHighlight()

@@ -51,7 +51,7 @@ public class Matching : CoreGameMode, IInteractable
 
     public override bool CancelInteract()
     {
-        ExitCards();
+        //ExitCards();
         return base.CancelInteract();
        
     }
@@ -65,7 +65,8 @@ public class Matching : CoreGameMode, IInteractable
 
     protected override void PostCameraShift()
     {
-        StartCoroutine(MainGameplay());
+        //StartCoroutine(MainGameplay());
+        StartCoroutine(NewGameplay());
     }
 
     public override string GetPrompt()
@@ -280,6 +281,74 @@ public class Matching : CoreGameMode, IInteractable
         newCard = false;
         return selectedCards;
     }
+
+    IEnumerator NewGameplay()
+    {
+        //retrieve all cards that need to be studied
+        Debug.Log(GameController.SaveData.cardQueue.Count + " cards need to be studied");
+        Debug.Log(GameController.SaveData.newQueue.Count + " cards need to be arted");
+
+        //retrieve all rooms that could be spawned in
+        List<RoomControl> allRooms = GameObject.FindObjectsOfType<RoomControl>().ToList();
+        for (int i = 0; i < allRooms.Count; i++)
+        {
+            if (allRooms[i].roomData.roomType == RoomType.CONSTRUCTION)
+            {
+                Debug.Log("Room Removed");
+                allRooms.Remove(allRooms[i]);
+            }
+        }
+        Debug.Log(allRooms.Count + " eligible rooms found");
+
+        //evenly split the number of cards between the room
+        //TODO - REPLACE NEWQUEUE WITH CARDQUEUE
+        int cardsPerRoom = GameController.SaveData.newQueue.Count / allRooms.Count;
+        int additionalCards = GameController.SaveData.newQueue.Count % allRooms.Count;
+
+        List<Flashcard> remainingCards = new List<Flashcard>(GameController.SaveData.newQueue);
+        //assign cards to rooms
+        for (int i = 0; i < allRooms.Count; i++)
+        {
+            int cardCount = cardsPerRoom;
+            if (additionalCards > 0) {
+                cardCount++;
+                additionalCards--;
+            }
+
+            StartCoroutine(CardtoRoom(allRooms[i], remainingCards, cardCount));
+            Debug.Log(remainingCards.Count + " cards left to be assigned");
+        }
+
+        //generate a random position for each card using a raycast shot from the center of the room, assign the card data to a physical representation - will eventually be just artwork
+        foreach (RoomControl roomControl in allRooms)
+        {
+            roomControl.ScatterCards();
+        }
+
+        yield return null;
+    }
+
+    IEnumerator CardtoRoom(RoomControl currentRoom, List<Flashcard> remainingCards, int cardCount)
+    {
+        //clear the current cards in case any were residual from a previous round or something
+        currentRoom.assignedCards.Clear();
+
+        //assign X random cards to the room
+        for (int i = 0; i < cardCount; i++)
+        {
+            //choose a random card
+            int chosenIndex = Random.Range(0, remainingCards.Count);
+            Flashcard card = remainingCards[chosenIndex];
+
+            //add to the associated room list
+            currentRoom.assignedCards.Add(card);
+
+            //remove card from the list once assigned
+            remainingCards.RemoveAt(chosenIndex);
+        }
+        yield return null;
+    }
+
 }
 
     

@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour
 
     //generic prefabs that will get called a lot
     [SerializeField] public GameObject popup;
+    [SerializeField] public GameObject scatteredCard;
     
 
     // Start is called before the first frame update

@@ -155,7 +155,7 @@ public class Rearrangeable : MonoBehaviour, IInteractable
         GetComponent<Outline>().enabled = false;
     }
 
-    private float Round(float startVal)
+    protected float Round(float startVal)
     {
         return Mathf.Round(startVal * 2) / 2;
     }

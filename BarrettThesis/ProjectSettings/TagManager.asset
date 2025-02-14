@@ -16,6 +16,9 @@ TagManager:
   - AnswerPool
   - AnswerHolder
   - RoomPanelControl
+  - Wall
+  - Ceiling
+  - Floor
   layers:
   - Default
   - TransparentFX
@@ -28,8 +31,8 @@ TagManager:
   - Wall
   - paintable
   - colors
-  - 
-  - 
+  - Floor
+  - Ceiling
   - 
   - 
   - 
