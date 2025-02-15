@@ -46,14 +46,24 @@ public class Matching : CoreGameMode, IInteractable
 
     public override bool Interact()
     {
-        return base.Interact();
+        if (GameController.GameControl.gameMode == GameMode.MATCHING)
+            CancelInteract();
+        else
+        {
+            base.Interact();
+            GameController.GameControl.lockPlayer = false;
+        }
+        return false;
     }
 
     public override bool CancelInteract()
     {
-        //ExitCards();
-        return base.CancelInteract();
-       
+        GameController.GameControl.lockPlayer = false;
+        GameController.GameControl.gameMode = GameMode.DEFAULT;
+
+        //enable the match scanner
+
+        return true;
     }
 
     /*public override IEnumerator CameraShift()

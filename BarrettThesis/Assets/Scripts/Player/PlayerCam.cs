@@ -26,7 +26,7 @@ public class PlayerCam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameController.GameControl.gameMode == GameMode.DEFAULT)
+        if (GameController.GameControl.gameMode == GameMode.DEFAULT || GameController.GameControl.gameMode == GameMode.MATCHING)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

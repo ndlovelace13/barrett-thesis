@@ -202,6 +202,7 @@ public class RoomControl : MonoBehaviour
                 Debug.Log(hit.collider.gameObject.name);
                 GameObject newCard = Instantiate(GameController.GameControl.scatteredCard, hit.point, Quaternion.identity);
                 newCard.GetComponent<ScatteredCard>().Place(hit);
+                newCard.GetComponent<ScatteredCard>().FillCard(assignedCards[i]);
                 //newCard.GetComponent<Rigidbody>().useGravity = false;
             }
             else

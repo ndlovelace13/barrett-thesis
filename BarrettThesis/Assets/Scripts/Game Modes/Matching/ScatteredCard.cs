@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.Localization.Plugins.XLIFF.Common;
 
 public class ScatteredCard : Rearrangeable, IInteractable
 {
     Flashcard cardData;
 
-    [SerializeField] Image artwork;
+    [SerializeField] MeshRenderer artwork;
+    Material paintMat;
     [SerializeField] TMP_Text promptText;
     [SerializeField] Transform cardTransform;
 
     // Start is called before the first frame update
     void Start()
-    {
+    { 
+        paintMat = artwork.material;
         
     }
 
@@ -48,9 +51,9 @@ public class ScatteredCard : Rearrangeable, IInteractable
         if (currentWall.tag == "Wall")
             transform.rotation = Quaternion.Euler(currentWall.transform.rotation.eulerAngles);
         else if (currentWall.tag == "Ceiling")
-            transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-        else if (currentWall.tag == "Floor")
             transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        else if (currentWall.tag == "Floor")
+            transform.rotation = Quaternion.Euler(0f, 0f, 90f);
         else
             Debug.Log("Shit is fucked" + currentWall.tag);
 
@@ -70,7 +73,15 @@ public class ScatteredCard : Rearrangeable, IInteractable
     public void FillCard(Flashcard newCard)
     {
         cardData = newCard;
+        if (cardData.useCustom)
+            paintMat.mainTexture = SaveHandler.SaveSystem.GetPainting(cardData.customArt);
+        NoteType noteInfo = GameController.SaveData.currentDeck.dictRetrieve(cardData.noteId);
+        promptText.text = cardData.fields[noteInfo.matchPromptField];
+    }
 
+    public Flashcard ReportCard()
+    {
+        return cardData;
     }
 
 
