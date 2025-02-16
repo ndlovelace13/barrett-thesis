@@ -122,7 +122,16 @@ public class Rearrangeable : MonoBehaviour, IInteractable
         inPlace = true;
         GameObject currentWall = hit.collider.gameObject;
         transform.rotation = Quaternion.Euler(currentWall.transform.rotation.eulerAngles + new Vector3(0, 90, 0));
-        transform.position = new Vector3(Round(hit.point.x), Round(hit.point.y), Round(hit.point.z)) + PlaceOffset(currentWall);
+        Vector3 roundedHit;
+
+        //round according to orientation of the parent obj
+        if (Mathf.Abs(currentWall.transform.eulerAngles.y) > 0)
+            roundedHit = new Vector3(Round(hit.point.x), Round(hit.point.y), hit.point.z);
+        else
+            roundedHit = new Vector3(hit.point.x, Round(hit.point.y), Round(hit.point.z));
+
+        //apply the rounded and offset
+        transform.position = roundedHit + PlaceOffset(currentWall);
         
     }
     

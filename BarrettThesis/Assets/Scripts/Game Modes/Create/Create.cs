@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class Create : CoreGameMode, IInteractable
@@ -21,8 +23,10 @@ public class Create : CoreGameMode, IInteractable
 
     [SerializeField] Transform frontStart;
     [SerializeField] Transform frontEnd;
+    [SerializeField] Transform frontPresent;
     [SerializeField] Transform backStart;
     [SerializeField] Transform backEnd;
+    [SerializeField] Transform backPresent;
 
     [SerializeField] ObjectPool cardPool;
 
@@ -37,6 +41,16 @@ public class Create : CoreGameMode, IInteractable
     public bool eraserToggled = false;
 
     [SerializeField] ColorSelect colorSelect;
+
+    //state handling
+    bool newQueue = false;
+    bool specificArt = false;
+
+    //timer stuff
+    public float lerpTime = 0.5f;
+    public float artTimer = 30f;
+
+    [SerializeField] TMP_Text timerDisplay;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -61,13 +75,19 @@ public class Create : CoreGameMode, IInteractable
     public override bool Interact()
     {
         ObjRetrieve();
-
-        GameObject obj = GetHeldObject();
-        if (obj != null)
+        if (GameController.SaveData.newQueue.Count > 0)
         {
-            if (obj.GetComponent<CardFill>() != null || obj.GetComponent<Painting>() != null)
+            return base.Interact();
+        }
+        else
+        {
+            GameObject obj = GetHeldObject();
+            if (obj != null)
             {
-                return base.Interact();
+                if (obj.GetComponent<CardFill>() != null || obj.GetComponent<Painting>() != null)
+                {
+                    return base.Interact();
+                }
             }
         }
         return false;
@@ -119,6 +139,13 @@ public class Create : CoreGameMode, IInteractable
             if (obj.GetComponent<CardFill>() != null || obj.GetComponent<Painting>() != null)
                 return "Press E to Restore a Painting";
         }
+        else
+        {
+            if (GameController.SaveData.newQueue.Count > 0)
+                return "Press E to Add New Art to Archive";
+            else if (GameController.SaveData.artQueue.Count > 0)
+                return "Press E to Touch Up Existing Art";
+        }
         return "Must be holding a card or painting in order to restore";
     }
 
@@ -133,39 +160,19 @@ public class Create : CoreGameMode, IInteractable
         GameObject heldObj = GetHeldObject();
         if (heldObj.GetComponent<Painting>())
         {
-            //associate the painting 
-            painting = heldObj;
-            associatedCard = painting.GetComponent<Painting>().associatedCard;
-
-            //retrieve and fill new card front
-            cardFront = cardPool.GetPooledObject();
-            cardFront.SetActive(true);
-            cardFront.GetComponent<CardFill>().CardAssign(associatedCard);
-
-            //retrieve and fill new card back
-            cardBack = cardPool.GetPooledObject();
-            cardBack.SetActive(true);
-            cardBack.GetComponent<CardFill>().CardAssign(associatedCard);
+            PaintingFill(heldObj);
         }
         else if (heldObj.GetComponent<CardFill>())
         {
-            //associate the card front
-            cardFront = heldObj;
-            associatedCard = cardFront.GetComponent<CardFill>().GetFlashcard();
-
-            //create a new painting for creation
-            painting = allPlaceable.RetrievePainting();
-            painting.GetComponent<Painting>().associatedCard = associatedCard;
-            painting.GetComponent<Painting>().AssignImage(false);
-
-            //retrieve and fill a new card back
-            cardBack = cardPool.GetPooledObject();
-            cardBack.SetActive(true);
-            cardBack.GetComponent<CardFill>().CardAssign(associatedCard);
+            CardFill(heldObj);
         }
         else
         {
-            Debug.Log("You're boned buddy");
+            //cases for newQueue art needing to be made and artQueue art needing to be added to
+            if (GameController.SaveData.newQueue.Count > 0)
+                QueuePrepare(true);
+            else if (GameController.SaveData.artQueue.Count > 0)
+                QueuePrepare(false);
         }
 
         //turn on brush objects
@@ -177,7 +184,103 @@ public class Create : CoreGameMode, IInteractable
         StartCoroutine(ObjectLerp());
     }
 
-    //used to lerp all objs into place
+    private void PaintingFill(GameObject heldObj)
+    {
+        //set indicator
+        specificArt = true;
+
+        //associate the painting 
+        painting = heldObj;
+        associatedCard = painting.GetComponent<Painting>().associatedCard;
+
+        //retrieve and fill new card front
+        cardFront = cardPool.GetPooledObject();
+        cardFront.SetActive(true);
+        cardFront.GetComponent<CardFill>().CardAssign(associatedCard);
+
+        //retrieve and fill new card back
+        cardBack = cardPool.GetPooledObject();
+        cardBack.SetActive(true);
+        cardBack.GetComponent<CardFill>().CardAssign(associatedCard);
+    }
+
+    private void CardFill(GameObject heldObj)
+    {
+        //set indicator
+        specificArt = true;
+
+        //associate the card front
+        cardFront = heldObj;
+        associatedCard = cardFront.GetComponent<CardFill>().GetFlashcard();
+
+        //create a new painting for creation
+        painting = allPlaceable.RetrievePainting();
+        painting.GetComponent<Painting>().associatedCard = associatedCard;
+        painting.GetComponent<Painting>().AssignImage(false);
+
+        //retrieve and fill a new card back
+        cardBack = cardPool.GetPooledObject();
+        cardBack.SetActive(true);
+        cardBack.GetComponent<CardFill>().CardAssign(associatedCard);
+    }
+
+    private void QueuePrepare(bool newCards)
+    {
+        //set indicator bools
+        specificArt = false;
+        newQueue = newCards;
+
+        //pull the first card in the queue
+        if (newQueue)
+        {
+            associatedCard = GameController.SaveData.newQueue.First();
+        }
+        else
+        {
+            associatedCard = GameController.SaveData.artQueue.First();
+        }
+
+        //retrieve and fill new card front
+        cardFront = cardPool.GetPooledObject();
+        cardFront.SetActive(true);
+        cardFront.GetComponent<CardFill>().CardAssign(associatedCard);
+
+        //retrieve and fill a new card back
+        cardBack = cardPool.GetPooledObject();
+        cardBack.SetActive(true);
+        cardBack.GetComponent<CardFill>().CardAssign(associatedCard);
+
+        //create a new painting for creation
+        painting = allPlaceable.RetrievePainting();
+        painting.GetComponent<Painting>().associatedCard = associatedCard;
+
+
+        StartCoroutine(FirstView());
+    }
+
+    //run whenever the user is presented with a new card - allow them time to review before jumping into the art creation
+    IEnumerator FirstView()
+    {
+        TransformTransfer(cardFront.transform, frontStart);
+        TransformTransfer(cardBack.transform, backStart);
+
+
+        float timer = 0f;
+        while (timer < lerpTime)
+        {
+            cardFront.transform.position = Vector3.Lerp(frontStart.position, frontPresent.position, timer / lerpTime);
+            cardBack.transform.position = Vector3.Lerp(backStart.position, backPresent.position, timer / lerpTime);
+
+            cardFront.transform.rotation = Quaternion.Lerp(frontStart.rotation, frontPresent.rotation, timer / lerpTime);
+            cardBack.transform.rotation = Quaternion.Lerp(backStart.rotation, backPresent.rotation, timer / lerpTime);
+
+            //increment timer
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+//used to lerp all objs into place
     IEnumerator ObjectLerp()
     {
         //Set init Transforms
@@ -188,7 +291,6 @@ public class Create : CoreGameMode, IInteractable
         
         //set up the timer
         float timer = 0f;
-        float lerpTime = 0.5f;
 
         //start timer
         while (timer < lerpTime)
@@ -203,8 +305,8 @@ public class Create : CoreGameMode, IInteractable
             painting.transform.rotation = Quaternion.Lerp(paintStart.rotation, paintEnd.rotation, timer / lerpTime);
             brushHolder.transform.rotation = Quaternion.Lerp(brushStart.rotation, brushEnd.rotation, timer / lerpTime);
 
-            timer += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
 
         //finalize lerp
@@ -219,6 +321,47 @@ public class Create : CoreGameMode, IInteractable
 
         //select the current brush
         currentBrush.Select();
+
+        //reset the timer
+        StartTimer();
+    }
+
+    IEnumerator StartTimer()
+    {
+        if (newQueue)
+            artTimer = 60f;
+        else
+            artTimer = 30f;
+
+        float currentTime = 0f;
+
+        int min = Mathf.FloorToInt(artTimer / 60);
+        int sec = Mathf.FloorToInt(artTimer % 60);
+
+        while ( currentTime < artTimer)
+        {
+            timerDisplay.text = string.Format("{0:00}:{1:00}", min, sec);
+
+            min = Mathf.FloorToInt(artTimer / 60);
+            sec = Mathf.FloorToInt(artTimer % 60);
+
+            currentTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        StopPainting();
+    }
+
+    //call this when time runs out or the player is done with painting early
+    public void StopPainting()
+    {
+        painting.GetComponent<Paint>().StopPainting();
+
+        //display finalized art
+
+        //enable an option to continue to the next piece if part of queue
+
+        //if a single work, either submit to archives or claim the painting to hang
     }
 
     public void BrushSelect(Brush newBrush)

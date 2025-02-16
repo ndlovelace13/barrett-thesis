@@ -14,6 +14,7 @@ public class ColorSelect : Paint
     {
         paintable = LayerMask.GetMask("colors");
         paintingEnabled = true;
+        cam = Camera.main;
 
         xMult = xPixels / (topLeftCorner.localPosition.x - bottomRightCorner.localPosition.x);
         yMult = yPixels / (topLeftCorner.localPosition.z - bottomRightCorner.localPosition.z);

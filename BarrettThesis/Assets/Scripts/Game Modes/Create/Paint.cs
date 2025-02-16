@@ -41,6 +41,7 @@ public class Paint : MonoBehaviour
     protected virtual void Start()
     {
         paintable = LayerMask.GetMask("paintable");
+        cam = Camera.main;
     }
 
     protected void Update()
@@ -206,7 +207,7 @@ public class Paint : MonoBehaviour
     {
         SaveHandler.SaveSystem.SavePainting(createdPainting, currentCard);
         paintingEnabled = false;
-        GameController.GameControl.gameMode = GameMode.DEFAULT;
+        //GameController.GameControl.gameMode = GameMode.DEFAULT;
         SaveHandler.SaveSystem.SaveGame();
     }
 }

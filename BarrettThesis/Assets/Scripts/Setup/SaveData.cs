@@ -22,6 +22,7 @@ public class SaveData
 
     public List<Flashcard> newQueue;
     public List<Flashcard> cardQueue;
+    public List<Flashcard> artQueue;
     public List<TaskType> taskMenu;
 
     public bool tasksComplete;
@@ -72,6 +73,7 @@ public class SaveData
 
         newQueue = new List<Flashcard>();
         cardQueue = new List<Flashcard>();
+        artQueue = new List<Flashcard>();
         placeables = new List<Placeable>();
 
         //expansion init

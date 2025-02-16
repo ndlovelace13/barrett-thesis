@@ -46,12 +46,15 @@ public class Matching : CoreGameMode, IInteractable
 
     public override bool Interact()
     {
-        if (GameController.GameControl.gameMode == GameMode.MATCHING)
-            CancelInteract();
-        else
+        if (GameController.SaveData.newQueue.Count == 0)
         {
-            base.Interact();
-            GameController.GameControl.lockPlayer = false;
+            if (GameController.GameControl.gameMode == GameMode.MATCHING)
+                CancelInteract();
+            else
+            {
+                base.Interact();
+                GameController.GameControl.lockPlayer = false;
+            }
         }
         return false;
     }
@@ -81,10 +84,16 @@ public class Matching : CoreGameMode, IInteractable
 
     public override string GetPrompt()
     {
-        if (GameController.SaveData.cardQueue.Count > 0 || GameController.SaveData.newQueue.Count > 0)
-            return "Press E to Start Matching";
+        if (GameController.SaveData.newQueue.Count == 0)
+        {
+            if (GameController.SaveData.cardQueue.Count > 0)
+                return "Press E to Start Matching";
+            else
+                return "Press E for Extra Practice";
+        }
         else
-            return "Press E for Extra Practice";
+            return "Matching not available - add new cards to archive!";
+        
     }
 
     public void CardSelect()
