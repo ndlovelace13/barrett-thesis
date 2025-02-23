@@ -161,4 +161,16 @@ public class Flashcard
         }
             
     }
+
+    //will be called upon at the beginning of the matching phase, 
+    public List<int> RetrieveAnswers()
+    {
+        List<int> returnedIndexes = new List<int>();
+
+        //add four random answers to the list, one of them is correct
+
+        //if there are confusedIndexes, roll the dice to incorporate them instead of random pulls
+
+        return returnedIndexes;
+    }
 }
