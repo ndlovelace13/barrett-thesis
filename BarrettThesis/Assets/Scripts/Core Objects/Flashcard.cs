@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
+using System.Linq;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class Flashcard
@@ -26,6 +28,9 @@ public class Flashcard
 
     //tracker for frequently confused
     public List<int> confusedIndexes;
+    
+    //storage for generated answers
+    public List<int> returnedIndexes;
 
     // Start is called before the first frame update
     void Start()
@@ -129,6 +134,9 @@ public class Flashcard
         confusedIndexes.Add(index);
 
         Debug.Log(cardId + " was confused with" + index);
+
+        //generate new indices
+        GenerateAnswers();
     }
 
     //Mastery only updated on Card Correct
@@ -162,15 +170,46 @@ public class Flashcard
             
     }
 
-    //will be called upon at the beginning of the matching phase, 
-    public List<int> RetrieveAnswers()
+    //will be called upon at the beginning of the matching phase, or if the wrong answer was chosen
+    public void GenerateAnswers()
     {
-        List<int> returnedIndexes = new List<int>();
+        returnedIndexes = new List<int>();
 
         //add four random answers to the list, one of them is correct
+        returnedIndexes.Add(cardId);
 
         //if there are confusedIndexes, roll the dice to incorporate them instead of random pulls
+        for (int i = 0; i < 3; i++)
+        {
+            if (confusedIndexes.Count > 0 && Random.Range(0f, 1f) < (0.1f * masteryLevel))
+            {
+                int newConf = confusedIndexes[Random.Range(0, confusedIndexes.Count)];
+                if (returnedIndexes.Contains(newConf))
+                    AnyIndex();
+                else
+                    returnedIndexes.Add(newConf);
+            }
+            else
+                AnyIndex();
+        }
 
+        Debug.Log("returned Indexes contains: " + returnedIndexes.Count);
+        //returnedIndexes = returnedIndexes.OrderBy(_ => Guid.NewGuid()).ToList();
+    }
+
+    private void AnyIndex()
+    {
+        int newIndex;
+        do
+        {
+            newIndex = Random.Range(0, GameController.SaveData.unlockedCardCount);
+        } while (returnedIndexes.Contains(newIndex));
+        returnedIndexes.Add(newIndex);
+    }
+
+    //called to return the answers generated earlier
+    public List<int> RetrieveAnswers()
+    {
         return returnedIndexes;
     }
 }

@@ -89,7 +89,7 @@ public class CardFill : MonoBehaviour
     {
         //set the mesh mat to match the mastery level
         mesh.material = DeckManager.DeckManage.masteryMaterials[currentCard.masteryLevel];
-        if (cardAssigned && prevNoteId.Equals(currentCard.noteId))
+        /*if (cardAssigned && prevNoteId.Equals(currentCard.noteId))
         {
             //fields already set, just need to fill them in
             FieldReplace(cardFront, noteInfo.front);
@@ -101,12 +101,26 @@ public class CardFill : MonoBehaviour
             FieldFill(cardFront, noteInfo.front);
             //fill the back
             FieldFill(cardBack, noteInfo.back);
-        }
+        }*/
+
+        //simplified version, no field replacement due to issues of differences between cards
+
+        //fill the front
+        FieldFill(cardFront, noteInfo.front);
+        //fill the back
+        FieldFill(cardBack, noteInfo.back);
     }
 
     //use this to fill initially
     protected void FieldFill(GameObject parent, List<int> indexes)
     {
+        //destroy all existing fields
+        foreach (Transform child in parent.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        //create new objects for each field
         foreach (int index in indexes)
         {
             //create an image plane
@@ -159,6 +173,8 @@ public class CardFill : MonoBehaviour
                 GameObject newImg = parent.transform.GetChild(i).gameObject;
                 if (currentCard.fields[indexes[i]] != "")
                 {
+                    Debug.Log(newImg.name);
+                    newImg.SetActive(true);
                     //load the image into a texture
                     string filePath = GameController.SaveData.currentDeck.mediaPath + currentCard.fields[indexes[i]];
                     Debug.Log(filePath);
@@ -185,9 +201,18 @@ public class CardFill : MonoBehaviour
             //create text field
             else
             {
-                Debug.Log(indexes[i] + " " + currentCard.fields[indexes[i]]);
                 GameObject newText = parent.transform.GetChild(i).gameObject;
-                newText.GetComponentInChildren<TMP_Text>().text = currentCard.fields[indexes[i]];
+                if (!string.IsNullOrEmpty(currentCard.fields[indexes[i]]))
+                {
+                    Debug.Log(indexes[i] + " " + currentCard.fields[indexes[i]]);
+                    Debug.Log(newText.name);
+                    newText.GetComponentInChildren<TMP_Text>().text = currentCard.fields[indexes[i]];
+                }
+                else
+                {
+                    Debug.Log("exception caught");
+                    newText.SetActive(false);
+                }
             }
 
         }

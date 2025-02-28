@@ -24,6 +24,7 @@ public class DailyCardDelivery : CoreGameMode, IInteractable
             StartCoroutine(MoneyShipment(5000));
         }
         GameController.SaveData.cardsUnboxed = true;
+        GameController.SaveData.unlockedCardCount += GameController.SaveData.newPerDay;
         GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskUpdate();
     }
 
@@ -35,6 +36,7 @@ public class DailyCardDelivery : CoreGameMode, IInteractable
 
         GameObject newPopup = Instantiate(GameController.GameControl.popup, transform);
         newPopup.GetComponent<PopupBehavior>().NewPopup("+" + GameController.SaveData.newPerDay + " to Archives", Color.yellow);
+        
 
         yield return null;
     }

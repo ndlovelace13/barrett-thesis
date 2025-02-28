@@ -19,6 +19,7 @@ public class SaveData
     public int dayIndex = 0;
     public int donationsToday;
     public bool cardsUnboxed;
+    public int unlockedCardCount;
 
     public List<Flashcard> newQueue;
     public List<Flashcard> cardQueue;
@@ -68,6 +69,7 @@ public class SaveData
         saveTime = DateTime.UtcNow.ToString();
         refreshTime = DateTime.UtcNow.AddHours(24).ToString();
         cardsUnboxed = false;
+        unlockedCardCount = 0;
 
         maxVisitors = 2;
 

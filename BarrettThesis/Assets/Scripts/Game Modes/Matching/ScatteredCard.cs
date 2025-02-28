@@ -15,10 +15,11 @@ public class ScatteredCard : Rearrangeable, IInteractable
     [SerializeField] Transform cardTransform;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Awake()
     { 
         paintMat = artwork.material;
-        
+        Debug.Log(paintMat.ToString());
+        base.Awake();
     }
 
     // Update is called once per frame
@@ -74,7 +75,12 @@ public class ScatteredCard : Rearrangeable, IInteractable
     {
         cardData = newCard;
         if (cardData.useCustom)
+        {
+            Debug.Log(paintMat.mainTexture);
+            Debug.Log(cardData.customArt);
             paintMat.mainTexture = SaveHandler.SaveSystem.GetPainting(cardData.customArt);
+        }
+            
         NoteType noteInfo = GameController.SaveData.currentDeck.dictRetrieve(cardData.noteId);
         promptText.text = cardData.fields[noteInfo.matchPromptField];
     }

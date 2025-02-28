@@ -320,11 +320,10 @@ public class Matching : CoreGameMode, IInteractable
         Debug.Log(allRooms.Count + " eligible rooms found");
 
         //evenly split the number of cards between the room
-        //TODO - REPLACE NEWQUEUE WITH CARDQUEUE
-        int cardsPerRoom = GameController.SaveData.newQueue.Count / allRooms.Count;
-        int additionalCards = GameController.SaveData.newQueue.Count % allRooms.Count;
+        int cardsPerRoom = GameController.SaveData.cardQueue.Count / allRooms.Count;
+        int additionalCards = GameController.SaveData.cardQueue.Count % allRooms.Count;
 
-        List<Flashcard> remainingCards = new List<Flashcard>(GameController.SaveData.newQueue);
+        List<Flashcard> remainingCards = new List<Flashcard>(GameController.SaveData.cardQueue);
         //assign cards to rooms
         for (int i = 0; i < allRooms.Count; i++)
         {
@@ -364,6 +363,9 @@ public class Matching : CoreGameMode, IInteractable
 
             //remove card from the list once assigned
             remainingCards.RemoveAt(chosenIndex);
+
+            //generate answers for the card
+            card.GenerateAnswers();
         }
         yield return null;
     }

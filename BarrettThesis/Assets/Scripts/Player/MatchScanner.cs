@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MatchScanner : ObjectMotion
 {
@@ -13,17 +15,26 @@ public class MatchScanner : ObjectMotion
     [SerializeField] Transform offScreen;
 
     [SerializeField] MeshRenderer scannedPainting;
+    [SerializeField] Image imageDisplay;
     [SerializeField] TMP_Text scannedPrompt;
 
-    Texture placeholder;
+    [SerializeField] List<TMP_Text> answers;
+    [SerializeField] GameObject answerHolder;
+
+    Sprite placeholder;
 
     Flashcard scannedCard;
+    Flashcard prevCard;
+
+    bool answerFilled = false;
 
     // Start is called before the first frame update
     void Start()
     {
         layer = LayerMask.NameToLayer("cardLayer");
-        placeholder = scannedPainting.material.mainTexture;
+        prevCard = null;
+        //Debug.Log("CHew on this you filthy animal: " + layer);
+        placeholder = imageDisplay.sprite;
     }
 
     public void FixedUpdate()
@@ -31,35 +42,81 @@ public class MatchScanner : ObjectMotion
         if (!disabled)
             StartCoroutine(ScanCheck());
 
+        if (scannedCard == null)
+        {
+            answerFilled = false;
+        }
+        else
+        {
+            if (!answerFilled)
+                FillAnswers();
+            StartCoroutine(AnswerCheck());
+        }
+
         DisableHandler();
+    }
+
+    private void FillAnswers()
+    {
+        answerFilled = true;
+        answerHolder.SetActive(true);
+
+        //get the cards answers
+        List<int> answerIndexes = new List<int>(scannedCard.RetrieveAnswers());
+        NoteType noteType = GameController.SaveData.currentDeck.dictRetrieve(scannedCard.noteId);
+
+        //create a list of all the answer text objs
+        //List<TMP_Text> remainingAnswers = new List<TMP_Text>(answers);
+
+        for (int i = 0; i < answers.Count; i++)
+        {
+            int selectedText = Random.Range(0, answerIndexes.Count);
+
+            //retrieve the correct value from the 
+            answers[i].text = (i+1) + ". " + GameController.SaveData.currentDeck.cards[answerIndexes[selectedText]].fields[noteType.matchAnswerField];
+            answerIndexes.RemoveAt(selectedText);
+
+        }
+    }
+
+    IEnumerator AnswerCheck()
+    {
+        yield return null;
     }
 
 
     IEnumerator ScanCheck()
     {
+        //Debug.Log("I'm tryingggg");
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100f, layer))
         {
             //if a card is detected, display it to the screen of the scanner
+            //Debug.Log("card detected");
             scannedCard = hit.collider.transform.root.GetComponent<ScatteredCard>().ReportCard();
         }
         else
             scannedCard = null;
 
         //apply to the scanner
-        if (scannedCard != null)
+        if (scannedCard != null && scannedCard != prevCard)
         {
             if (scannedCard.useCustom)
-                scannedPainting.material.mainTexture = SaveHandler.SaveSystem.GetPainting(scannedCard.customArt);
+            {
+                Texture2D tex = SaveHandler.SaveSystem.GetPainting(scannedCard.customArt);
+                imageDisplay.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+            }
+                
             NoteType noteInfo = GameController.SaveData.currentDeck.dictRetrieve(scannedCard.noteId);
             scannedPrompt.text = scannedCard.fields[noteInfo.matchPromptField];
         }
-        else
+        else if (scannedCard == null)
         {
-            scannedPainting.material.mainTexture = placeholder;
+            imageDisplay.sprite = placeholder;
             scannedPrompt.text = "No Archive Detected";
+            answerHolder.SetActive(false);
         }
-
+        prevCard = scannedCard;
         yield return null;
     }
 
@@ -103,7 +160,7 @@ public class MatchScanner : ObjectMotion
                 yield break;
         }
         transform.localPosition = offScreen.localPosition;
-        GetComponent<MeshRenderer>().enabled = false;
+        //GetComponent<MeshRenderer>().enabled = false;
         held = false;
         yield return null;
 
@@ -114,7 +171,7 @@ public class MatchScanner : ObjectMotion
         Debug.Log("Enabling Scanner");
         //GetComponent<ChecklistDisplay>().TaskUpdate();
         Vector3 startLoc = transform.localPosition;
-        GetComponent<MeshRenderer>().enabled = true;
+        //GetComponent<MeshRenderer>().enabled = true;
         float timer = 0f;
         while (timer < .25f)
         {
