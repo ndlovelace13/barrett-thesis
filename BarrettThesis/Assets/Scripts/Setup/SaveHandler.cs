@@ -96,6 +96,9 @@ public class SaveHandler : MonoBehaviour
 
         card.customArt = currentPainting;
         card.useCustom = true;
+
+        //unlock as discovered
+        card.discovered = true;
     }
 
     public Texture2D GetPainting(string paintFile)

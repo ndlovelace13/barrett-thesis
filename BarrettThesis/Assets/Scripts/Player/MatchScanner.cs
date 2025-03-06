@@ -13,6 +13,7 @@ public class MatchScanner : ObjectMotion
 
     [SerializeField] Transform startingPos;
     [SerializeField] Transform offScreen;
+    [SerializeField] Transform cardDestination;
 
     [SerializeField] MeshRenderer scannedPainting;
     [SerializeField] Image imageDisplay;
@@ -20,13 +21,30 @@ public class MatchScanner : ObjectMotion
 
     [SerializeField] List<TMP_Text> answers;
     [SerializeField] GameObject answerHolder;
+    string correctText;
+
+    //Correct Visual Objects
+    [Header("Correct Elements")]
+    [SerializeField] GameObject correctMain;
+    [SerializeField] TMP_Text correctAnswerText;
+    [SerializeField] TMP_Text masteryUpdate;
+
+    //Incorrect Visual Objects
+    [Header("Incorrect Elements")]
+    [SerializeField] GameObject incorrectMain;
+    [SerializeField] TMP_Text incorrectAnswerText;
+    [SerializeField] TMP_Text masteryDrop;
 
     Sprite placeholder;
 
+    ScatteredCard cardControl;
     Flashcard scannedCard;
     Flashcard prevCard;
+    bool masteryUp;
 
     bool answerFilled = false;
+
+    Dictionary<int, int> answerMap;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +55,16 @@ public class MatchScanner : ObjectMotion
         placeholder = imageDisplay.sprite;
     }
 
-    public void FixedUpdate()
+    public override void Update()
+    {
+        if (answerFilled && scannedCard != null)
+        {
+            StartCoroutine(AnswerCheck());
+        }
+        base.Update();
+    }
+
+    void FixedUpdate()
     {
         if (!disabled)
             StartCoroutine(ScanCheck());
@@ -49,14 +76,14 @@ public class MatchScanner : ObjectMotion
         else
         {
             if (!answerFilled)
-                FillAnswers();
-            StartCoroutine(AnswerCheck());
+                StartCoroutine(FillAnswers());
+            
         }
 
         DisableHandler();
     }
 
-    private void FillAnswers()
+    IEnumerator FillAnswers()
     {
         answerFilled = true;
         answerHolder.SetActive(true);
@@ -67,20 +94,173 @@ public class MatchScanner : ObjectMotion
 
         //create a list of all the answer text objs
         //List<TMP_Text> remainingAnswers = new List<TMP_Text>(answers);
+        answerMap = new Dictionary<int, int>();
 
         for (int i = 0; i < answers.Count; i++)
         {
             int selectedText = Random.Range(0, answerIndexes.Count);
 
             //retrieve the correct value from the 
-            answers[i].text = (i+1) + ". " + GameController.SaveData.currentDeck.cards[answerIndexes[selectedText]].fields[noteType.matchAnswerField];
+            string tempText = (i + 1) + ". " + GameController.SaveData.currentDeck.cards[answerIndexes[selectedText]].fields[noteType.matchAnswerField];
+
+            //store to correctText if its the correctAnswer
+            if (answerIndexes[selectedText] == scannedCard.cardId)
+                correctText = tempText;
+            answers[i].text = tempText;
+            
+            //add to the answer map
+            answerMap.Add(i, answerIndexes[selectedText]);
+
+            //remove from the possible answers
             answerIndexes.RemoveAt(selectedText);
 
         }
+        yield return null;
     }
 
     IEnumerator AnswerCheck()
     {
+        int chosenAns;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            chosenAns = 0;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            chosenAns = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            chosenAns = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            chosenAns = 3;
+        }
+        else
+        {
+            chosenAns = -1;
+        }
+
+        if (chosenAns != -1)
+        {
+            Debug.Log("Chosen Ans Recieved: " + chosenAns);
+
+            //check whether the answer is correct or not
+            int answerIndex = answerMap[chosenAns];
+
+            if (scannedCard.cardId == answerIndex)
+            {
+                masteryUp = scannedCard.Correct();
+
+                //Correct Answer Routines Here (remove the scannedCard)
+                StartCoroutine(CorrectCoroutine());
+            }
+            else
+            {
+                scannedCard.Missed(answerIndex);
+
+                //Incorrect Answer Routines Here (display incorrect answer)
+                StartCoroutine(IncorrectCoroutine());
+            }
+        }
+
+        yield return null;
+    }
+
+    IEnumerator CorrectCoroutine()
+    {
+        //Lerp the card to the user's viewpoint
+        cardControl.CorrectBehavior(cardDestination);
+        Debug.Log("Correct Coroutine Initiated in the MatchScanner");
+
+        //if mastery upgraded, do special animation
+
+        //else do basic animation - reveal mastery color regardless
+
+        //meanwhile, show correct on match scanner - time until next check
+        answerHolder.SetActive(false);
+        correctMain.SetActive(true);
+
+        //fill text with correct text and mastery progress
+        correctAnswerText.text = correctText;
+        if (masteryUp)
+        {
+            //check whether maxMastery has been reached or not
+            if (scannedCard.masteryLevel == DeckManager.DeckManage.masteryDays.Length)
+            {
+                masteryUpdate.text = "Max Mastery reached! | Next Review in " + scannedCard.daysTilNext + " Days";
+            }
+            else
+            {
+                masteryUpdate.text = "Mastery Tier " + scannedCard.masteryLevel + " reached! | Next Review in " + scannedCard.daysTilNext + " Days";
+            }
+        }
+        else
+        {
+            //check whether maxMastery has been reached or not
+            if (scannedCard.masteryLevel == DeckManager.DeckManage.masteryDays.Length)
+            {
+                masteryUpdate.text = "Max Mastery Retained | Next Review in " + scannedCard.daysTilNext + " Days";
+            }
+            else
+            {
+                masteryUpdate.text = "Mastery Tier " + scannedCard.masteryLevel + " " + (int)(scannedCard.MasteryPercent() * 100f) + "% Complete | Next Review in " + scannedCard.daysTilNext + " Days";
+            }
+
+        }
+
+        //maybe a bar showing progress towards next mastery tier
+
+        //update checklist
+        GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskUpdate();
+
+        //card fly over shoulder lerp, back to archive?
+        float currentTime = 0f;
+        while (currentTime < 1f)
+        {
+            currentTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        //disable the correct menu and reenable the base answer holder
+        answerHolder.SetActive(true);
+        correctMain.SetActive(false);
+
+        yield return null;
+    }
+
+    IEnumerator IncorrectCoroutine()
+    {
+        //Leave card there
+        Debug.Log("Incorrect Coroutine Initiated in the MatchScanner");
+        cardControl.IncorrectBehavior();
+
+        //show incorrect on match scanner - new time until next check
+        answerHolder.SetActive(false);
+        incorrectMain.SetActive(true);
+
+        //reveal the correct answer
+        correctAnswerText.text = correctText;
+
+        //bar showing reset mastery progress on match scanner
+        masteryUpdate.text = "Mastery Tier " + scannedCard.masteryLevel + " Reset | Additional Review Required";
+
+        //lerp to a new location?
+        float currentTime = 0f;
+        while (currentTime < 1f)
+        {
+            currentTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        //disable the correct menu and reenable the base answer holder
+        answerHolder.SetActive(true);
+        incorrectMain.SetActive(false);
+
+        //refresh answers
+        answerFilled = false;
+
         yield return null;
     }
 
@@ -93,10 +273,16 @@ public class MatchScanner : ObjectMotion
         {
             //if a card is detected, display it to the screen of the scanner
             //Debug.Log("card detected");
-            scannedCard = hit.collider.transform.root.GetComponent<ScatteredCard>().ReportCard();
+            cardControl = hit.collider.transform.root.GetComponent<ScatteredCard>();
+            scannedCard = cardControl.ReportCard();
+            
         }
         else
+        {
+            cardControl = null;
             scannedCard = null;
+        }
+            
 
         //apply to the scanner
         if (scannedCard != null && scannedCard != prevCard)

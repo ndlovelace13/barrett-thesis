@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3884614464332491619}
   - component: {fileID: -1616265706700706742}
   - component: {fileID: 388599377175093330}
+  - component: {fileID: 810932422391810824}
   m_Layer: 3
   m_Name: ScatteredCard
   m_TagString: Untagged
@@ -89,8 +90,32 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   artwork: {fileID: 9012501807550539341}
+  baseCard: {fileID: 2661173549300852554}
   promptText: {fileID: 2602029077863089698}
   cardTransform: {fileID: 8751911590843080582}
+  animControl: {fileID: 810932422391810824}
+  lerpTime: 1
+--- !u!95 &810932422391810824
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174808656349809685}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5fc6d442fbd293d468bd7bfa855cc9ea, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2085130535214354820
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class OldQueueTask : TaskControl
     void Start()
     {
         taskDescription = "Archives Reviewed";
-        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count - GameController.SaveData.newQueue.Count;
+        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count;
         tasksTotal = GameController.SaveData.cardCount;
         Debug.Log("OldQueueTask exists");
     }
@@ -24,7 +24,7 @@ public class OldQueueTask : TaskControl
     public override bool UpdateTask()
     {
         taskDescription = "Archives Reviewed";
-        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count - GameController.SaveData.newQueue.Count;
+        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count;
         tasksTotal = GameController.SaveData.cardCount;
         Debug.Log("OldQueueTask Updated");
         return base.UpdateTask();

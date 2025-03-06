@@ -96,19 +96,15 @@ public class Flashcard
         }
     }
 
-    public void Correct()
+    public bool Correct()
     {
+        Debug.Log("Before Correct Application " + daysTilNext);
         correctCount++;
         //increment the mastery points
-        if (!discovered)
-        {
-            discovered = true;
-            daysTilNext++;
-            
-        }
-        else if (daysTilNext == 0)
+        if (daysTilNext == 0)
         {
             daysTilNext = 1;
+            prevInterval = daysTilNext;
         }
         else
         {
@@ -117,9 +113,11 @@ public class Flashcard
             prevInterval = daysTilNext;
         }
 
-        MasteryCheck();
+        bool masteryUp = MasteryCheck();
+        GameController.SaveData.cardQueue.Remove(this);
         
         Debug.Log(cardId + " was Correct | Days til Next Review: " + daysTilNext);
+        return masteryUp;
     }
 
     public void Missed(int index)
@@ -140,20 +138,24 @@ public class Flashcard
     }
 
     //Mastery only updated on Card Correct
-    private void MasteryCheck()
+    private bool MasteryCheck()
     {
+        //declaration of vars
         int newMastery = 0;
-        if (daysTilNext >= 30)
+        bool masteryUp = false;
+
+        //check masteryTier
+        if (daysTilNext >= DeckManager.DeckManage.masteryDays[5])
             newMastery = 6;
-        else if (daysTilNext >= 21)
+        else if (daysTilNext >= DeckManager.DeckManage.masteryDays[4])
             newMastery = 5;
-        else if (daysTilNext >= 14)
+        else if (daysTilNext >= DeckManager.DeckManage.masteryDays[3])
             newMastery = 4;
-        else if (daysTilNext >= 7)
+        else if (daysTilNext >= DeckManager.DeckManage.masteryDays[2])
             newMastery = 3;
-        else if (daysTilNext >= 3)
+        else if (daysTilNext >= DeckManager.DeckManage.masteryDays[1])
             newMastery = 2;
-        else if (daysTilNext >= 1)
+        else if (daysTilNext >= DeckManager.DeckManage.masteryDays[0])
             newMastery = 1;
    
         //trigger an event to reward the player for new mastery level here
@@ -162,12 +164,18 @@ public class Flashcard
         {
             masteryLevel = newMastery;
             Debug.Log("Mastery upgraded on card + " + cardId + ": Level " + masteryLevel);
+            masteryUp = true;
         }
         else
         {
             Debug.Log("Mastery retained on card " + cardId + ": Level " + masteryLevel);
         }
-            
+        return masteryUp;
+    }
+
+    public float MasteryPercent()
+    {
+        return (float)daysTilNext / (float)DeckManager.DeckManage.masteryDays[masteryLevel + 1];
     }
 
     //will be called upon at the beginning of the matching phase, or if the wrong answer was chosen

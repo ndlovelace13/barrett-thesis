@@ -13,7 +13,8 @@ public enum GameMode
     MATCHING,
     CREATING,
     INSPECTING,
-    ORDERING
+    ORDERING,
+    PAUSED
 }
 
 public class GameController : MonoBehaviour
@@ -68,6 +69,8 @@ public class GameController : MonoBehaviour
 
     public void GameStart()
     {
+        gameMode = GameMode.DEFAULT;
+        Time.timeScale = 1f;
         FindObjectOfType<MuseumLoader>().MuseumRestore();
         FindObjectOfType<PlaceableHandler>().PlaceableRestore();
         DeckManager.DeckManage.DateCheck();

@@ -23,12 +23,16 @@ public class RoomControl : MonoBehaviour
     public List<Flashcard> assignedCards;
     [SerializeField] Transform cardSpawn;
     public LayerMask hitLayers;
+    ObjectPool scatteredPool;
 
 
     // Start is called before the first frame update
     void Start()
     {
         hitLayers = LayerMask.GetMask("ground") | LayerMask.GetMask("Wall") | LayerMask.GetMask("Ceiling");
+
+        //retrieve the pool object
+        scatteredPool = GameObject.FindWithTag("ScatteredPool").GetComponent<ObjectPool>();
 }
 
     // Update is called once per frame
@@ -199,8 +203,12 @@ public class RoomControl : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(cardSpawn.position, cardSpawn.position + (finalAngle * mag), out hit, mag, hitLayers))
             {
-                Debug.Log(hit.collider.gameObject.name);
-                GameObject newCard = Instantiate(GameController.GameControl.scatteredCard, hit.point, Quaternion.identity);
+                Debug.Log(hit.point);
+                //GameObject newCard = Instantiate(GameController.GameControl.scatteredCard, hit.point, Quaternion.identity);
+                //get new card from pool
+                GameObject newCard = scatteredPool.GetPooledObject();
+                newCard.SetActive(true);
+                newCard.transform.position = hit.point;
                 newCard.GetComponent<ScatteredCard>().Place(hit);
                 newCard.GetComponent<ScatteredCard>().FillCard(assignedCards[i]);
                 //newCard.GetComponent<Rigidbody>().useGravity = false;

@@ -10,9 +10,13 @@ public class ScatteredCard : Rearrangeable, IInteractable
     Flashcard cardData;
 
     [SerializeField] MeshRenderer artwork;
+    [SerializeField] MeshRenderer baseCard;
     Material paintMat;
     [SerializeField] TMP_Text promptText;
     [SerializeField] Transform cardTransform;
+    [SerializeField] Animator animControl;
+
+    public float lerpTime = 1f;
 
     // Start is called before the first frame update
     protected override void Awake()
@@ -88,6 +92,71 @@ public class ScatteredCard : Rearrangeable, IInteractable
     public Flashcard ReportCard()
     {
         return cardData;
+    }
+
+    public void ApplyMastery()
+    {
+        Debug.Log("Mastery Material Applied");
+        baseCard.material = DeckManager.DeckManage.masteryMaterials[cardData.masteryLevel];
+    }
+
+    public void CorrectBehavior(Transform finalLoc)
+    {
+        Debug.Log("Correct Behavior Called");
+
+        StartCoroutine(CorrectLerp(finalLoc));
+    }
+
+    IEnumerator CorrectLerp(Transform finalLoc)
+    {
+        //store starting pos
+        Vector3 startPosition = transform.position;
+
+        //execute lerp
+        float currentTime = 0f;
+        while (currentTime < lerpTime)
+        {
+            transform.position = Vector3.Lerp(startPosition, finalLoc.position, currentTime / lerpTime);
+            //Debug.Log(transform.position);
+            currentTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        transform.position = finalLoc.position;
+
+        //execute anim
+        animControl.SetTrigger("correct");
+        //make an animation trigger in the animation to call the second half of this function instead of relying on animation time tracking
+        /*while (animControl.playbackTime < 1f)
+        {
+            yield return new WaitForFixedUpdate();
+        }*/
+
+        //lerp over shoulder and kill
+        
+
+        yield return null;
+    }
+
+    public void IncorrectBehavior()
+    {
+        Debug.Log("Incorrect Behavior Called");
+        animControl.SetTrigger("incorrect");
+        //StartCoroutine(Incorrect)
+    }
+
+    public void SpinComplete()
+    {
+        Debug.Log("SpinComplete");
+        StartCoroutine(CardRemoval());   
+    }
+
+    IEnumerator CardRemoval()
+    {
+        gameObject.SetActive(false);
+
+        Debug.Log("Reached end of correct Lerp");
+        yield return null;
     }
 
 

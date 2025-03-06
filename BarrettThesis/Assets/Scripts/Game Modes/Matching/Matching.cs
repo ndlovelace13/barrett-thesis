@@ -33,8 +33,8 @@ public class Matching : CoreGameMode, IInteractable
         cardsCorrect = 0;
         newCardsCorrect = 0;
         cardRatio = 0;
-        promptObjectPool = GameObject.FindWithTag("PromptPool").GetComponent<ObjectPool>();
-        answerObjectPool = GameObject.FindWithTag("AnswerPool").GetComponent<ObjectPool>();
+        //promptObjectPool = GameObject.FindWithTag("PromptPool").GetComponent<ObjectPool>();
+        //answerObjectPool = GameObject.FindWithTag("AnswerPool").GetComponent<ObjectPool>();
         answerHolder = GameObject.FindWithTag("AnswerHolder");
     }
 

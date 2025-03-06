@@ -133,9 +133,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc1368105e3a7af4c9d223f6434a9e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taskDescription: Acquire New Works
+  taskDescription: Create New Works
   tasksComplete: 0
   tasksTotal: 0
+  complete: 0
 --- !u!1 &4189881214314884794
 GameObject:
   m_ObjectHideFlags: 0
