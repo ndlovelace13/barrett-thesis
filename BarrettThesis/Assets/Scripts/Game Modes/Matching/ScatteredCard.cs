@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.Localization.Plugins.XLIFF.Common;
 
 public class ScatteredCard : Rearrangeable, IInteractable
 {
@@ -75,6 +74,22 @@ public class ScatteredCard : Rearrangeable, IInteractable
         transform.rotation = Quaternion.Euler(tempRot);
     }
 
+    public void ArchiveView(Flashcard newCard)
+    {
+        if (newCard.discovered)
+            FillCard(newCard);
+        else
+            UndiscoveredFill(newCard);
+        ApplyMastery();
+    }
+
+    public void UndiscoveredFill(Flashcard newCard)
+    {
+        Debug.Log("Card not discovered!");
+        cardData = newCard;
+        promptText.text = "???";
+    }
+
     public void FillCard(Flashcard newCard)
     {
         cardData = newCard;
@@ -97,7 +112,10 @@ public class ScatteredCard : Rearrangeable, IInteractable
     public void ApplyMastery()
     {
         Debug.Log("Mastery Material Applied");
-        baseCard.material = DeckManager.DeckManage.masteryMaterials[cardData.masteryLevel];
+        if (cardData.discovered)
+            baseCard.material = DeckManager.DeckManage.masteryMaterials[cardData.masteryLevel];
+        else
+            baseCard.material = DeckManager.DeckManage.mysteryMat;
     }
 
     public void CorrectBehavior(Transform finalLoc)

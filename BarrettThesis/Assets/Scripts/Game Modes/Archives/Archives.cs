@@ -5,18 +5,24 @@ using UnityEngine;
 public class Archives : CoreGameMode, IInteractable
 {
     ObjectPool cardPool;
+    ObjectPool scatteredPool;
+    ObjectPool statsPool;
     public List<GameObject> displayedCards;
+
+    [SerializeField] Transform displayGrid;
 
     //cam control
     //public Transform camControl;
 
     int currentIndex;
-    int indexModAmount = 1;
+    int indexModAmount = 5;
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         cardPool = GameObject.FindWithTag("CardPool").GetComponent<ObjectPool>();
+        scatteredPool = GameObject.FindWithTag("ScatteredPool").GetComponent<ObjectPool>();
+        statsPool = GameObject.FindWithTag("StatsPool").GetComponent<ObjectPool>();
         displayedCards = new List<GameObject>();
         gameMode = GameMode.ARCHIVE;
     }
@@ -117,23 +123,29 @@ public class Archives : CoreGameMode, IInteractable
         List<GameObject> newCards = new List<GameObject>();
         for (int i = 0; i < cardNum; i++)
         {
-            GameObject currentCard = cardPool.GetPooledObject();
+            GameObject currentCard = scatteredPool.GetPooledObject();
             currentCard.SetActive(true);
 
-            //set card a certain dist from the user
-            currentCard.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
-            currentCard.GetComponent<Rigidbody>().useGravity = false;
+            //set card grid a certain dist from the user
+            displayGrid.position = Camera.main.transform.position + Camera.main.transform.forward * 3f;
+
+            //set the card to the displayGrid
+            currentCard.transform.SetParent(displayGrid, false);
+            currentCard.transform.localPosition = new Vector3(i, 0, 0);
+            /*currentCard.GetComponent<Rigidbody>().useGravity = false;
             currentCard.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            currentCard.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            currentCard.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;*/
             //currentCard.GetComponent<BoxCollider>().enabled = false;
 
             //in case need to set rotation
-            currentCard.transform.LookAt(Camera.main.transform);
+            displayGrid.transform.LookAt(Camera.main.transform);
+            displayGrid.transform.Rotate(0f, 90f, 0f);
             //currentCard.transform.rotation = currentCam;
 
             //fill the card
             Flashcard currentFlashcard = GameController.SaveData.currentDeck.cards[cardIndex + i];
-            currentCard.GetComponent<CardFill>().CardAssign(currentFlashcard);
+            //currentCard.GetComponent<CardFill>().CardAssign(currentFlashcard);
+            currentCard.GetComponent<ScatteredCard>().ArchiveView(currentFlashcard);
             currentCard.GetComponent<CardMotion>().selected = true;
 
             //add the new card to the newCards list

@@ -74,7 +74,7 @@ MonoBehaviour:
     type: 3}
   constructionDoor: {fileID: 1514622897279814163, guid: 25d82cb27464a874b9e4f880f27cb123,
     type: 3}
-  officeConstruction: {fileID: 1514622897279814163, guid: 25d82cb27464a874b9e4f880f27cb123,
+  officeConstruction: {fileID: 3287649868752397915, guid: 07cb6a088d977a3439fe949cf25fcc82,
     type: 3}
   assignedCards: []
   cardSpawn: {fileID: 2702818564967283847}

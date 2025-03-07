@@ -10,6 +10,7 @@ public class DeckManager : MonoBehaviour
     public static DeckManager DeckManage;
 
     public List<Material> masteryMaterials;
+    public Material mysteryMat;
     public int[] masteryDays;
 
     //[SerializeField] PlaceableHandler placeableHandler;

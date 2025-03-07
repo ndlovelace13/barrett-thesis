@@ -342,7 +342,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5819704141701132801}
-  - component: {fileID: 2345875286414369324}
   - component: {fileID: 1434006071023223723}
   - component: {fileID: 6089303426994490442}
   m_Layer: 5
@@ -372,36 +371,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2345875286414369324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3528535277793679230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 5819704141701132801}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 5819704141701132801}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 1
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1434006071023223723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,6 +385,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   housingPanel: {fileID: 3528535277793679230}
   roomPanelPrefab: {fileID: 4999328256544006092, guid: a201f406b8eb98d4b8711f2075d81589,
+    type: 3}
+  officePanelPrefab: {fileID: 4999328256544006092, guid: 58d3bcd1084c93741ae5d7108bc80d4d,
+    type: 3}
+  entrancePanelPrefab: {fileID: 4999328256544006092, guid: 6866af2f92e5ac64492e08a29a7a7851,
+    type: 3}
+  fillerPanelPrefab: {fileID: 4999328256544006092, guid: 76bfc1d664aac3e4fa8ba6d629e72511,
     type: 3}
   roomRowPrefab: {fileID: 357315441202270109, guid: dea5729b174a81345be65b05efeedc6e,
     type: 3}
@@ -437,13 +412,13 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 20
+  m_Spacing: 5
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
-  m_ChildScaleWidth: 1
-  m_ChildScaleHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
 --- !u!1 &4357857491671455419
 GameObject:
@@ -722,7 +697,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3238360460894581216}
-  - component: {fileID: 4399708451462118959}
   - component: {fileID: 1137194724397303099}
   - component: {fileID: 7952992927315292300}
   m_Layer: 5
@@ -752,36 +726,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4399708451462118959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5021749917706641199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 3238360460894581216}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 3238360460894581216}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 1
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1137194724397303099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -797,6 +741,9 @@ MonoBehaviour:
   housingPanel: {fileID: 5021749917706641199}
   roomPanelPrefab: {fileID: 4999328256544006092, guid: a201f406b8eb98d4b8711f2075d81589,
     type: 3}
+  officePanelPrefab: {fileID: 0}
+  entrancePanelPrefab: {fileID: 0}
+  fillerPanelPrefab: {fileID: 0}
   roomRowPrefab: {fileID: 357315441202270109, guid: dea5729b174a81345be65b05efeedc6e,
     type: 3}
 --- !u!114 &7952992927315292300
@@ -944,7 +891,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 851059921614762815}
   m_HandleRect: {fileID: 3850166008210786594}
   m_Direction: 3
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

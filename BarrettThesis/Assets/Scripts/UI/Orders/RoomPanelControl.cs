@@ -5,23 +5,35 @@ using UnityEngine.UI;
 
 public class RoomPanelControl : MonoBehaviour
 {
+    //housing parent
     [SerializeField] GameObject housingPanel;
+
+    [Header("Room Panel Types")]
     [SerializeField] GameObject roomPanelPrefab;
+    [SerializeField] GameObject officePanelPrefab;
+    [SerializeField] GameObject entrancePanelPrefab;
+    [SerializeField] GameObject fillerPanelPrefab;
 
     [SerializeField] GameObject roomRowPrefab;
 
     List<GameObject> rowList;
 
     Dictionary<Vector2, RoomData> tempRooms;
+    Dictionary<GameObject, Vector3> fillerData;
+
+    int numPerRow;
+    int rowCount;
 
     // Start is called before the first frame update
     void Start()
     {
         rowList = new List<GameObject>();
         tempRooms = new Dictionary<Vector2, RoomData>();
+        fillerData = new Dictionary<GameObject, Vector3>();
         RoomReset();
         //InitRoom();
-        RoomFill(GameController.SaveData.roomData[0]);
+        
+
     }
 
     // Update is called once per frame
@@ -38,8 +50,9 @@ public class RoomPanelControl : MonoBehaviour
             GameController.SaveData.roomData[i].analyzed = false;
         }
 
-        //reset tempList
+        //reset tempList & fillerList
         tempRooms.Clear();
+        fillerData.Clear();
 
         //reset rowList
         for (int i = rowList.Count - 1; i >= 0; i--)
@@ -50,6 +63,12 @@ public class RoomPanelControl : MonoBehaviour
 
         //add the first row
         RowAddition();
+
+        //begin filling the rooms
+        RoomFill(GameController.SaveData.roomData[0]);
+
+        //add filler rooms once all rooms have been instantiated
+        SpacingFix();
     }
 
     public void RoomFill(RoomData room)
@@ -60,7 +79,7 @@ public class RoomPanelControl : MonoBehaviour
             Debug.Log(GameController.SaveData.roomData.Count + " rooms exist");
             Debug.Log(tempRooms.Count + " temp rooms exist");
 
-            GameObject newPanel = Instantiate(roomPanelPrefab);
+            GameObject newPanel = ChoosePanel(room);
             newPanel.GetComponent<RoomPanel>().AssignRoom(room);
 
             //add another row if necessary
@@ -84,6 +103,16 @@ public class RoomPanelControl : MonoBehaviour
             Debug.Log("room already analyzed, ignoring");
         }
         
+    }
+
+    public GameObject ChoosePanel(RoomData room)
+    {
+        if (room.roomId == 0)
+            return Instantiate(entrancePanelPrefab);
+        else if (room.roomId == 1)
+            return Instantiate(officePanelPrefab);
+        else
+            return Instantiate(roomPanelPrefab);
     }
 
     public void AdjacentRooms(RoomData room)
@@ -191,7 +220,6 @@ public class RoomPanelControl : MonoBehaviour
         newRow.transform.SetParent(housingPanel.transform, false);
         newRow.transform.SetSiblingIndex(0);
         rowList.Add(newRow);
-
         Debug.Log(rowList.Count + " rows now available");
     }
 
@@ -201,9 +229,100 @@ public class RoomPanelControl : MonoBehaviour
         RoomData addedRoom;
         tempRooms.Remove(coords, out addedRoom);
         RoomReset();
-        RoomFill(GameController.SaveData.roomData[0]);
-
         //may need to completely rebuild the mapping here, in case a tempRoom gets added that is adjacent to a preexisting room
 
     }
+
+    //called to add filler rooms to any grids that are misaligned
+    private void SpacingFix()
+    {
+        numPerRow = 0;
+        int lowestIndex = 1000;
+        int highestIndex = -1000;
+
+        //create a fillerData entry for each row in the rowList
+        //Vector3(numOfPanels, lowestInd, highestInd)
+        for (int i = 0; i < rowList.Count; i++)
+        {
+            RoomPanel[] rooms = rowList[i].GetComponentsInChildren<RoomPanel>();
+            int lowIndex = 1000;
+            int highIndex = -1000;
+
+            //grab current low and high indexes first
+            foreach (RoomPanel panel in rooms)
+            {
+                if (panel.currentRoom.colId < lowIndex)
+                    lowIndex = panel.currentRoom.colId;
+                if (panel.currentRoom.colId > highIndex)
+                    highIndex = panel.currentRoom.colId;
+            }
+
+            //store to the vector and into the dict
+            Vector3 rowData = new Vector3(rooms.Length, lowIndex, highIndex);
+            fillerData.Add(rowList[i], rowData);
+
+            //check if they are greater than the current max
+            if (rooms.Length > numPerRow)
+                numPerRow = rooms.Length;
+            if (lowIndex < lowestIndex)
+                lowestIndex = lowIndex;
+            if (highIndex > highestIndex)
+                highestIndex = highIndex;
+        }
+
+        Debug.Log("Rows should all have " + numPerRow + " panels");
+        Debug.Log("Low: " + lowestIndex + " | High: " + highestIndex);
+
+        int rowCounter = 0;
+
+        foreach (var data in fillerData)
+        {
+            GameObject currentRow = data.Key;
+            Vector3 stats = data.Value;
+            Debug.Log("Row " + rowCounter + ": Current Panels - " + stats.x + " | Low Index - " + stats.y + " | High Index - " + stats.z);
+            
+
+            /*
+            if (stats.x < numPerRow)
+            {
+                Debug.Log(numPerRow - stats.x + " panels should be added");
+            }
+            else
+                Debug.Log("Row already has enough panels");*/
+
+            //add fillers to the front
+            for (int i = lowestIndex; i < stats.y; i++)
+            {
+                GameObject lowFiller = Instantiate(fillerPanelPrefab, currentRow.transform);
+                lowFiller.transform.SetAsFirstSibling();
+
+                Debug.Log("New filler added to front of row " + rowCounter);
+            }
+
+            //add fillers to the back
+            for (int i = highestIndex; i > stats.z; i--)
+            {
+                GameObject highFiller = Instantiate(fillerPanelPrefab, currentRow.transform);
+                highFiller.transform.SetAsLastSibling();
+
+                Debug.Log("New filler added to back of row " + rowCounter);
+            }
+
+            rowCounter++;
+        }
+
+        //
+    }
+
+    /* Abandon the grid, you're in too deep with rows and columns
+    public void GridReset()
+    {
+        GridLayout grid = housingPanel.GetComponent<GridLayout>();
+
+        //set the row and columns of the grid
+       
+
+        //set the spacing of each cell
+
+    }*/
 }

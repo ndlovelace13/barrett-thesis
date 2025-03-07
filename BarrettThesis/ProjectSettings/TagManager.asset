@@ -20,6 +20,7 @@ TagManager:
   - Ceiling
   - Floor
   - ScatteredPool
+  - StatsPool
   layers:
   - Default
   - TransparentFX

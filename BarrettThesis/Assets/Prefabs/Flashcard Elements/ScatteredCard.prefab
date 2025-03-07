@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -1616265706700706742}
   - component: {fileID: 388599377175093330}
   - component: {fileID: 810932422391810824}
+  - component: {fileID: 8326605976679499261}
   m_Layer: 3
   m_Name: ScatteredCard
   m_TagString: Untagged
@@ -116,6 +117,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8326605976679499261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174808656349809685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b46ca696131254459db6e23ba198a34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selected: 1
 --- !u!1 &2085130535214354820
 GameObject:
   m_ObjectHideFlags: 0

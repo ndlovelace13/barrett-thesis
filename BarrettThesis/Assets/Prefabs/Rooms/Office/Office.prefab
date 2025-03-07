@@ -80,7 +80,7 @@ MonoBehaviour:
     type: 3}
   constructionDoor: {fileID: 1514622897279814163, guid: 25d82cb27464a874b9e4f880f27cb123,
     type: 3}
-  officeConstruction: {fileID: 1514622897279814163, guid: 25d82cb27464a874b9e4f880f27cb123,
+  officeConstruction: {fileID: 3287649868752397915, guid: e13700cf8b310614bae427dd038feb17,
     type: 3}
   assignedCards: []
   cardSpawn: {fileID: 761086682554420652}
@@ -1125,7 +1125,7 @@ PrefabInstance:
     - target: {fileID: 1625185561300932362, guid: 82af69a4ac606154fa9b5f447dfb8edc,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2238871955550326698, guid: 82af69a4ac606154fa9b5f447dfb8edc,
         type: 3}

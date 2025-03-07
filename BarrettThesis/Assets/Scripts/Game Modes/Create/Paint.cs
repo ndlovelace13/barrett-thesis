@@ -205,7 +205,9 @@ public class Paint : MonoBehaviour
     //call this when painting is complete, store it to files and to the associated flashcard
     public void StopPainting()
     {
-        SaveHandler.SaveSystem.SavePainting(createdPainting, currentCard);
+        if (paintingEnabled)
+            SaveHandler.SaveSystem.SavePainting(createdPainting, currentCard);
+
         paintingEnabled = false;
         //GameController.GameControl.gameMode = GameMode.DEFAULT;
         SaveHandler.SaveSystem.SaveGame();
