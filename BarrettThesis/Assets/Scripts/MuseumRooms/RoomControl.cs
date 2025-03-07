@@ -155,8 +155,9 @@ public class RoomControl : MonoBehaviour
     public GameObject DoorRetrieve(int index, int constructionIndex)
     {
         GameObject newDoor;
-        if (index == 1)
+        if (index == 1 || roomData.roomId == 1)
         {
+            Debug.Log("Office Detected");
             if (constructionIndex > -1)
             {
                 Debug.Log("Double bruh");
@@ -164,7 +165,11 @@ public class RoomControl : MonoBehaviour
                 newDoor.GetComponentInChildren<ConstructionTape>().AssignData(constructionIndex);
             }
             else
+            {
                 newDoor = Instantiate(officeDoor);
+                Debug.Log("Office Door Created");
+            }
+                
         }
         else
         {
