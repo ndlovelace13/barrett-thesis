@@ -6,7 +6,7 @@ using TMPro;
 
 public class ScatteredCard : Rearrangeable, IInteractable
 {
-    Flashcard cardData;
+    public Flashcard cardData;
 
     [SerializeField] MeshRenderer artwork;
     [SerializeField] MeshRenderer baseCard;
@@ -65,6 +65,7 @@ public class ScatteredCard : Rearrangeable, IInteractable
         transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z) + PlaceOffset(currentWall);
 
         RotateOffset();
+        Debug.Log("ScatteredCard Placed at " + transform.position);
     }
 
     public void RotateOffset()
@@ -175,6 +176,41 @@ public class ScatteredCard : Rearrangeable, IInteractable
 
         Debug.Log("Reached end of correct Lerp");
         yield return null;
+    }
+
+    public void OnMouseEnter()
+    {
+        //enable the outline, enable a mouse over animation?
+        ActivateHighlight();
+
+        Debug.Log("Mouse over detected");
+    }
+
+    public void OnMouseExit()
+    {
+        //disable the outline and animation
+        DeactivateHighlight();
+    }
+
+    public void OnMouseDown()
+    {
+        //if currentState is Matching lerp to the player for matching, fill out match scanner
+        if (GameController.GameControl.gameMode == GameMode.MATCHING)
+        {
+            Debug.Log("Matching Click Detected");
+        }
+        else if (GameController.GameControl.gameMode == GameMode.ARCHIVE)
+        {
+            Debug.Log("Archive Click detected");
+        }
+        else
+        {
+            Debug.Log("Click detected outside of two handled modes");
+        }
+
+
+        //if currentState is Archive, enable the specific view
+
     }
 
 

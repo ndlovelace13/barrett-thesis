@@ -19,9 +19,11 @@ public class Flashcard
 
     //progression elements
     public bool discovered;
+    public int dayDiscovered;
     public int masteryLevel;
     //public int masteryPoints;
     public int daysTilNext;
+    public int highestDays;
     public int prevInterval;
     public int correctCount;
     public int missedCount;
@@ -81,6 +83,7 @@ public class Flashcard
         discovered = false;
         prevInterval = 0;
         daysTilNext = 0;
+        highestDays = 0;
         correctCount = 0;
         missedCount = 0;
         confusedIndexes = new List<int>();
@@ -115,6 +118,12 @@ public class Flashcard
 
         bool masteryUp = MasteryCheck();
         GameController.SaveData.cardQueue.Remove(this);
+
+        //highest days check
+        if (daysTilNext > highestDays)
+        {
+            highestDays = daysTilNext;
+        }
         
         Debug.Log(cardId + " was Correct | Days til Next Review: " + daysTilNext);
         return masteryUp;

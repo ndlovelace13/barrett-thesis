@@ -99,6 +99,7 @@ public class SaveHandler : MonoBehaviour
 
         //unlock as discovered
         card.discovered = true;
+        card.dayDiscovered = GameController.SaveData.dayIndex;
     }
 
     public Texture2D GetPainting(string paintFile)

@@ -11,11 +11,17 @@ public class Archives : CoreGameMode, IInteractable
 
     [SerializeField] Transform displayGrid;
 
+    [Header("File View Locations")]
+    [SerializeField] Transform scatteredLoc;
+    [SerializeField] Transform flashcardLoc;
+    [SerializeField] Transform statsLoc;
+
     //cam control
     //public Transform camControl;
 
     int currentIndex;
-    int indexModAmount = 5;
+    int indexModAmount = 15;
+    int numPerRow = 5;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -121,6 +127,12 @@ public class Archives : CoreGameMode, IInteractable
     IEnumerator SpawnCard(int cardIndex, int cardNum)
     {
         List<GameObject> newCards = new List<GameObject>();
+
+        //set the starting row to be centered around 0
+        int currentRow = 0 + ((indexModAmount / numPerRow) / 2);
+        int startingZ = 0 + (numPerRow / 2);
+        int zPos = startingZ;
+
         for (int i = 0; i < cardNum; i++)
         {
             GameObject currentCard = scatteredPool.GetPooledObject();
@@ -129,9 +141,26 @@ public class Archives : CoreGameMode, IInteractable
             //set card grid a certain dist from the user
             displayGrid.position = Camera.main.transform.position + Camera.main.transform.forward * 3f;
 
+            
+
             //set the card to the displayGrid
             currentCard.transform.SetParent(displayGrid, false);
-            currentCard.transform.localPosition = new Vector3(i, 0, 0);
+
+            //check for a row increment otherwise increment zPos
+            if (i != 0 && i % numPerRow == 0)
+            {
+                currentRow--;
+                zPos = startingZ;
+            }
+            else if (i != 0)
+            {
+                zPos--;
+            }
+                
+
+            //calculate position in the grid
+
+            currentCard.transform.localPosition = new Vector3(0, currentRow, zPos);
             /*currentCard.GetComponent<Rigidbody>().useGravity = false;
             currentCard.GetComponent<Rigidbody>().velocity = Vector3.zero;
             currentCard.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;*/
@@ -164,7 +193,7 @@ public class Archives : CoreGameMode, IInteractable
         foreach (GameObject card in currentCards)
         {
             Debug.Log("Removing Card");
-            card.GetComponent<Rigidbody>().useGravity = true;
+            //card.GetComponent<Rigidbody>().useGravity = true;
             card.GetComponent<CardMotion>().selected = false;
             //card.GetComponent<BoxCollider>().enabled = true;
             StartCoroutine(CardDisable(card));
@@ -176,5 +205,54 @@ public class Archives : CoreGameMode, IInteractable
     {
         yield return new WaitForSeconds(1f);
         card.SetActive(false);
+    }
+
+    public void SpecificFileView(GameObject clickedFile, Flashcard currentCard)
+    {
+        //spawn in a flashcard and fill with the current card info
+        GameObject newCard = cardPool.GetPooledObject();
+        newCard.SetActive(true);
+        newCard.GetComponent<CardFill>().CardAssign(currentCard);
+        newCard.transform.position = clickedFile.transform.position;
+
+        //spawn in a stats card and fill with the current card info
+        GameObject newStats = statsPool.GetPooledObject();
+        newStats.SetActive(true);
+        newStats.transform.position = clickedFile.transform.position;
+        newStats.GetComponent<StatsCard>().AssignCard(currentCard);
+
+        //call the lerp
+        StartCoroutine(EnterFileView(clickedFile, newCard, newStats));
+
+        
+    }
+
+    IEnumerator EnterFileView(GameObject scatteredCard, GameObject flashcard, GameObject statsCard)
+    {
+        //set starting locations
+        Vector3 scatteredStart = scatteredCard.transform.position;
+        Vector3 flashcardStart = flashcard.transform.position;
+        Vector3 statsStart = statsCard.transform.position;
+
+
+        //begin lerp
+        float currentTime = 0f;
+        while (currentTime < GameController.GameControl.lerpTime)
+        {
+            //update all locations
+            scatteredCard.transform.position = Vector3.Lerp(scatteredStart, scatteredLoc.position, currentTime / GameController.GameControl.lerpTime);
+            flashcard.transform.position = Vector3.Lerp(flashcardStart, flashcardLoc.position, currentTime / GameController.GameControl.lerpTime);
+            statsCard.transform.position = Vector3.Lerp(statsStart, statsLoc.position, currentTime / GameController.GameControl.lerpTime);
+
+            //increment the timer
+            currentTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        //set to final locations
+        scatteredCard.transform.position = scatteredLoc.position;
+        flashcard.transform.position = flashcardLoc.position;
+        statsCard.transform.position = statsLoc.position;
+
     }
 }

@@ -32,6 +32,8 @@ public class GameController : MonoBehaviour
 
     public GameMode gameMode = GameMode.DEFAULT;
 
+    public float lerpTime = 0.5f;
+
     //generic prefabs that will get called a lot
     [SerializeField] public GameObject popup;
     [SerializeField] public GameObject scatteredCard;

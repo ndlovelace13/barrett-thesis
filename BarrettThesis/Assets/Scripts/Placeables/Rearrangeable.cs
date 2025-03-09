@@ -60,7 +60,7 @@ public class Rearrangeable : MonoBehaviour, IInteractable
 
     public void BeginHold()
     {
-        Debug.Log("Interact called on Rearrangeable");
+        Debug.Log("Interact called on Rearrangeable " + name);
         transform.SetParent(playerHand.transform, false);
         Debug.Log(transform.parent.name);
         transform.localPosition = Vector3.zero;
@@ -147,6 +147,9 @@ public class Rearrangeable : MonoBehaviour, IInteractable
             transform.localPosition = Vector3.zero;
         inPlace = false;
         transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+        Debug.Log("Hold being called on " + name);
+
     }
 
     public virtual string GetPrompt()

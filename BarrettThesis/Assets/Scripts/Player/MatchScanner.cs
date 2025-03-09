@@ -273,7 +273,7 @@ public class MatchScanner : ObjectMotion
         {
             //if a card is detected, display it to the screen of the scanner
             //Debug.Log("card detected");
-            cardControl = hit.collider.transform.root.GetComponent<ScatteredCard>();
+            cardControl = hit.collider.transform.root.GetComponentInChildren<ScatteredCard>();
             scannedCard = cardControl.ReportCard();
             
         }
