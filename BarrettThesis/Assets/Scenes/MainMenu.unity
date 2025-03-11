@@ -260,6 +260,7 @@ MonoBehaviour:
   lockPlayer: 0
   habitRange: 2
   gameMode: 0
+  lerpTime: 0.5
   popup: {fileID: 1454202196361901945, guid: e5e298b6225edeb4abc451e13fcfc474, type: 3}
   scatteredCard: {fileID: 1174808656349809685, guid: e5ff350fa30e9674daa36ae5ba3eebc3,
     type: 3}

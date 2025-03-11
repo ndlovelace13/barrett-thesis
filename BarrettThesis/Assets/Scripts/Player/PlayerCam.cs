@@ -12,7 +12,7 @@ public class PlayerCam : MonoBehaviour
     public float xRotation = 0;
     public float yRotation = 0;
 
-
+    [SerializeField] Canvas crosshair;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,12 +37,13 @@ public class PlayerCam : MonoBehaviour
             yRotation += mouseX;
             xRotation -= mouseY;
             RotClamp();
-
+            crosshair.enabled = true;
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            crosshair.enabled = false;
         }
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         direction.rotation = Quaternion.Euler(0, yRotation, 0);

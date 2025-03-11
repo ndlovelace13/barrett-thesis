@@ -379,6 +379,7 @@ MonoBehaviour:
   lockPlayer: 0
   habitRange: 2
   gameMode: 0
+  lerpTime: 0.5
   popup: {fileID: 0}
   scatteredCard: {fileID: 0}
 --- !u!4 &239553361
@@ -631,6 +632,53 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 699736619}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &539414453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 539414455}
+  - component: {fileID: 539414454}
+  m_Layer: 0
+  m_Name: SprenPool
+  m_TagString: SprenPool
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &539414454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539414453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3d4e6a38bdb69941802e58a2b0879b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instance: {fileID: 1911759005985511349, guid: cb2087320ffde5f45978890f26fbb8e3,
+    type: 3}
+  objectNum: 300
+--- !u!4 &539414455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539414453}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -106.65939, y: -195.6961, z: 381.85565}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &563301286
 GameObject:
@@ -1445,6 +1493,7 @@ MonoBehaviour:
   direction: {fileID: 563301287}
   xRotation: 0
   yRotation: 0
+  crosshair: {fileID: 1980114236}
 --- !u!1 &1154578667
 GameObject:
   m_ObjectHideFlags: 0
@@ -2969,3 +3018,4 @@ SceneRoots:
   - {fileID: 1902660519}
   - {fileID: 1980114237}
   - {fileID: 1579263884679296124}
+  - {fileID: 539414455}

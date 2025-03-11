@@ -40,13 +40,13 @@ public class StatsCard : MonoBehaviour
 
     IEnumerator FillFields()
     {
-        cardNum.text = "#" + displayedCard.cardId;
+        cardNum.text = "#" + (displayedCard.cardId + 1);
         currentMastery.text = "Mastery Tier " + displayedCard.masteryLevel;
         nextMastery.text = displayedCard.MasteryPercent() + "% of way to next tier";
         daysCounter.text = "Next Review in " + displayedCard.daysTilNext + " Days\nMost Days Between Reviews: " + displayedCard.highestDays;
         timesCorrect.text = "Correct Review Count: " + displayedCard.correctCount;
         timesIncorrect.text = "Mistake Count: " + displayedCard.missedCount;
-        discoveryDate.text = "Discovered on Day" + displayedCard.dayDiscovered;
+        discoveryDate.text = "Discovered on Day #" + displayedCard.dayDiscovered;
 
 
         yield return null;

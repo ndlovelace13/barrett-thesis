@@ -79,7 +79,8 @@ public class Matching : CoreGameMode, IInteractable
     protected override void PostCameraShift()
     {
         //StartCoroutine(MainGameplay());
-        StartCoroutine(NewGameplay());
+        //StartCoroutine(NewGameplay());
+        StartCoroutine(SprenGameplay());
     }
 
     public override string GetPrompt()
@@ -368,6 +369,21 @@ public class Matching : CoreGameMode, IInteractable
             card.GenerateAnswers();
         }
         yield return null;
+    }
+
+    //third iteration of core loop...kms
+    IEnumerator SprenGameplay()
+    {
+        ObjectPool sprenSpawner = GameObject.FindWithTag("SprenPool").GetComponent<ObjectPool>();
+
+        for (int i = 0; i < GameController.SaveData.cardCount; i++)
+        {
+            GameObject newSpren = sprenSpawner.GetPooledObject();
+            newSpren.SetActive(true);
+            newSpren.transform.position = transform.position;
+            newSpren.GetComponent<SprenBehavior>().SprenSpawn();
+            yield return new WaitForFixedUpdate();
+        }
     }
 
 }

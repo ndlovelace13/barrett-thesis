@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class ScatteredCard : Rearrangeable, IInteractable
 {
@@ -11,18 +12,38 @@ public class ScatteredCard : Rearrangeable, IInteractable
     [SerializeField] MeshRenderer artwork;
     [SerializeField] MeshRenderer baseCard;
     Material paintMat;
+    Texture defaultPaint;
     [SerializeField] TMP_Text promptText;
     [SerializeField] Transform cardTransform;
     [SerializeField] Animator animControl;
 
     public float lerpTime = 1f;
 
+    //core game mode objects for later calls
+    protected Archives archives;
+    protected Matching matchControl;
+    bool inspecting = false;
+
     // Start is called before the first frame update
     protected override void Awake()
     { 
         paintMat = artwork.material;
+        defaultPaint = paintMat.mainTexture;
         Debug.Log(paintMat.ToString());
+
+        
+        //Debug.Log("core objects found");
+
         base.Awake();
+    }
+
+    private void GetCoreObjs()
+    {
+        //store the core game mode objects for later calls
+        if (archives == null)
+            archives = GameObject.FindWithTag("Archives").GetComponent<Archives>();
+        if (matchControl == null)
+            matchControl = GameObject.FindWithTag("Matching").GetComponent<Matching>();
     }
 
     // Update is called once per frame
@@ -75,13 +96,18 @@ public class ScatteredCard : Rearrangeable, IInteractable
         transform.rotation = Quaternion.Euler(tempRot);
     }
 
-    public void ArchiveView(Flashcard newCard)
+    public void ArchiveView(Flashcard newCard, Vector3 finalPos)
     {
         if (newCard.discovered)
             FillCard(newCard);
         else
             UndiscoveredFill(newCard);
         ApplyMastery();
+
+        GetCoreObjs();
+
+        //lerp from the archive
+        FromArchive(finalPos);
     }
 
     public void UndiscoveredFill(Flashcard newCard)
@@ -89,6 +115,7 @@ public class ScatteredCard : Rearrangeable, IInteractable
         Debug.Log("Card not discovered!");
         cardData = newCard;
         promptText.text = "???";
+        paintMat.mainTexture = defaultPaint;
     }
 
     public void FillCard(Flashcard newCard)
@@ -103,6 +130,8 @@ public class ScatteredCard : Rearrangeable, IInteractable
             
         NoteType noteInfo = GameController.SaveData.currentDeck.dictRetrieve(cardData.noteId);
         promptText.text = cardData.fields[noteInfo.matchPromptField];
+
+        GetCoreObjs();
     }
 
     public Flashcard ReportCard()
@@ -180,10 +209,13 @@ public class ScatteredCard : Rearrangeable, IInteractable
 
     public void OnMouseEnter()
     {
-        //enable the outline, enable a mouse over animation?
-        ActivateHighlight();
+        if (!inspecting)
+        {
+            //enable the outline, enable a mouse over animation?
+            ActivateHighlight();
+        }
 
-        Debug.Log("Mouse over detected");
+        //Debug.Log("Mouse over detected");
     }
 
     public void OnMouseExit()
@@ -197,11 +229,14 @@ public class ScatteredCard : Rearrangeable, IInteractable
         //if currentState is Matching lerp to the player for matching, fill out match scanner
         if (GameController.GameControl.gameMode == GameMode.MATCHING)
         {
+
             Debug.Log("Matching Click Detected");
         }
         else if (GameController.GameControl.gameMode == GameMode.ARCHIVE)
         {
             Debug.Log("Archive Click detected");
+            archives.SpecificFileView(gameObject, cardData);
+            inspecting = true;
         }
         else
         {
@@ -211,6 +246,39 @@ public class ScatteredCard : Rearrangeable, IInteractable
 
         //if currentState is Archive, enable the specific view
 
+    }
+
+    public void StopInspect()
+    {
+        inspecting = false;
+    }
+
+    public void FromArchive(Vector3 finalPos)
+    {
+        StartCoroutine(ArchiveLerp(archives.transform.position, finalPos, false));
+    }
+
+    public void ToArchive()
+    {
+        StartCoroutine(ArchiveLerp(transform.position, archives.transform.position, true));
+    }
+
+    IEnumerator ArchiveLerp(Vector3 startPos, Vector3 endPos, bool disable)
+    {
+
+        float currentTime = 0f;
+        while (currentTime < GameController.GameControl.lerpTime)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, currentTime / GameController.GameControl.lerpTime);
+
+            currentTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        transform.position = endPos;
+
+        if (disable)
+            gameObject.SetActive(false);
     }
 
 

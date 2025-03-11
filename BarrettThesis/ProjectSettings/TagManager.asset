@@ -21,6 +21,9 @@ TagManager:
   - Floor
   - ScatteredPool
   - StatsPool
+  - Archives
+  - Matching
+  - SprenPool
   layers:
   - Default
   - TransparentFX

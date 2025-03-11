@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 6931212476473048583}
   m_Layer: 6
   m_Name: Matching
-  m_TagString: Untagged
+  m_TagString: Matching
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
