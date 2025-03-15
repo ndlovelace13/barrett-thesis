@@ -19,12 +19,16 @@ public class DoorTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (GameController.GameControl.gameMode == GameMode.MATCHING)
+        {
+            animControl.SetBool("enter", entrance);
+            animControl.SetBool("open", true);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.root.tag == "Player")
+        if (GameController.GameControl.gameMode != GameMode.MATCHING && other.transform.root.tag == "Player")
         {
             Debug.Log("Opening Door");
             animControl.SetBool("enter", entrance);
@@ -35,7 +39,7 @@ public class DoorTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.transform.root.tag == "Player")
+        if (GameController.GameControl.gameMode != GameMode.MATCHING && other.transform.root.tag == "Player")
         {
             Debug.Log("Closing Door");
             animControl.SetBool("enter", entrance);

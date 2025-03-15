@@ -30,6 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7858861000194298610}
   - {fileID: 8129697623150694234}
   - {fileID: 7290399349965464444}
   - {fileID: 2781979655584743289}
@@ -82,6 +83,7 @@ MonoBehaviour:
     type: 3}
   officeConstruction: {fileID: 3287649868752397915, guid: e13700cf8b310614bae427dd038feb17,
     type: 3}
+  sprenPoint: {fileID: 7858861000194298610}
   assignedCards: []
   cardSpawn: {fileID: 761086682554420652}
   hitLayers:
@@ -207,6 +209,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 533594195603277098}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6521982138288507664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7858861000194298610}
+  m_Layer: 0
+  m_Name: RoomCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7858861000194298610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6521982138288507664}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -610,10 +643,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 533594195603277098}
     m_Modifications:
+    - target: {fileID: 2139688287322277750, guid: 7030212cc274dd04984f305cb4c26b7f,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 42.3
+      objectReference: {fileID: 0}
     - target: {fileID: 3945014288380684100, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
       propertyPath: m_Name
       value: Archives
+      objectReference: {fileID: 0}
+    - target: {fileID: 5416126159237699607, guid: 7030212cc274dd04984f305cb4c26b7f,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 42.3
       objectReference: {fileID: 0}
     - target: {fileID: 7258174748516146189, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
@@ -664,6 +707,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8153225443290433606, guid: 7030212cc274dd04984f305cb4c26b7f,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 23.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1125,7 +1173,7 @@ PrefabInstance:
     - target: {fileID: 1625185561300932362, guid: 82af69a4ac606154fa9b5f447dfb8edc,
         type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2238871955550326698, guid: 82af69a4ac606154fa9b5f447dfb8edc,
         type: 3}

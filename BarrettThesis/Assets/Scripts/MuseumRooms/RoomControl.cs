@@ -19,6 +19,8 @@ public class RoomControl : MonoBehaviour
     [SerializeField] GameObject constructionDoor;
     [SerializeField] GameObject officeConstruction;
 
+    [SerializeField] public Transform sprenPoint;
+
     //card stuff
     public List<Flashcard> assignedCards;
     [SerializeField] Transform cardSpawn;

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 //this will be used to place all rooms in the world corresponding to RoomData in the Save File
 public class MuseumLoader : MonoBehaviour
@@ -11,6 +13,9 @@ public class MuseumLoader : MonoBehaviour
     [SerializeField] GameObject entrancePrefab;
     [SerializeField] GameObject officePrefab;
     [SerializeField] GameObject defaultPrefab;
+
+    //navmesh
+    [SerializeField] NavMeshSurface navMesh;
 
     public List<GameObject> roomReference;
 
@@ -38,6 +43,8 @@ public class MuseumLoader : MonoBehaviour
         {
             NewRoomCreate(room);
         }
+
+        
     }
 
     public void NewRoomCreate(RoomData room)
@@ -75,5 +82,14 @@ public class MuseumLoader : MonoBehaviour
         {
             roomControl.GetComponent<RoomControl>().DoorwayUpdate();
         }
+
+        RebuildNav();
+    }
+
+    public void RebuildNav()
+    {
+        //restore the navmensh
+        Debug.Log("Rebuilding NavMesh");
+        navMesh.BuildNavMesh();
     }
 }

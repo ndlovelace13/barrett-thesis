@@ -338,11 +338,12 @@ public class Matching : CoreGameMode, IInteractable
             Debug.Log(remainingCards.Count + " cards left to be assigned");
         }
 
+        //deprecated, do not use scatter anymore, just assign to rooms for the sake of splitting up spren
         //generate a random position for each card using a raycast shot from the center of the room, assign the card data to a physical representation - will eventually be just artwork
-        foreach (RoomControl roomControl in allRooms)
+        /*foreach (RoomControl roomControl in allRooms)
         {
             roomControl.ScatterCards();
-        }
+        }*/
 
         yield return null;
     }
@@ -376,6 +377,9 @@ public class Matching : CoreGameMode, IInteractable
     {
         ObjectPool sprenSpawner = GameObject.FindWithTag("SprenPool").GetComponent<ObjectPool>();
 
+        //reset the navmesh because plot reasons
+        GameObject.FindFirstObjectByType<MuseumLoader>().RebuildNav();
+
         for (int i = 0; i < GameController.SaveData.cardCount; i++)
         {
             GameObject newSpren = sprenSpawner.GetPooledObject();
@@ -384,6 +388,8 @@ public class Matching : CoreGameMode, IInteractable
             newSpren.GetComponent<SprenBehavior>().SprenSpawn();
             yield return new WaitForFixedUpdate();
         }
+
+        StartCoroutine(NewGameplay());
     }
 
 }

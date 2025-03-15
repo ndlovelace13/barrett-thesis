@@ -66,8 +66,8 @@ public class MatchScanner : ObjectMotion
 
     void FixedUpdate()
     {
-        if (!disabled)
-            StartCoroutine(ScanCheck());
+        //if (!disabled)
+            //StartCoroutine(ScanCheck());
 
         if (scannedCard == null)
         {
