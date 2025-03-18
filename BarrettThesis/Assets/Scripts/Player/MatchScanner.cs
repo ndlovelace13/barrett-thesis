@@ -83,6 +83,26 @@ public class MatchScanner : ObjectMotion
         DisableHandler();
     }
 
+    public void CardSelect(GameObject selectedSpren, Flashcard selectedCard)
+    {
+        Debug.Log("Card Select Request Received for Card #" + selectedCard.cardId);
+        cardControl = selectedSpren.GetComponentInChildren<ScatteredCard>();
+        scannedCard = selectedCard;
+
+        Texture2D tex = SaveHandler.SaveSystem.GetPainting(scannedCard.customArt);
+        imageDisplay.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+
+        NoteType noteInfo = GameController.SaveData.currentDeck.dictRetrieve(scannedCard.noteId);
+        scannedPrompt.text = scannedCard.fields[noteInfo.matchPromptField];
+
+        //execute spren lerp
+        selectedSpren.GetComponent<SprenBehavior>().SprenSelect();
+
+        FillAnswers();
+
+        //do some lerping here
+    }
+
     IEnumerator FillAnswers()
     {
         answerFilled = true;

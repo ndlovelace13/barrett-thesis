@@ -22,6 +22,7 @@ public class ScatteredCard : Rearrangeable, IInteractable
     //core game mode objects for later calls
     protected Archives archives;
     protected Matching matchControl;
+    protected MatchScanner matchScanner;
     bool inspecting = false;
 
     // Start is called before the first frame update
@@ -44,6 +45,8 @@ public class ScatteredCard : Rearrangeable, IInteractable
             archives = GameObject.FindWithTag("Archives").GetComponent<Archives>();
         if (matchControl == null)
             matchControl = GameObject.FindWithTag("Matching").GetComponent<Matching>();
+        if (matchScanner == null)
+            matchScanner = GameObject.FindFirstObjectByType<MatchScanner>();
     }
 
     // Update is called once per frame
@@ -229,8 +232,8 @@ public class ScatteredCard : Rearrangeable, IInteractable
         //if currentState is Matching lerp to the player for matching, fill out match scanner
         if (GameController.GameControl.gameMode == GameMode.MATCHING)
         {
-
             Debug.Log("Matching Click Detected");
+            matchScanner.CardSelect(transform.root.gameObject, cardData);
         }
         else if (GameController.GameControl.gameMode == GameMode.ARCHIVE)
         {
@@ -245,7 +248,7 @@ public class ScatteredCard : Rearrangeable, IInteractable
 
 
         //if currentState is Archive, enable the specific view
-
+        
     }
 
     public void StopInspect()

@@ -23,6 +23,7 @@ public class SprenBehavior : MonoBehaviour
 
     [Header("Core Data")]
     public Flashcard heldCard;
+    public float sprenDist;
 
     //object references
     GameObject archives;
@@ -41,7 +42,11 @@ public class SprenBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (currentState == SprenState.SELECT)
+        {
+            transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2f;
+            transform.LookAt(Camera.main.transform);
+        }
     }
 
     //call to spawn the spren, begin its starting behavior
@@ -93,7 +98,7 @@ public class SprenBehavior : MonoBehaviour
         currentState = SprenState.ROOM;
 
         //retrieve a room to be assigned to, must move there before wandering
-        agent.destination = assignedRoom;
+        agent.SetDestination(assignedRoom);
         
     }
 
@@ -116,10 +121,10 @@ public class SprenBehavior : MonoBehaviour
                                 //retrieve 
                                 break;
                             case SprenState.ROOM:
-                                WanderDestination();
+                                StartCoroutine(WanderDestination());
                                 break;
                             case SprenState.WANDER:
-                                WanderDestination();
+                                StartCoroutine(WanderDestination());
                                 //wander state
                                 break;
                             default:
@@ -135,11 +140,48 @@ public class SprenBehavior : MonoBehaviour
         
     }
 
-    private void WanderDestination()
+    IEnumerator WanderDestination()
     {
-        currentState = SprenState.WANDER;
+        Debug.Log("Wander Reached");
+        
         //randomly assign locations for the spren to wander to and change periodically, should be mostly random
-        //Debug.Log("New Location assigned");
+        Vector2 newDirection = Random.insideUnitCircle * sprenDist;
+
+        Vector3 actualDir = transform.position + new Vector3(newDirection.x, 0f, newDirection.y);
+
+        NavMeshHit hit;
+        NavMesh.SamplePosition(actualDir, out hit, sprenDist, 1);
+
+        agent.SetDestination(hit.position);
+        currentState = SprenState.WANDER;
+
+        Debug.Log("New Location assigned");
+        yield return null;
+    }
+
+    public void SprenSelect()
+    {
+        StartCoroutine(SelectLerp());
+    }
+
+    IEnumerator SelectLerp()
+    {
+        agent.isStopped = true;
+        Vector3 startPos = transform.position;
+        Vector3 selectPos;
+
+        float currentTime = 0f;
+        while (currentTime < GameController.GameControl.lerpTime)
+        {
+            selectPos = Camera.main.transform.position + Camera.main.transform.forward * 2f;
+            transform.position = Vector3.Lerp(startPos, selectPos, currentTime / GameController.GameControl.lerpTime);
+
+            currentTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        currentState = SprenState.SELECT;
+        transform.LookAt(Camera.main.transform);
     }
 
 }
