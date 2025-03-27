@@ -21,6 +21,7 @@ public class MatchScanner : ObjectMotion
 
     [SerializeField] List<TMP_Text> answers;
     [SerializeField] GameObject answerHolder;
+    [SerializeField] Animator screenAnimator;
     string correctText;
 
     //Correct Visual Objects
@@ -39,6 +40,7 @@ public class MatchScanner : ObjectMotion
 
     ScatteredCard cardControl;
     Flashcard scannedCard;
+    SprenBehavior heldSpren;
     Flashcard prevCard;
     bool masteryUp;
 
@@ -60,6 +62,10 @@ public class MatchScanner : ObjectMotion
         if (answerFilled && scannedCard != null)
         {
             StartCoroutine(AnswerCheck());
+        }
+        if (Input.GetKey(KeyCode.Mouse1) && GameController.GameControl.gameMode == GameMode.MATCHING && heldSpren != null)
+        {
+            MatchCancel();
         }
         base.Update();
     }
@@ -83,11 +89,23 @@ public class MatchScanner : ObjectMotion
         DisableHandler();
     }
 
+    public void MatchCancel()
+    {
+        StartCoroutine(ScannerReset());
+        screenAnimator.SetBool("answerMode", false);
+        heldSpren.SprenDeselect();
+        heldSpren = null;
+    }
+
     public void CardSelect(GameObject selectedSpren, Flashcard selectedCard)
     {
+        //begin the animation
+        screenAnimator.SetBool("answerMode", true);
+
         Debug.Log("Card Select Request Received for Card #" + selectedCard.cardId);
         cardControl = selectedSpren.GetComponentInChildren<ScatteredCard>();
         scannedCard = selectedCard;
+        heldSpren = selectedSpren.GetComponent<SprenBehavior>();
 
         Texture2D tex = SaveHandler.SaveSystem.GetPainting(scannedCard.customArt);
         imageDisplay.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
@@ -98,9 +116,14 @@ public class MatchScanner : ObjectMotion
         //execute spren lerp
         selectedSpren.GetComponent<SprenBehavior>().SprenSelect();
 
-        FillAnswers();
+        //StartCoroutine(FillAnswers());
 
         //do some lerping here
+    }
+
+    public void AnswerFill()
+    {
+        StartCoroutine(FillAnswers());
     }
 
     IEnumerator FillAnswers()
@@ -190,6 +213,9 @@ public class MatchScanner : ObjectMotion
 
     IEnumerator CorrectCoroutine()
     {
+        //start anim
+        screenAnimator.SetTrigger("correct");
+
         //Lerp the card to the user's viewpoint
         cardControl.CorrectBehavior(cardDestination);
         Debug.Log("Correct Coroutine Initiated in the MatchScanner");
@@ -247,11 +273,20 @@ public class MatchScanner : ObjectMotion
         answerHolder.SetActive(true);
         correctMain.SetActive(false);
 
+        //reset answers
+        answerFilled = false;
+
+        screenAnimator.SetBool("answerMode", false);
+        StartCoroutine(ScannerReset());
+
         yield return null;
     }
 
     IEnumerator IncorrectCoroutine()
     {
+        //start anim
+        screenAnimator.SetTrigger("incorrect");
+
         //Leave card there
         Debug.Log("Incorrect Coroutine Initiated in the MatchScanner");
         cardControl.IncorrectBehavior();
@@ -281,6 +316,16 @@ public class MatchScanner : ObjectMotion
         //refresh answers
         answerFilled = false;
 
+        screenAnimator.SetBool("answerMode", false);
+        StartCoroutine(ScannerReset());
+
+        yield return null;
+    }
+
+    IEnumerator ScannerReset()
+    {
+        imageDisplay.sprite = placeholder;
+        scannedPrompt.text = (GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count) + " of " + GameController.SaveData.cardCount + " spren captured";
         yield return null;
     }
 
@@ -360,8 +405,8 @@ public class MatchScanner : ObjectMotion
         while (timer < 1f)
         {
             transform.localPosition = Vector3.Lerp(startLoc, offScreen.localPosition, timer);
-            yield return new WaitForEndOfFrame();
-            timer += Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+            timer += Time.fixedDeltaTime;
             if (!disabled)
                 yield break;
         }
@@ -375,6 +420,10 @@ public class MatchScanner : ObjectMotion
     IEnumerator Enable()
     {
         Debug.Log("Enabling Scanner");
+
+        //fill with default
+        StartCoroutine(ScannerReset());
+
         //GetComponent<ChecklistDisplay>().TaskUpdate();
         Vector3 startLoc = transform.localPosition;
         //GetComponent<MeshRenderer>().enabled = true;

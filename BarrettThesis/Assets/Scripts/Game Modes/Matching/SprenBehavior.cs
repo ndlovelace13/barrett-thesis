@@ -63,6 +63,7 @@ public class SprenBehavior : MonoBehaviour
         agent.SetDestination(archives.transform.position);
         currentState = SprenState.RETRIEVE;
         StartCoroutine(StateCheck());
+        Debug.Log("BRo");
     }
 
     //assign the spren a new color
@@ -113,6 +114,7 @@ public class SprenBehavior : MonoBehaviour
                 {
                     if ((!agent.hasPath || agent.velocity.sqrMagnitude == 0f))
                     {
+                        Debug.Log("shits broke yo");
                         //assign a new location
                         switch (currentState)
                         {
@@ -182,6 +184,13 @@ public class SprenBehavior : MonoBehaviour
 
         currentState = SprenState.SELECT;
         transform.LookAt(Camera.main.transform);
+    }
+
+    public void SprenDeselect()
+    {
+        //where the spren detaches and goes back down to the ground
+        currentState = SprenState.WANDER;
+        agent.isStopped = false;
     }
 
 }

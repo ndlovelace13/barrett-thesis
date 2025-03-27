@@ -101,7 +101,7 @@ public class Create : CoreGameMode, IInteractable
         {
             PaintingRetrieve();
         }
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse1) && GameController.GameControl.gameMode == GameMode.CREATING)
         {
             eraser.EraserToggle();
         }

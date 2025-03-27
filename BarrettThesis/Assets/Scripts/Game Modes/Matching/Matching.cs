@@ -380,8 +380,9 @@ public class Matching : CoreGameMode, IInteractable
         //reset the navmesh because plot reasons
         GameObject.FindFirstObjectByType<MuseumLoader>().RebuildNav();
 
-        for (int i = 0; i < GameController.SaveData.cardCount; i++)
+        for (int i = 0; i < GameController.SaveData.cardQueue.Count; i++)
         {
+            Debug.Log("Spawning Spren #" + (i + 1));
             GameObject newSpren = sprenSpawner.GetPooledObject();
             newSpren.SetActive(true);
             newSpren.transform.position = transform.position;
@@ -389,7 +390,11 @@ public class Matching : CoreGameMode, IInteractable
             yield return new WaitForFixedUpdate();
         }
 
+        Debug.Log("All spren spawned");
+
         StartCoroutine(NewGameplay());
+
+        yield return null;
     }
 
 }

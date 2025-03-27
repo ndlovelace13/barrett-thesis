@@ -217,6 +217,7 @@ public class Flashcard
     private void AnyIndex()
     {
         int newIndex;
+        Debug.Log("Unlocked card count: " + GameController.SaveData.unlockedCardCount);
         do
         {
             newIndex = Random.Range(0, GameController.SaveData.unlockedCardCount);

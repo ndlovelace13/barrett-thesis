@@ -160,20 +160,20 @@ public class ScatteredCard : Rearrangeable, IInteractable
 
     IEnumerator CorrectLerp(Transform finalLoc)
     {
-        //store starting pos
-        Vector3 startPosition = transform.position;
+        /*store starting pos
+        Vector3 startPosition = transform.localPosition;
 
         //execute lerp
         float currentTime = 0f;
         while (currentTime < lerpTime)
         {
-            transform.position = Vector3.Lerp(startPosition, finalLoc.position, currentTime / lerpTime);
+            transform.localPosition = Vector3.Lerp(startPosition, finalLoc.position, currentTime / lerpTime);
             //Debug.Log(transform.position);
             currentTime += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
 
-        transform.position = finalLoc.position;
+        transform.localPosition = finalLoc.position;*/
 
         //execute anim
         animControl.SetTrigger("correct");
@@ -202,9 +202,23 @@ public class ScatteredCard : Rearrangeable, IInteractable
         StartCoroutine(CardRemoval());   
     }
 
+    public void ShakeComplete()
+    {
+        if (transform.parent != null)
+        {
+            transform.parent.GetComponent<SprenBehavior>().SprenDeselect();
+        }
+        else
+            Debug.Log("What the sigma");
+    }
+
     IEnumerator CardRemoval()
     {
-        gameObject.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        if (transform.parent != null)
+            transform.parent.gameObject.SetActive(false);
+        else
+            gameObject.SetActive(false);
 
         Debug.Log("Reached end of correct Lerp");
         yield return null;
