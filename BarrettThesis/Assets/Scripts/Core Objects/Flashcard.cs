@@ -174,6 +174,10 @@ public class Flashcard
             masteryLevel = newMastery;
             Debug.Log("Mastery upgraded on card + " + cardId + ": Level " + masteryLevel);
             masteryUp = true;
+
+            //check against global best
+            if (masteryLevel > GameController.SaveData.highestMastery)
+                GameController.SaveData.highestMastery = masteryLevel;
         }
         else
         {

@@ -373,6 +373,10 @@ public class Create : CoreGameMode, IInteractable
         //set up the timer
         float timer = 0f;
 
+        //activate painting mode here
+        painting.GetComponent<Painting>().ColliderEnable();
+        painting.GetComponent<Paint>().StartPainting(associatedCard);
+
         //start timer
         while (timer < lerpTime)
         {
@@ -396,9 +400,7 @@ public class Create : CoreGameMode, IInteractable
         TransformTransfer(painting.transform, paintCreate);
         TransformTransfer(brushHolder.transform, brushCreate);
 
-        //activate painting mode here
-        painting.GetComponent<Painting>().ColliderEnable();
-        painting.GetComponent<Paint>().StartPainting(associatedCard);
+        
 
         //select the current brush
         currentBrush.Select();

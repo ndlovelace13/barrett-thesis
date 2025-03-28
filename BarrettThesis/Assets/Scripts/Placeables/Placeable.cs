@@ -21,6 +21,7 @@ public class Placeable
     public PlaceableType type;
     public int cardIndex = -1;
     public int pillarIndex = -1;
+    public int artifactIndex = -1;
     public bool donationPillar;
 
     public JsonVector location;
@@ -92,6 +93,7 @@ public class Placeable
         }
         else if (obj.GetComponent<Artifact>() != null)
         {
+            //store the pillar index for later restoration
             Placeable pillarData = obj.GetComponent<Artifact>().GetPillarData();
             if (pillarData != null)
             {
@@ -100,6 +102,10 @@ public class Placeable
             }
             else
                 pillarIndex = -1;
+
+            //store the artifact id for later restoration
+            artifactIndex = obj.GetComponent<Artifact>().data.id;
+
             return PlaceableType.Artifact;
         }
         else

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8907d5cc7d2cc764fad07967aa4609ef, type: 3}
+  m_Name: expansions2
+  m_EditorClassIdentifier: 
+  id: 21
+  unlocked: 0
+  type: 4
+  level: 2
+  unlockThreshold: 3
+  mat: {fileID: 2100000, guid: e403d78e741c19a458537d451d2b2e58, type: 2}
+  artifactName: Wannabe Contractor
+  effectDescription: Expand the Museum Three Times

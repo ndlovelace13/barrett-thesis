@@ -24,6 +24,7 @@ public class ConstructionTape : MonoBehaviour, IInteractable
         {
             Debug.Log("Room finished, opening room access");
             GameController.SaveData.roomData[constructionRoomIndex].FinishConstruction();
+            GameController.SaveData.additionalRooms++;
 
             //update all doorways
             museumControl.AllDoorsUpdate();

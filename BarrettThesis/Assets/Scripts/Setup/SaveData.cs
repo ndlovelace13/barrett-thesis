@@ -16,10 +16,19 @@ public class SaveData
     public int balance;
     public int jarBalance;
     public int completeDays;
+    public int studyStreak;
     public int dayIndex = 0;
     public int donationsToday;
     public bool cardsUnboxed;
+
+
+    //achievement shit
+    public int highestMastery;
     public int unlockedCardCount;
+    public int highestStudyStreak;
+    public int placeableCount;
+    public int additionalRooms;
+    
 
     public List<Flashcard> newQueue;
     public List<Flashcard> cardQueue;
@@ -35,6 +44,10 @@ public class SaveData
     //museum expansions
     public List<RoomData> roomData;
     public int currentRoomCost;
+
+    //achievements
+    public List<ArtifactData> artifactData;
+    public int unlockedArtifacts;
 
     //orders
     public List<Placeable> orderedPlaceables;
@@ -66,10 +79,17 @@ public class SaveData
         jarBalance = 0;
         playerName = "Hugh Mungus";
         completeDays = 0;
+        studyStreak = 0;
         saveTime = DateTime.UtcNow.ToString();
         refreshTime = DateTime.UtcNow.AddHours(24).ToString();
         cardsUnboxed = false;
+
+        //achievement init
+        highestMastery = 0;
         unlockedCardCount = 0;
+        highestStudyStreak = 0;
+        placeableCount = 0;
+        additionalRooms = 0;
 
         maxVisitors = 2;
 
@@ -77,6 +97,10 @@ public class SaveData
         cardQueue = new List<Flashcard>();
         artQueue = new List<Flashcard>();
         placeables = new List<Placeable>();
+        
+        //artifact init
+        artifactData = new List<ArtifactData>();
+        unlockedArtifacts = 0;
 
         //expansion init
         roomData = new List<RoomData>();

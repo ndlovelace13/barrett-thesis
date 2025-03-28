@@ -27,6 +27,10 @@ public class Deliveries : CoreGameMode, IInteractable
         newObj.GetComponent<IInteractable>().Interact();
         player.GetComponent<PlayerInteraction>().RearrangeObj(newObj);
         player.GetComponent<PlayerInteraction>().isInteracting = false;
+
+        //increment global placeable count
+        GameController.SaveData.placeableCount++;
+
         //update the checklist on unbox
         GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskUpdate();
     }

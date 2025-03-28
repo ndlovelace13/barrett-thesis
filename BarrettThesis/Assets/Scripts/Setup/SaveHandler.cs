@@ -64,7 +64,10 @@ public class SaveHandler : MonoBehaviour
             if (GameController.SaveData == null)
                 GameController.SaveData = new SaveData();
             //update the save time
-            GameController.SaveData.saveTime = DateTime.UtcNow.ToString();    
+            GameController.SaveData.saveTime = DateTime.UtcNow.ToString();
+
+            //check for achievements
+            GameObject.FindFirstObjectByType<ArtifactControl>().ArtifactUnlock();
 
             string playerData = JsonUtility.ToJson(GameController.SaveData);
             File.WriteAllText(saveFilePath, playerData);

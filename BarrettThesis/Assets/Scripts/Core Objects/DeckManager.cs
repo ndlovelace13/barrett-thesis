@@ -98,6 +98,12 @@ public class DeckManager : MonoBehaviour
         GameController.SaveData.museumOpen = true;
         GameController.SaveData.refreshTime = DateTime.UtcNow.AddHours(8).ToString();
         GameController.SaveData.completeDays++;
+        GameController.SaveData.studyStreak++;
+
+        //check for new highest study streak
+        if (GameController.SaveData.studyStreak > GameController.SaveData.highestStudyStreak)
+            GameController.SaveData.highestStudyStreak = GameController.SaveData.studyStreak;
+
         GameObject.FindWithTag("VisitorSpawn").GetComponent<VisitorHandler>().VisitorSpawn();
     }
 
@@ -117,6 +123,7 @@ public class DeckManager : MonoBehaviour
             if (hourCount < -24)
             {
                 //reset streak
+                GameController.SaveData.studyStreak = 0;
                 Debug.Log("STATUS: tasks completed, but streak reset, assigning new tasks");
                 AssignTasks();
             }
@@ -149,6 +156,7 @@ public class DeckManager : MonoBehaviour
             if (hourCount < 0)
             {
                 //reset streak
+                GameController.SaveData.studyStreak = 0;
                 Debug.Log("STATUS: tasks not completed, streak reset, assigning new tasks");
                 AssignTasks();
             }

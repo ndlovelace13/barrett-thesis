@@ -8,6 +8,8 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
     float minVisit;
     float maxVisit;
 
+    public ArtifactData data;
+
     GameObject currentPillar;
 
     // Start is called before the first frame update
@@ -154,6 +156,26 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
                 }
             }
         }
+
+        if (placedData.artifactIndex != -1)
+        {
+            for (int i = 0; i < GameController.SaveData.artifactData.Count; i++)
+            {
+                if (GameController.SaveData.artifactData[i].id == placedData.artifactIndex)
+                {
+                    data = GameController.SaveData.artifactData[i];
+                    RestoreArtifact();
+                    Debug.Log("Artifact Restored");
+                    break;
+                }
+                    
+            }
+        }
         Debug.Log("This pillar index: " + placedData.pillarIndex);
+    }
+
+    private void RestoreArtifact()
+    {
+        GetComponent<MeshRenderer>().material = data.mat;
     }
 }

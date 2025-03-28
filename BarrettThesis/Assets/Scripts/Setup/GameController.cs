@@ -75,6 +75,7 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1f;
         FindObjectOfType<MuseumLoader>().MuseumRestore();
         FindObjectOfType<PlaceableHandler>().PlaceableRestore();
+        FindObjectOfType<ArtifactControl>().ArtifactRestore();
         DeckManager.DeckManage.DateCheck();
 
         //open new rooms here if there are any that finish today - cut a ribbon maybe?
