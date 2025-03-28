@@ -21,6 +21,7 @@ public class ArtifactData: ScriptableObject
     public int level;
     public float unlockThreshold;
     public Material mat;
+    public Sprite texture;
 
     [Header("Attributes")]
     public string artifactName;
@@ -34,7 +35,8 @@ public class ArtifactData: ScriptableObject
 
     public void Unlock()
     {
-        //in game notification???
+        //in game notification - add to the queue, artifact control will handle the rest
+        GameObject.FindFirstObjectByType<ArtifactControl>().unlockQueue.Add(this);
 
         Debug.Log("ARTIFACT UNLOCK: " + artifactName);
         unlocked = true;

@@ -1,11 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ArtifactControl : MonoBehaviour
 {
-    [SerializeField] List<ArtifactData> artifactData;
+    List<ArtifactData> artifactData;
+    public List<ArtifactData> unlockQueue;
+    bool popupActive = false;
+
+
+    [Header("Popup Components")]
+    [SerializeField] Animator artifactPopup;
+    [SerializeField] Image texture;
+    [SerializeField] TMP_Text artifactName;
+    [SerializeField] TMP_Text artifactDescription;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +51,8 @@ public class ArtifactControl : MonoBehaviour
         }
 
         Debug.Log(GameController.SaveData.artifactData.Count + " artifacts now found in save data");
+
+        StartCoroutine(ArtifactPopup());
     }
 
     public void ArtifactUnlock()
@@ -55,5 +68,42 @@ public class ArtifactControl : MonoBehaviour
                 data.UnlockCheck();
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    //will run as long as the game is active - only executes the animations when something is added to the unlock queue
+    IEnumerator ArtifactPopup()
+    {
+        unlockQueue = new List<ArtifactData>();
+        while (true)
+        {
+            if (unlockQueue.Count > 0 && !popupActive)
+            {
+                //stop the coroutine from starting any others while a popup is already active
+                popupActive = true;
+
+                //retrieve the oldest artifactdata from the queue
+                ArtifactData currentData = unlockQueue.First();
+                unlockQueue.Remove(currentData);
+
+                //fill the fields of the popup
+                FillPopup(currentData);
+
+                //execute animation
+                artifactPopup.SetTrigger("activate");
+            }
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+    public void FillPopup(ArtifactData data)
+    {
+        texture.sprite = data.texture;
+        artifactName.text = data.artifactName;
+        artifactDescription.text = data.effectDescription;
+    }
+
+    public void PopupComplete()
+    {
+        popupActive = false;
     }
 }
