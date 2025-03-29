@@ -174,7 +174,7 @@ public class Artifact : Rearrangeable, IInteractable, IVisitable
         Debug.Log("This pillar index: " + placedData.pillarIndex);
     }
 
-    private void RestoreArtifact()
+    public void RestoreArtifact()
     {
         GetComponent<MeshRenderer>().material = data.mat;
     }

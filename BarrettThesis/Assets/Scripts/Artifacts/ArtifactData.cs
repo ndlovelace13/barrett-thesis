@@ -17,6 +17,8 @@ public class ArtifactData: ScriptableObject
     [Header("Core Data")]
     public int id;
     public bool unlocked = false;
+    public int unlockDate;
+    public bool onDisplay = false;
     public ArtifactType type;
     public int level;
     public float unlockThreshold;
@@ -40,6 +42,7 @@ public class ArtifactData: ScriptableObject
 
         Debug.Log("ARTIFACT UNLOCK: " + artifactName);
         unlocked = true;
+        unlockDate = GameController.SaveData.dayIndex;
         GameController.SaveData.unlockedArtifacts++;
     }
 }

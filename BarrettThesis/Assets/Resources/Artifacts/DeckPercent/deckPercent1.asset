@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: deckPercent1
   m_EditorClassIdentifier: 
   id: 5
-  unlocked: 0
+  unlocked: 1
   type: 1
   level: 1
   unlockThreshold: 0.01
   mat: {fileID: 2100000, guid: e403d78e741c19a458537d451d2b2e58, type: 2}
+  texture: {fileID: 21300000, guid: f44b7a71a30b49646aedcefe1adfec6f, type: 3}
   artifactName: 1% Warrior
   effectDescription: Unlock 1% of the deck

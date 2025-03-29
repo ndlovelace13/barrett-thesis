@@ -104,7 +104,8 @@ public class Placeable
                 pillarIndex = -1;
 
             //store the artifact id for later restoration
-            artifactIndex = obj.GetComponent<Artifact>().data.id;
+            if (obj.GetComponent<Artifact>().data != null)
+                artifactIndex = obj.GetComponent<Artifact>().data.id;
 
             return PlaceableType.Artifact;
         }

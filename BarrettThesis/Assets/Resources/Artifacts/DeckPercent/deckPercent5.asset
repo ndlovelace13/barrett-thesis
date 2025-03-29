@@ -18,5 +18,6 @@ MonoBehaviour:
   level: 5
   unlockThreshold: 0.5
   mat: {fileID: 2100000, guid: e403d78e741c19a458537d451d2b2e58, type: 2}
+  texture: {fileID: 21300000, guid: f44b7a71a30b49646aedcefe1adfec6f, type: 3}
   artifactName: Living on a Prayer
   effectDescription: Unlock 50% of the deck
