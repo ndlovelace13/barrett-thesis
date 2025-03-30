@@ -71,6 +71,9 @@ public class VisitorHandler : MonoBehaviour
         int totalVisits = Mathf.FloorToInt(GameController.SaveData.maxVisitors * (secondsAway / visitorCooldown) / (avgTime / visitorCooldown));
         Debug.Log(totalVisits + " visitors over the course of " + timeAway.TotalHours + " hours");
         int totalEarnings = totalVisits * Mathf.CeilToInt(avgHappiness / 60f * 100f);
+
+        //spawn in the report
+        GameObject.FindFirstObjectByType<VisitorReport>().FillReport(timeAway, totalVisits, totalEarnings);
         
         //update the jar balance
         GameController.SaveData.jarBalance += totalEarnings;

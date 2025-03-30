@@ -1118,6 +1118,7 @@ MonoBehaviour:
     type: 0
     cardIndex: 0
     pillarIndex: 0
+    artifactIndex: 0
     donationPillar: 0
     location:
       x: 0
@@ -1145,12 +1146,15 @@ MonoBehaviour:
     customArt: 
     useCustom: 0
     discovered: 0
+    dayDiscovered: 0
     masteryLevel: 0
     daysTilNext: 0
+    highestDays: 0
     prevInterval: 0
     correctCount: 0
     missedCount: 0
     confusedIndexes: 
+    returnedIndexes: 
   image: {fileID: 4857045482767903116}
   displayMat: {fileID: 6594661532553476488}
 --- !u!114 &5624989301955505383
@@ -3022,7 +3026,7 @@ GameObject:
   - component: {fileID: 1331297692958142277}
   m_Layer: 6
   m_Name: Create
-  m_TagString: Untagged
+  m_TagString: create
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

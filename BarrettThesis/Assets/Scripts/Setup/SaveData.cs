@@ -37,6 +37,9 @@ public class SaveData
 
     public bool tasksComplete;
 
+    //tutorial shit
+    public List<string> completedTutorials;
+
     //museum orientation
     public List<Placeable> placeables;
     public List<PlaceableControl> placeableControls;
@@ -83,6 +86,9 @@ public class SaveData
         saveTime = DateTime.UtcNow.ToString();
         refreshTime = DateTime.UtcNow.AddHours(24).ToString();
         cardsUnboxed = false;
+        
+        //tutorial init
+        completedTutorials = new List<string>();
 
         //achievement init
         highestMastery = 0;

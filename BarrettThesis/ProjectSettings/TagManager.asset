@@ -24,6 +24,8 @@ TagManager:
   - Archives
   - Matching
   - SprenPool
+  - dailyCardDelivery
+  - create
   layers:
   - Default
   - TransparentFX

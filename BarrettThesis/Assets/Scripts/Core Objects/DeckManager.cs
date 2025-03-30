@@ -82,10 +82,10 @@ public class DeckManager : MonoBehaviour
         GameController.SaveData.donationsToday = GameController.SaveData.jarBalance;
 
         //instantiate the tasks and checklist here
-        GameObject test = GameObject.FindWithTag("Checklist");
+        //GameObject test = GameObject.FindWithTag("Checklist");
         //Debug.Log(SceneManager.GetActiveScene().name);
 
-        test.GetComponent<ChecklistDisplay>().TaskMenu();
+        GameObject.FindFirstObjectByType<ChecklistDisplay>().TaskMenu();
 
         GameObject.FindWithTag("PlaceableHandler").GetComponent<PlaceableHandler>().Delivery();
     }
@@ -146,7 +146,7 @@ public class DeckManager : MonoBehaviour
             {
                 GameObject.FindWithTag("VisitorSpawn").GetComponent<VisitorHandler>().VisitorsAway(true);
                 //restore checklist progress
-                GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskMenu();
+                GameObject.FindFirstObjectByType<ChecklistDisplay>().TaskMenu();
                 Debug.Log("STATUS: museum still open, come back later for new tasks");
             }
         }
@@ -165,7 +165,7 @@ public class DeckManager : MonoBehaviour
                 //allow the user to continue their progress
 
                 //restore the checklist progress
-                GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskMenu();
+                GameObject.FindFirstObjectByType<ChecklistDisplay>().TaskMenu();
 
 
                 //if this is the first day, assignTasks for the first time
@@ -176,6 +176,7 @@ public class DeckManager : MonoBehaviour
                     GameController.SaveData.newQueue = new List<Flashcard>();
                     GameController.SaveData.cardQueue = new List<Flashcard>();
                     AssignTasks();
+                    GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("welcome");
                 }
                 else
                     Debug.Log("STATUS: tasks still remain, continue working");

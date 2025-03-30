@@ -263,21 +263,20 @@ public class MatchScanner : ObjectMotion
 
         //card fly over shoulder lerp, back to archive?
         float currentTime = 0f;
-        while (currentTime < 1f)
+        while (currentTime < 3f)
         {
             currentTime += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
 
         //disable the correct menu and reenable the base answer holder
-        answerHolder.SetActive(true);
-        correctMain.SetActive(false);
+        //answerHolder.SetActive(true);
+        //correctMain.SetActive(false);
 
         //reset answers
         answerFilled = false;
-
-        screenAnimator.SetBool("answerMode", false);
         StartCoroutine(ScannerReset());
+        screenAnimator.SetBool("answerMode", false);
 
         yield return null;
     }
@@ -286,6 +285,7 @@ public class MatchScanner : ObjectMotion
     {
         //start anim
         screenAnimator.SetTrigger("incorrect");
+        //screenAnimator.SetBool("answerMode", false);
 
         //Leave card there
         Debug.Log("Incorrect Coroutine Initiated in the MatchScanner");
@@ -296,28 +296,28 @@ public class MatchScanner : ObjectMotion
         incorrectMain.SetActive(true);
 
         //reveal the correct answer
-        correctAnswerText.text = correctText;
+        incorrectAnswerText.text = correctText;
 
         //bar showing reset mastery progress on match scanner
-        masteryUpdate.text = "Mastery Tier " + scannedCard.masteryLevel + " Reset | Additional Review Required";
+        masteryDrop.text = "Mastery Tier " + scannedCard.masteryLevel + " Reset | Additional Review Required";
 
         //lerp to a new location?
         float currentTime = 0f;
-        while (currentTime < 1f)
+        while (currentTime < 3f)
         {
             currentTime += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
 
         //disable the correct menu and reenable the base answer holder
-        answerHolder.SetActive(true);
-        incorrectMain.SetActive(false);
+        //answerHolder.SetActive(true);
+        //incorrectMain.SetActive(false);
 
         //refresh answers
         answerFilled = false;
 
-        screenAnimator.SetBool("answerMode", false);
         StartCoroutine(ScannerReset());
+        screenAnimator.SetBool("answerMode", false);
 
         yield return null;
     }

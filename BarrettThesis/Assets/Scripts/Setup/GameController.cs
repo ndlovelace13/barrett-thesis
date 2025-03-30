@@ -14,7 +14,9 @@ public enum GameMode
     CREATING,
     INSPECTING,
     ORDERING,
-    PAUSED
+    PAUSED,
+    REPORT,
+    TUTORIAL
 }
 
 public class GameController : MonoBehaviour
@@ -76,6 +78,7 @@ public class GameController : MonoBehaviour
         FindObjectOfType<MuseumLoader>().MuseumRestore();
         FindObjectOfType<PlaceableHandler>().PlaceableRestore();
         FindObjectOfType<ArtifactControl>().ArtifactRestore();
+        FindObjectOfType<TutorialControl>().TutorialInit();
         DeckManager.DeckManage.DateCheck();
 
         //open new rooms here if there are any that finish today - cut a ribbon maybe?
