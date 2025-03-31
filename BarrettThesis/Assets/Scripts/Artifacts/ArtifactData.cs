@@ -39,6 +39,7 @@ public class ArtifactData: ScriptableObject
     {
         //in game notification - add to the queue, artifact control will handle the rest
         GameObject.FindFirstObjectByType<ArtifactControl>().unlockQueue.Add(this);
+        GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstArtifact");
 
         Debug.Log("ARTIFACT UNLOCK: " + artifactName);
         unlocked = true;

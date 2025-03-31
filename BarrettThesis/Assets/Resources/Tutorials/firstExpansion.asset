@@ -14,5 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstExpansion
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - Believe it or not, this two room museum isn't going to work forever. Therefore,
+    you can also save up and spend your donations on new room expansions using the
+    Order Terminal!
+  - Expanding your museum will allow for more works to be displayed, more visitors,
+    and therefore, more donations! These expansions aren't cheap, but are a great
+    way to increase your revenue!
+  - Now that you've acquired a solid chunk of change, head over to the Order Terminal
+    and purchase your first room! It will be under construction for the day, but
+    return again tomorrow to expand and start filling it with a brand new showing
+    of works!
+  outlineTag: orders

@@ -13,7 +13,8 @@ public class Archives : CoreGameMode, IInteractable
     [SerializeField] Transform displayGrid;
 
     [Header("UI Elements")]
-    [SerializeField] Canvas archiveCanvas;
+    [SerializeField] GameObject archiveCanvas;
+    [SerializeField] GameObject singleControls;
     [SerializeField] TMP_Text completionText;
     [SerializeField] TMP_Text displayedCardIndices;
 
@@ -49,7 +50,8 @@ public class Archives : CoreGameMode, IInteractable
         statsPool = GameObject.FindWithTag("StatsPool").GetComponent<ObjectPool>();
         displayedCards = new List<GameObject>();
         gameMode = GameMode.ARCHIVE;
-        archiveCanvas.enabled = false;
+        archiveCanvas.SetActive(false);
+        singleControls.SetActive(false);
     }
 
     // Update is called once per frame
@@ -65,7 +67,7 @@ public class Archives : CoreGameMode, IInteractable
                 cardIncrement(indexModAmount);
 
             //retrieve card for placement in painting
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Q) && singleView)
             {
                 CardRetrieve();
             }
@@ -89,7 +91,15 @@ public class Archives : CoreGameMode, IInteractable
             base.CancelInteract();
             //camControl.rotation = Camera.main.transform.rotation;
             StartCoroutine(RemoveCard(displayedCards));
-            archiveCanvas.enabled = false;
+            archiveCanvas.SetActive(false);
+            GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstMatch");
+            return true;
+        }
+        else if (singleView && GameObject.FindWithTag("ObjectSlot").GetComponentInChildren<CardFill>() != null)
+        {
+            base.CancelInteract();
+            singleView = false;
+            archiveCanvas.SetActive(false);
             return true;
         }
         else
@@ -110,8 +120,8 @@ public class Archives : CoreGameMode, IInteractable
             StartCoroutine(RemoveCard(heldCard));
             handCard.GetComponent<CardFill>().StopHolding();
         }
-        GameObject currentCard = displayedCards[0];
-        displayedCards.Remove(currentCard);
+        GameObject currentCard = singleFlash;
+        //displayedCards.Remove(currentCard);
 
         //place card in hand
         currentCard.GetComponent<CardFill>().StartHolding();
@@ -119,6 +129,11 @@ public class Archives : CoreGameMode, IInteractable
         //set rules of interacting
         player.GetComponent<PlayerInteraction>().heldObj = currentCard;
         player.GetComponent<PlayerInteraction>().isInteracting = false;
+
+        //disable other objects
+        singleStats.SetActive(false);
+        inspectedCard.SetActive(false);
+        
         CancelInteract();
     }
 
@@ -229,7 +244,8 @@ public class Archives : CoreGameMode, IInteractable
 
     private void EnableCanvas()
     {
-        archiveCanvas.enabled = true;
+        archiveCanvas.SetActive(true);
+        singleControls.SetActive(false);
 
         //update the ui elements
         completionText.text = ((float)GameController.SaveData.unlockedCardCount / (float)GameController.SaveData.currentDeck.cards.Count * 100).ToString("F2") + "% Cards Discovered";
@@ -266,7 +282,8 @@ public class Archives : CoreGameMode, IInteractable
         if (!singleView)
         {
             //display different ui here? - disabled for now
-            archiveCanvas.enabled = false;
+            archiveCanvas.SetActive(false);
+            singleControls.SetActive(true);
 
             //set single view locations if not already done so
             if (!singleLocsSet)

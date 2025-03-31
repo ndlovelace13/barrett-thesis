@@ -212,6 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selected: 1
+  flippable: 0
 --- !u!114 &2761192190548402598
 MonoBehaviour:
   m_ObjectHideFlags: 0

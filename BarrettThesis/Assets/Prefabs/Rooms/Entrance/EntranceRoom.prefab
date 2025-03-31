@@ -951,20 +951,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: VisitorSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 8001117335997112914, guid: 02586b32067ed444f97918c8221fe712,
+        type: 3}
+      propertyPath: objectNum
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 8438506222110492109, guid: 02586b32067ed444f97918c8221fe712,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.54
+      value: -0.909
       objectReference: {fileID: 0}
     - target: {fileID: 8438506222110492109, guid: 02586b32067ed444f97918c8221fe712,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.006997347
+      value: 0.485
       objectReference: {fileID: 0}
     - target: {fileID: 8438506222110492109, guid: 02586b32067ed444f97918c8221fe712,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.31
+      value: -3.196
       objectReference: {fileID: 0}
     - target: {fileID: 8438506222110492109, guid: 02586b32067ed444f97918c8221fe712,
         type: 3}

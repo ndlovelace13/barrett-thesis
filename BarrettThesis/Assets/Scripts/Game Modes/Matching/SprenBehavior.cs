@@ -114,7 +114,7 @@ public class SprenBehavior : MonoBehaviour
                 {
                     if ((!agent.hasPath || agent.velocity.sqrMagnitude == 0f))
                     {
-                        Debug.Log("shits broke yo");
+                        //Debug.Log("shits broke yo");
                         //assign a new location
                         switch (currentState)
                         {

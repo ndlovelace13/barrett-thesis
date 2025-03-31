@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstRoomOpening
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - Welcome back! Construction has just been completed on your new expansion, and
+    the time has come to cut the ribbon and open it! Head on over to the highlighted
+    tape and cut it in order to finish your expansion.
+  outlineTag: tape

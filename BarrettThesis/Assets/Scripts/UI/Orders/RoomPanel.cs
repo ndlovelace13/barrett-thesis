@@ -94,6 +94,7 @@ public class RoomPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (GameController.SaveData.balance >= GameController.SaveData.currentRoomCost)
         {
             GameController.SaveData.balance -= GameController.SaveData.currentRoomCost;
+            GameController.SaveData.currentRoomCost += Mathf.RoundToInt(GameController.SaveData.currentRoomCost * 1.5f);
             StartCoroutine(PurchaseExec());
         }
     }

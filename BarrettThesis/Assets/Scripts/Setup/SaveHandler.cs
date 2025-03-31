@@ -97,12 +97,7 @@ public class SaveHandler : MonoBehaviour
         string writePath = Path.Combine(paintingPath, currentPainting);
         File.WriteAllBytes(writePath, paintingBytes);
 
-        card.customArt = currentPainting;
-        card.useCustom = true;
-
-        //unlock as discovered
-        card.discovered = true;
-        card.dayDiscovered = GameController.SaveData.dayIndex;
+        GameController.SaveData.currentDeck.cards[card.cardId].Discover(currentPainting);
     }
 
     public Texture2D GetPainting(string paintFile)

@@ -99,6 +99,16 @@ public class Flashcard
         }
     }
 
+    public void Discover(string currentPainting)
+    {
+        customArt = currentPainting;
+        useCustom = true;
+
+        //unlock as discovered
+        discovered = true;
+        dayDiscovered = GameController.SaveData.dayIndex;
+    }
+
     public bool Correct()
     {
         Debug.Log("Before Correct Application " + daysTilNext);
@@ -117,7 +127,10 @@ public class Flashcard
         }
 
         bool masteryUp = MasteryCheck();
-        GameController.SaveData.cardQueue.Remove(this);
+        if (GameController.SaveData.cardQueue.Contains(this))
+            GameController.SaveData.cardQueue.Remove(this);
+        else
+            Debug.Log("you are a dumbass");
 
         //highest days check
         if (daysTilNext > highestDays)
@@ -188,7 +201,10 @@ public class Flashcard
 
     public float MasteryPercent()
     {
-        return (float)daysTilNext / (float)DeckManager.DeckManage.masteryDays[masteryLevel + 1];
+        if (daysTilNext > 0)
+            return (float)daysTilNext / (float)DeckManager.DeckManage.masteryDays[masteryLevel + 1];
+        else
+            return 0f;
     }
 
     //will be called upon at the beginning of the matching phase, or if the wrong answer was chosen

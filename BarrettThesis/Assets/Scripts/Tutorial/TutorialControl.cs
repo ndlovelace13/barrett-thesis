@@ -54,11 +54,12 @@ public class TutorialControl : MonoBehaviour
             remainingTutorials.Remove(reqKey);
 
             //begin the execution of the tutorial itself
+            Debug.Log("now executing the " + reqKey + " tutorial");
             StartCoroutine(TutorialExecute());
         }
         else
         {
-            Debug.Log("this tutorial has either already been executed or does not exist");
+            Debug.Log("the tutorial " + reqKey + " has either already been executed or does not exist");
         }
     }
 
@@ -107,12 +108,21 @@ public class TutorialControl : MonoBehaviour
         GameController.GameControl.gameMode = GameMode.DEFAULT;
 
         //turn on the tutorial obj outline
-        Outline tutorialOutline = currentTutorial.RetrieveOutline();
-        Debug.Log("Outline found: " + tutorialOutline.name);
-        tutorialOutline.enabled = true;
-        tutorialOutline.OutlineMode = Outline.Mode.OutlineAll;
-        tutorialOutline.OutlineColor = Color.yellow;
+        List<Outline> tutorialOutline = currentTutorial.RetrieveOutline();
+        if (tutorialOutline != null)
+            OutlineApply(tutorialOutline);
+        
         yield return null;
+    }
+
+    private void OutlineApply(List<Outline> outlines)
+    {
+        foreach (Outline outline in outlines)
+        {
+            outline.enabled = true;
+            outline.OutlineMode = Outline.Mode.OutlineAll;
+            outline.OutlineColor = Color.yellow;
+        }
     }
 
     //handles the actual printing of the dialogue to the screen
@@ -135,6 +145,7 @@ public class TutorialControl : MonoBehaviour
 
         dialogueReady = true;
         dialoguePrinting = false;
+        Debug.Log(currentLine + " completed");
     }
 
     // Update is called once per frame

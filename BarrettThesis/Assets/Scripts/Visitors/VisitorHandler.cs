@@ -70,7 +70,7 @@ public class VisitorHandler : MonoBehaviour
         //total visitor calculation - maybe accurate?
         int totalVisits = Mathf.FloorToInt(GameController.SaveData.maxVisitors * (secondsAway / visitorCooldown) / (avgTime / visitorCooldown));
         Debug.Log(totalVisits + " visitors over the course of " + timeAway.TotalHours + " hours");
-        int totalEarnings = totalVisits * Mathf.CeilToInt(avgHappiness / 60f * 100f);
+        int totalEarnings = totalVisits * Mathf.CeilToInt(avgHappiness / 60f * 10f);
 
         //spawn in the report
         GameObject.FindFirstObjectByType<VisitorReport>().FillReport(timeAway, totalVisits, totalEarnings);

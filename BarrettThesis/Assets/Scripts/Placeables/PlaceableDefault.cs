@@ -9,6 +9,7 @@ public class PlaceableDefault : ScriptableObject
     public bool unlocked;
     public int startingMax;
     public int absoluteMax;
+    public int extraPerRoom;
 
     //money stuff here?
     public int startingCost;

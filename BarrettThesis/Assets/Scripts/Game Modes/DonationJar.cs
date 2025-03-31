@@ -30,6 +30,7 @@ public class DonationJar : CoreGameMode, IInteractable
         GameController.SaveData.balance += GameController.SaveData.jarBalance;
         GameController.SaveData.jarBalance = 0;
         GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskUpdate();
+        GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstExpansion");
     }
 
     public override string GetPrompt()

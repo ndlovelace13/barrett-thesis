@@ -27,7 +27,10 @@ public class MuseumOpen : CoreGameMode, IInteractable
             GameController.SaveData.museumOpen = true;
             DeckManager.DeckManage.TasksComplete();
 
-            //TO DO - Flip the Open Sign
+            GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstDayFinish");
+
+            //reset the navmesh because plot reasons
+            GameObject.FindFirstObjectByType<MuseumLoader>().RebuildNav();
         }
         return false;
     }

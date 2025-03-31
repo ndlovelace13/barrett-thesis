@@ -144,6 +144,7 @@ public class ScatteredCard : Rearrangeable, IInteractable
 
     public void ApplyMastery()
     {
+        //cardData = GameController.SaveData.currentDeck.cards[cardData.cardId];
         Debug.Log("Mastery Material Applied");
         if (cardData.discovered)
             baseCard.material = DeckManager.DeckManage.masteryMaterials[cardData.masteryLevel];
@@ -226,7 +227,7 @@ public class ScatteredCard : Rearrangeable, IInteractable
 
     public void OnMouseEnter()
     {
-        if (!inspecting)
+        if (!inspecting && cardData.discovered)
         {
             //enable the outline, enable a mouse over animation?
             ActivateHighlight();
@@ -251,9 +252,16 @@ public class ScatteredCard : Rearrangeable, IInteractable
         }
         else if (GameController.GameControl.gameMode == GameMode.ARCHIVE)
         {
-            Debug.Log("Archive Click detected");
-            archives.SpecificFileView(gameObject, cardData);
-            inspecting = true;
+            if (cardData.discovered)
+            {
+                Debug.Log("Archive Click detected");
+                archives.SpecificFileView(gameObject, cardData);
+                inspecting = true;
+            }
+            else
+            {
+                Debug.Log("Card not yet discovered");
+            }
         }
         else
         {

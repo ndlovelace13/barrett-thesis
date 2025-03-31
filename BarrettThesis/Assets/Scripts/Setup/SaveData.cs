@@ -110,7 +110,7 @@ public class SaveData
 
         //expansion init
         roomData = new List<RoomData>();
-        currentRoomCost = 100;
+        currentRoomCost = 10000;
         InitRoom();
 
         //order init

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class DailyCardDelivery : CoreGameMode, IInteractable
@@ -25,7 +24,9 @@ public class DailyCardDelivery : CoreGameMode, IInteractable
         }
         GameController.SaveData.cardsUnboxed = true;
         GameController.SaveData.unlockedCardCount += GameController.SaveData.newQueue.Count;
+        //GameController.SaveData.cardCount += GameController.SaveData.newQueue.Count;
         GameObject.FindWithTag("Checklist").GetComponent<ChecklistDisplay>().TaskUpdate();
+        GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstCreate");
     }
 
     //spawn popup and maybe do a card explosion

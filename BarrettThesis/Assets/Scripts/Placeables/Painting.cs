@@ -50,6 +50,7 @@ public class Painting : Rearrangeable, IInteractable, IVisitable
                 associatedCard = card.GetFlashcard();
                 card.StopHolding();
                 AssignImage(true);
+                GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstOpening");
             }
         }
         return true;

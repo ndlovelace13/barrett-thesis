@@ -10,12 +10,19 @@ public class TutorialItem : ScriptableObject
     [TextArea] public string[] dialogue;
     public string outlineTag;
 
-    public Outline RetrieveOutline()
+    public List<Outline> RetrieveOutline()
     {
-        GameObject associatedObj = GameObject.FindWithTag(outlineTag);
-        if (associatedObj == null)
-            return null;
+        if (!string.IsNullOrEmpty(outlineTag))
+        {
+            List<Outline> outlines = new List<Outline>();
+            GameObject[] associatedObjs = GameObject.FindGameObjectsWithTag(outlineTag);
+            foreach (GameObject obj in associatedObjs)
+            {
+                outlines.Add(obj.GetComponent<Outline>());
+            }
+            return outlines;
+        }
         else
-            return associatedObj.GetComponent<Outline>();
+            return null;
     }
 }

@@ -16,6 +16,7 @@ MonoBehaviour:
   unlocked: 1
   startingMax: 2
   absoluteMax: 100
+  extraPerRoom: 3
   startingCost: 500
   costMod: 1.5
   title: Painting Frame

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System;
-using Unity.VisualScripting;
-using UnityEditor.Timeline;
+
 
 public class VisitorReport : ObjectMotion
 {
@@ -31,11 +30,11 @@ public class VisitorReport : ObjectMotion
     // Update is called once per frame
     public override void Update()
     {
-        if (GameController.GameControl.gameMode == GameMode.REPORT && Input.GetKey(KeyCode.Escape) && !inspecting)
+        if (GameController.GameControl.gameMode == GameMode.REPORT && Input.GetKeyDown(KeyCode.Escape) && !inspecting)
         {
             ReportDisable();
         }
-        if (GameController.GameControl.gameMode == GameMode.REPORT && Input.GetKey(KeyCode.Space))
+        if (GameController.GameControl.gameMode == GameMode.REPORT && Input.GetKeyDown(KeyCode.Space))
         {
             InspectHandler();
         }
@@ -68,7 +67,7 @@ public class VisitorReport : ObjectMotion
         dayCounter.text = "Day " + GameController.SaveData.dayIndex;
         timeAway.text = "Time Open: " + timeaway.ToString(@"hh\:mm");
         visitorCount.text = "No. of Visitors: " + totalVisits;
-        totalPayout.text = "Donations Received: " + ((float)(GameController.SaveData.jarBalance / 100f)).ToString("C2");
+        totalPayout.text = "Donations Received: " + ((float)(totalEarnings / 100f)).ToString("C2");
 
         //activate the report
         StartCoroutine(ReportPopup());
@@ -77,6 +76,7 @@ public class VisitorReport : ObjectMotion
     IEnumerator ReportPopup()
     {
         GameController.GameControl.gameMode = GameMode.REPORT;
+        GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstVisitorReport");
         yield return null;
     }
 

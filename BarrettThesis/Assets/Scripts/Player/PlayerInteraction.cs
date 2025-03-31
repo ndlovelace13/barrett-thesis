@@ -135,7 +135,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void UpdatePrompt()
     {
-        if (isInteracting || currentInteractable == null)
+        if (isInteracting || currentInteractable == null || GameController.GameControl.gameMode != GameMode.DEFAULT)
             prompt = "";
         else
             prompt = currentInteractable.GetComponent<IInteractable>().GetPrompt();

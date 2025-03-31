@@ -194,6 +194,7 @@ public class MatchScanner : ObjectMotion
 
             if (scannedCard.cardId == answerIndex)
             {
+                //scannedCard = GameController.SaveData.currentDeck.cards[scannedCard.cardId];
                 masteryUp = scannedCard.Correct();
 
                 //Correct Answer Routines Here (remove the scannedCard)
@@ -201,6 +202,7 @@ public class MatchScanner : ObjectMotion
             }
             else
             {
+                //scannedCard = GameController.SaveData.currentDeck.cards[scannedCard.cardId];
                 scannedCard.Missed(answerIndex);
 
                 //Incorrect Answer Routines Here (display incorrect answer)
@@ -251,7 +253,7 @@ public class MatchScanner : ObjectMotion
             }
             else
             {
-                masteryUpdate.text = "Mastery Tier " + scannedCard.masteryLevel + " " + (int)(scannedCard.MasteryPercent() * 100f) + "% Complete | Next Review in " + scannedCard.daysTilNext + " Days";
+                masteryUpdate.text = "Mastery Tier " + scannedCard.masteryLevel + " " + (int)(scannedCard.MasteryPercent() * 100f) + "% Complete\nNext Review in " + scannedCard.daysTilNext + " Days";
             }
 
         }
@@ -299,7 +301,7 @@ public class MatchScanner : ObjectMotion
         incorrectAnswerText.text = correctText;
 
         //bar showing reset mastery progress on match scanner
-        masteryDrop.text = "Mastery Tier " + scannedCard.masteryLevel + " Reset | Additional Review Required";
+        masteryDrop.text = "Mastery Tier " + scannedCard.masteryLevel + " Reset\nAdditional Review Required";
 
         //lerp to a new location?
         float currentTime = 0f;

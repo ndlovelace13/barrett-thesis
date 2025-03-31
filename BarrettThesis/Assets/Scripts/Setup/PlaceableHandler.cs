@@ -11,6 +11,7 @@ public class PlaceableControl
     public int currentPlaced;
     public int currentMax;
     public int absoluteMax;
+    public int extraPerRoom;
 
     //cost
     public int currentCost;
@@ -27,6 +28,7 @@ public class PlaceableControl
         currentPlaced = 0;
         currentMax = ogSpecs.startingMax;
         absoluteMax = ogSpecs.absoluteMax;
+        extraPerRoom = ogSpecs.extraPerRoom;
 
         currentCost = ogSpecs.startingCost;
         costMod = ogSpecs.costMod;
@@ -39,6 +41,11 @@ public class PlaceableControl
     {
         currentCost = Mathf.CeilToInt(currentCost * costMod);
         Debug.Log("Price increased to " + ((float)(currentCost / 100f)).ToString("C2"));
+    }
+
+    public void IncreaseMax()
+    {
+        currentMax += extraPerRoom;
     }
 }
 
@@ -143,13 +150,27 @@ public class PlaceableHandler : MonoBehaviour
         Debug.Log(controlDict.Count + " placeable controllers are in the dictionary");
     }
 
+    public void SpecialDelivery()
+    {
+        GameController.SaveData.orderedPlaceables.AddRange(GameController.SaveData.newOrders);
+        GameController.SaveData.newOrders.Clear();
+        Delivery();
+    }
+
     public void Delivery()
     {
         //enable delivery boxes if there are any items in orderedPlaceables
         if (GameController.SaveData.orderedPlaceables.Count > 0)
+        {
             deliveryBox.SetActive(true);
+            Debug.Log("Delivery Box correctly enabled");
+        }
+            
         else
+        {
             deliveryBox.SetActive(false);
+            Debug.Log("Why the fuck would this work as intended");
+        }
     }
 
     //DEBUG
@@ -174,6 +195,7 @@ public class PlaceableHandler : MonoBehaviour
                 returnedObj = Instantiate(artifactPrefab);
                 break;
             default:
+                Debug.Log("you serve zero purpose");
                 break;
 
         }
@@ -188,5 +210,16 @@ public class PlaceableHandler : MonoBehaviour
     public GameObject RetrieveArtifact()
     {
         return Instantiate(artifactPrefab);
+    }
+
+    public void RoomGrowth()
+    {
+        //increase the max visitors as well
+        GameController.SaveData.maxVisitors += 2;
+
+        foreach (var controller in controlDict.Values)
+        {
+            controller.IncreaseMax();
+        }
     }
 }

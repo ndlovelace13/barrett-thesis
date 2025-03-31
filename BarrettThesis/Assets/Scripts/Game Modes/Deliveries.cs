@@ -21,6 +21,9 @@ public class Deliveries : CoreGameMode, IInteractable
     //equip a new item from the ordered list
     private void UnboxDelivery()
     {
+        if (allPlaceable == null)
+            allPlaceable = GameObject.FindFirstObjectByType<PlaceableHandler>();
+
         Placeable newOrder = GameController.SaveData.orderedPlaceables[0];
         GameController.SaveData.orderedPlaceables.Remove(newOrder);
         GameObject newObj = allPlaceable.RetrieveOrder(newOrder);

@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 5280340014168213050}
   m_Layer: 6
   m_Name: TapeOne
-  m_TagString: Untagged
+  m_TagString: tape
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -511,7 +511,7 @@ GameObject:
   - component: {fileID: 3585490340979969025}
   m_Layer: 6
   m_Name: TapeTwo
-  m_TagString: Untagged
+  m_TagString: tape
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

@@ -18,6 +18,7 @@ public class VisitorBehavior : MonoBehaviour
     public void BeginVisit()
     {
         Debug.Log("A New Visitor has Arrived!");
+        AssignColor();
         
         //reset vars
         happiness = 0f;
@@ -31,6 +32,11 @@ public class VisitorBehavior : MonoBehaviour
 
         //assign the first destination
         UpdateDestination();
+    }
+
+    private void AssignColor()
+    {
+        GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value, 1f);
     }
 
     // Update is called once per frame
@@ -103,7 +109,7 @@ public class VisitorBehavior : MonoBehaviour
 
     private int HappyToDollar()
     {
-        int donation = Mathf.CeilToInt(happiness / 60f * 100f);
+        int donation = Mathf.CeilToInt(happiness / 60f * 10f);
         return donation;
     }
 

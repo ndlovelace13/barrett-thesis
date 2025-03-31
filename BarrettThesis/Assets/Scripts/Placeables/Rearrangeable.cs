@@ -132,6 +132,10 @@ public class Rearrangeable : MonoBehaviour, IInteractable
 
         //apply the rounded and offset
         transform.position = roundedHit + PlaceOffset(currentWall);
+
+        //check for the tutorial advancement
+        if (GameController.SaveData.orderedPlaceables.Count == 0)
+            GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstPainting");
         
     }
     

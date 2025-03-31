@@ -719,6 +719,11 @@ PrefabInstance:
       objectReference: {fileID: 4958361630613104722}
     - target: {fileID: 6591913684959825520, guid: 3ebb9d15926696647b9e9ce4c8f2c05e,
         type: 3}
+      propertyPath: expansionCost
+      value: 
+      objectReference: {fileID: 3778634894637953221}
+    - target: {fileID: 6591913684959825520, guid: 3ebb9d15926696647b9e9ce4c8f2c05e,
+        type: 3}
       propertyPath: expansionMode
       value: 
       objectReference: {fileID: 5154267267823214491}
@@ -816,7 +821,7 @@ PrefabInstance:
     - target: {fileID: 2139688287322277750, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
       propertyPath: m_fontSize
-      value: 53.9
+      value: 56.25
       objectReference: {fileID: 0}
     - target: {fileID: 3945014288380684100, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
@@ -826,17 +831,17 @@ PrefabInstance:
     - target: {fileID: 4677946412845603633, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 3.775
       objectReference: {fileID: 0}
     - target: {fileID: 4677946412845603633, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3
+      value: -3.572
       objectReference: {fileID: 0}
     - target: {fileID: 5416126159237699607, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
       propertyPath: m_fontSize
-      value: 53.9
+      value: 56.25
       objectReference: {fileID: 0}
     - target: {fileID: 7258174748516146189, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
@@ -891,7 +896,7 @@ PrefabInstance:
     - target: {fileID: 8153225443290433606, guid: 7030212cc274dd04984f305cb4c26b7f,
         type: 3}
       propertyPath: m_fontSize
-      value: 29.8
+      value: 31.15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -966,6 +971,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Artifact Archives
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244385946195261540, guid: a356e0fda161ec4458df39bf34a539ae,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 48.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1352,6 +1362,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1625185561300932362, guid: 82af69a4ac606154fa9b5f447dfb8edc,
         type: 3}
+      propertyPath: m_Size
+      value: 0.99999994
+      objectReference: {fileID: 0}
+    - target: {fileID: 1625185561300932362, guid: 82af69a4ac606154fa9b5f447dfb8edc,
+        type: 3}
       propertyPath: m_Value
       value: 1
       objectReference: {fileID: 0}
@@ -1576,6 +1591,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3778634894637953221 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4871063229239147022, guid: 82af69a4ac606154fa9b5f447dfb8edc,
+    type: 3}
+  m_PrefabInstance: {fileID: 8640461928768883403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &4223567749173311019 stripped

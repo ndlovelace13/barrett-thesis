@@ -200,6 +200,7 @@ public class Create : CoreGameMode, IInteractable
     {
         //update the state
         createState = CreateState.PRECREATE;
+        timerDisplay.text = "A New Archive Appears!";
         instruction.text = "Analyze information, press Ready to start creating!";
         nextStage.GetComponentInChildren<TMP_Text>().text = "Ready to Paint!";
         nextStage.GetComponent<Button>().interactable = true;
@@ -305,18 +306,18 @@ public class Create : CoreGameMode, IInteractable
         if (cardFront == null)
         {
             cardFront = cardPool.GetPooledObject();
-            cardFront.SetActive(true);
         }
-        
+        cardFront.SetActive(true);
+
         cardFront.GetComponent<CardFill>().CardAssign(associatedCard);
 
         //retrieve and fill a new card back
         if (cardBack == null)
         {
             cardBack = cardPool.GetPooledObject();
-            cardBack.SetActive(true);
         }
-        
+        cardBack.SetActive(true);
+
         cardBack.GetComponent<CardFill>().CardAssign(associatedCard);
 
         //create a new painting for creation

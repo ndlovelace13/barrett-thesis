@@ -16,6 +16,7 @@ MonoBehaviour:
   unlocked: 1
   startingMax: 1
   absoluteMax: 20
+  extraPerRoom: 1
   startingCost: 2000
   costMod: 1.25
   title: Display Pillar

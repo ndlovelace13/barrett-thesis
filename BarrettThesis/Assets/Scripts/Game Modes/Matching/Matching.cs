@@ -25,6 +25,8 @@ public class Matching : CoreGameMode, IInteractable
     List<GameObject> activePrompts;
     List<GameObject> activeAnswers;
 
+    bool sprenSpawned = false;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -80,7 +82,8 @@ public class Matching : CoreGameMode, IInteractable
     {
         //StartCoroutine(MainGameplay());
         //StartCoroutine(NewGameplay());
-        StartCoroutine(SprenGameplay());
+        if (!sprenSpawned)
+            StartCoroutine(SprenGameplay());
     }
 
     public override string GetPrompt()
@@ -324,7 +327,8 @@ public class Matching : CoreGameMode, IInteractable
         int cardsPerRoom = GameController.SaveData.cardQueue.Count / allRooms.Count;
         int additionalCards = GameController.SaveData.cardQueue.Count % allRooms.Count;
 
-        List<Flashcard> remainingCards = new List<Flashcard>(GameController.SaveData.cardQueue);
+        List<Flashcard> remainingCards = new List<Flashcard>();
+        remainingCards.AddRange(GameController.SaveData.cardQueue);
         //assign cards to rooms
         for (int i = 0; i < allRooms.Count; i++)
         {
@@ -391,6 +395,7 @@ public class Matching : CoreGameMode, IInteractable
         }
 
         Debug.Log("All spren spawned");
+        sprenSpawned = true;
 
         StartCoroutine(NewGameplay());
 

@@ -9,6 +9,7 @@ public class OldQueueTask : TaskControl
     // Start is called before the first frame update
     void Start()
     {
+        tutorialKey = "firstPurchases";
         taskDescription = "Archives Reviewed";
         tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count;
         tasksTotal = GameController.SaveData.cardCount;
@@ -23,8 +24,12 @@ public class OldQueueTask : TaskControl
 
     public override bool UpdateTask()
     {
+        tutorialKey = "firstPurchases";
         taskDescription = "Archives Reviewed";
-        tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count;
+        if (GameController.SaveData.newQueue.Count == 0)
+            tasksComplete = GameController.SaveData.cardCount - GameController.SaveData.cardQueue.Count;
+        else
+            tasksComplete = 0;
         tasksTotal = GameController.SaveData.cardCount;
         Debug.Log("OldQueueTask Updated");
         return base.UpdateTask();

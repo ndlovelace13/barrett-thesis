@@ -5,7 +5,7 @@ using UnityEngine;
 //[CreateAssetMenu(fileName = "New Card", menuName = "Custom/TaskControl")]
 public class TaskControl : MonoBehaviour
 {
-
+    public string tutorialKey;
     public string taskDescription;
     public int tasksComplete;
     public int tasksTotal;
@@ -18,9 +18,10 @@ public class TaskControl : MonoBehaviour
 
     public virtual bool UpdateTask()
     {
-        if (tasksComplete == tasksTotal)
+        if (tasksComplete == tasksTotal && GameController.SaveData.cardsUnboxed)
         {
             Debug.Log("Task Complete");
+            GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial(tutorialKey);
             return true;
         }
         else

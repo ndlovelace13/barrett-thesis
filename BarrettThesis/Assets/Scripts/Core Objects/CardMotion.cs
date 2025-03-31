@@ -6,6 +6,7 @@ public class CardMotion : MonoBehaviour
 {
 
     public bool selected = true;
+    public bool flippable = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +18,7 @@ public class CardMotion : MonoBehaviour
     {
         if (selected)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F) && flippable)
             {
                 StartCoroutine(CardFlip());
             }

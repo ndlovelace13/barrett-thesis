@@ -26,6 +26,9 @@ public class ConstructionTape : MonoBehaviour, IInteractable
             GameController.SaveData.roomData[constructionRoomIndex].FinishConstruction();
             GameController.SaveData.additionalRooms++;
 
+            //increment all placeables to allow for more growth
+            GameObject.FindFirstObjectByType<PlaceableHandler>().RoomGrowth();
+
             //update all doorways
             museumControl.AllDoorsUpdate();
         }
@@ -69,5 +72,9 @@ public class ConstructionTape : MonoBehaviour, IInteractable
         constructionRoomIndex = linkedConstructionRoom;
 
         outlines = GetComponentsInChildren<Outline>();
+
+        //check for tutorial trigger
+        if (GameController.SaveData.roomData[constructionRoomIndex].dayFinished <= GameController.SaveData.dayIndex)
+            GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstRoomOpening");
     }
 }

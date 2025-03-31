@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Localization.LocalizationTableCollection;
 
 public class Order : CoreGameMode, IInteractable
 {
@@ -23,6 +22,7 @@ public class Order : CoreGameMode, IInteractable
     [SerializeField] PlaceableHandler objectHandler;
 
     [SerializeField] TMP_Text budgetDisplay;
+    [SerializeField] TMP_Text expansionCost;
 
     private List<OrderPanel> orderPanels;
 
@@ -42,12 +42,22 @@ public class Order : CoreGameMode, IInteractable
     void Update()
     {
         budgetDisplay.text = "Budget: " + ((float)(GameController.SaveData.balance / 100f)).ToString("C2");
+        if (expansionCost.enabled)
+            expansionCost.text = "Next Room Expansion Cost: " + ((float)(GameController.SaveData.currentRoomCost / 100f)).ToString("C2");
     }
     
     public override bool CancelInteract()
     {
         base.CancelInteract();
         orderMenu.enabled = false;
+
+        //tutorial trigger
+        if (GameController.SaveData.newOrders.Count == 4 && GameController.SaveData.dayIndex == 1)
+        {
+            GameObject.FindFirstObjectByType<PlaceableHandler>().SpecialDelivery();
+            GameObject.FindFirstObjectByType<TutorialControl>().CheckTutorial("firstPlaceableDelivery");
+        }
+            
         return true;
     }
 
@@ -154,6 +164,8 @@ public class Order : CoreGameMode, IInteractable
 
         itemOrderHolder.SetActive(true);
         expansionOrderHolder.SetActive(false);
+
+        expansionCost.enabled = false;
     }
 
     //when the expansion tab is clicked
@@ -164,5 +176,7 @@ public class Order : CoreGameMode, IInteractable
 
         itemOrderHolder.SetActive(false);
         expansionOrderHolder.SetActive(true);
+
+        expansionCost.enabled = true;
     }
 }

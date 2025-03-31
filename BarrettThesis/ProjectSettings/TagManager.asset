@@ -30,6 +30,7 @@ TagManager:
   - deliveries
   - museumOpen
   - artifacts
+  - tape
   layers:
   - Default
   - TransparentFX

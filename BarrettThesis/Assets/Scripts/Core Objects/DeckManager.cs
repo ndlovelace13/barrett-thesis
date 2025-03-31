@@ -59,7 +59,7 @@ public class DeckManager : MonoBehaviour
                 card.daysTilNext = 0;
                 counter++;
             }
-            else
+            else if (card.discovered)
                 card.daysTilNext--;
         }
 

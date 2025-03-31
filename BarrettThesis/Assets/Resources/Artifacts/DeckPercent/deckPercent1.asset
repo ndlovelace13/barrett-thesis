@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: deckPercent1
   m_EditorClassIdentifier: 
   id: 5
-  unlocked: 1
+  unlocked: 0
+  unlockDate: 0
+  onDisplay: 0
   type: 1
   level: 1
   unlockThreshold: 0.01

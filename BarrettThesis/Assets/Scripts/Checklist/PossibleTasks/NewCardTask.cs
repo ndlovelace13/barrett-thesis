@@ -8,6 +8,7 @@ public class NewCardTask : TaskControl
     // Start is called before the first frame update
     void Start()
     {
+        tutorialKey = "firstArchives";
         taskDescription = "Acquire New Works";
         tasksComplete = GameController.SaveData.newPerDay - GameController.SaveData.newQueue.Count;
         tasksTotal = GameController.SaveData.newPerDay;
@@ -22,6 +23,7 @@ public class NewCardTask : TaskControl
 
     public override bool UpdateTask()
     {
+        tutorialKey = "firstArchives";
         taskDescription = "Acquire New Works";
         tasksComplete = GameController.SaveData.newPerDay - GameController.SaveData.newQueue.Count;
         tasksTotal = GameController.SaveData.newPerDay;
