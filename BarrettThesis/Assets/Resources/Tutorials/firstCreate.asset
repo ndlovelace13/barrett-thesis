@@ -14,5 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstCreate
   charName: Art, the Creativity Spren
-  dialogue: []
+  dialogue:
+  - Fantastic! Most interactable objects in the museum will tell you how and when
+    you can interact with them - but as a rule of thumb, press E to interact!
+  - 'Now that you''ve collected your first archives grouping of archives, the next
+    thing to knock off the checklist is to Restore your new works. '
+  - As a curator at the Museum of Memory, you not only manage the museum - you create
+    the works as well. While the right to each masterpiece must be collected via
+    flashcard delivery, you have full reign to create any work you'd like to!
+  - 'Here are a few quick pointers on creating your own masterpieces:'
+  - 1. To expedite the curation process, you are given a limited amount of time to
+    create each work - I recommend thinking of a masterpiece while looking at the
+    full archive card, so you can make the most of your creation time!
+  - 2. Archives at the Museum of Memory have a tendency to get mixed up - you'll
+    spend a significant amount of time sorting through them. Make sure the works
+    you create help you to remember the definition of each word - but there are no
+    restrictions!
+  - 3. After the initial creation of each masterwork, you can always touch them up
+    later - don't feel pressured to get things perfect on the first try!
+  - The Creation Station is now highlighted in yellow - go create some beautiful
+    mnemonics!
   outlineTag: create

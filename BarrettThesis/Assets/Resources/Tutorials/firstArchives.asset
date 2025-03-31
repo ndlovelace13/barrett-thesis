@@ -14,5 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstArchives
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - Well done - you have a knack for creative work! As I mentioned earlier, you'll
+    be able to revise any works you'd like to remaster by visiting the Archives!
+  - The Archives allow you to review any unlocked cards, as well as see your collection
+    progress as a whole!
+  - To review a particular card, just click on it - you can also use the arrow keys
+    to view cards later in the deck.
+  - Go check it out for yourself
+  outlineTag: Archives

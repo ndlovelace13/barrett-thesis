@@ -77,11 +77,6 @@ public class TutorialControl : MonoBehaviour
         //set the charactername
         characterName.text = currentTutorial.charName;
 
-        //turn on the tutorial obj outline
-        Outline tutorialOutline = currentTutorial.RetrieveOutline();
-        tutorialOutline.enabled = true;
-        tutorialOutline.OutlineColor = Color.yellow;
-
         while (dialogueIndex < currentTutorial.dialogue.Length)
         {
             //only begin printing the next dialogue if it exists
@@ -109,7 +104,14 @@ public class TutorialControl : MonoBehaviour
 
         //go back to normal programming
         GameController.GameControl.lockPlayer = false;
-        GameController.GameControl.gameMode = GameMode.TUTORIAL;
+        GameController.GameControl.gameMode = GameMode.DEFAULT;
+
+        //turn on the tutorial obj outline
+        Outline tutorialOutline = currentTutorial.RetrieveOutline();
+        Debug.Log("Outline found: " + tutorialOutline.name);
+        tutorialOutline.enabled = true;
+        tutorialOutline.OutlineMode = Outline.Mode.OutlineAll;
+        tutorialOutline.OutlineColor = Color.yellow;
         yield return null;
     }
 

@@ -14,5 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstMatch
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - Now, for the bread and butter of your job - sorting through the archives!
+  - As a curator, its important that you stay knowledgeable about the entire collection;
+    therefore, I've recruited some of my spren colleagues to help make this process
+    a little more engaging!
+  - Once you release them into the museum, the spren will all select a work from
+    the archive that is ready for review - you're job is to catch them all!
+  - To catch a spren, click on it or the card it is holding - then, use the Matching
+    Scanner to select the matching definition for each card. You can use keys 1-4
+    on the keyboard to select your answer.
+  - If you select the right definition, the card's mastery level will increase, it
+    will be added back to the archives, and the spren will happily dissipate.
+  - If you select an incorrect definition, the card's mastery level will drop and
+    the spren will continue wandering the museum.
+  - If you have a particularly tricky card, you can always drop the spren using the
+    right mouse button and catch it again later.
+  - To complete this task, be sure to review all assigned archives! Don't worry about
+    making mistakes - while that may set your mastery back, it is all part of the
+    learning process!
+  - Now get after it - the matching destination is highlighted in yellow!
+  outlineTag: Matching

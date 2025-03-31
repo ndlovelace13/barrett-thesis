@@ -14,5 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstPurchases
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - Well done - on any average work day, all that is required to open the museum
+    is collection of new cards, creation of their associated pieces, and organization
+    of the archives!
+  - Keep in mind however, that as more works get added to your collection, organization
+    of these archives will take longer than they did today - you will have to review
+    prior archives in addition to the newly added ones!
+  - The spren will present you with only the cards that are necessary for review
+    - that means as your mastery of a card increases, it will need to be reviewed
+    less frequently. You'll get the hang of it over the next few shifts I'm sure!
+  - Now, the other side of the curation job is, well, curation! On top of being in
+    charge of the ever-growing collection of works, you get to organize and design
+    the museum however you'd like!
+  - Unfortunately, the museum has been down on its funding recently - any improvements
+    you make will have to be paid for through donations. However, improving the museum
+    will increase donations - so try to do your best to keep expanding our offerings!
+  - Head over to the Order Terminal and buy out their offerings with that $50 bonus
+    - I promise it will be worth the investment.
+  outlineTag: orders

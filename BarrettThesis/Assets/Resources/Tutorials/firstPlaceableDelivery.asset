@@ -14,5 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstPlaceableDelivery
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - Good work - usually, you'll have to wait for the next work day for the delivery
+    of newly ordered items - however, seeing as its your first day, the benefactor
+    has splurged a bit for instantaneous shipping!
+  - In reality, we already had these items on hand - we just needed to make sure
+    you could work the Order Terminal :)
+  - Whenever new objects arrive to place in your museum, they must be unpacked from
+    the delivery box near the entrance.
+  - Go on over there and open things up!
+  outlineTag: deliveries

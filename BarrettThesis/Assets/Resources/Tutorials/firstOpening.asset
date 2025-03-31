@@ -14,5 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstOpening
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - Alright - that's just about everything we need to cover on the first day!
+  - If you ever forget what to do, be sure to consult the checklist - it will automatically
+    update and let you know the tasks that must be completed before the museum can
+    be opened for the day.
+  - Now that you've got a handle on all the core requirements of the job, let's open
+    this thing up to the public!
+  - Go ahead and unlock the door so visitors can start seeing all the beautiful works
+    on display - they may even learn a thing or two!
+  outlineTag: museumOpen

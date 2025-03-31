@@ -26,6 +26,10 @@ TagManager:
   - SprenPool
   - dailyCardDelivery
   - create
+  - orders
+  - deliveries
+  - museumOpen
+  - artifacts
   layers:
   - Default
   - TransparentFX

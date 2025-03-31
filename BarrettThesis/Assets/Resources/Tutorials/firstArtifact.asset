@@ -14,5 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstArtifact
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - Would you look at that! It seems like you just uncovered an artifact! These masterworks
+    are granted by the benefactor whenever you meet specific milestones in your curation
+    journey.
+  - These artifacts can also be placed onto pillars present in your museum - visitors
+    will donate more the more impressive the work was to achieve.
+  - Go check out the Artifact Archives and check out your new work! If you like what
+    you see, go ahead and display it for a boost to donations!
+  outlineTag: artifacts

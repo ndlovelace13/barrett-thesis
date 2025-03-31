@@ -14,5 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstVisitorReport
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - You came back! Glad to know that we didn't scare you off on your first day! Curation
+    can be overwhelming, but it sure is rewarding!
+  - Whenever you clock in after opening your museum, you'll recieve a report of how
+    long you the museum was open, the number of visitors you received during that
+    time, and the total donations acquired.
+  - However, to add this amount to your balance, you should head over to the donation
+    jar. Only then will you be able to spend your hard-earned cash on new improvements
+    to the museum!
+  - Press space to review the Visitor Report and Escape to put it away. Now go claim
+    your donations!
+  outlineTag: donation

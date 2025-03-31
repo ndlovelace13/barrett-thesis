@@ -327,7 +327,7 @@ GameObject:
   - component: {fileID: 1929814275576480804}
   m_Layer: 0
   m_Name: VisitorReport
-  m_TagString: Checklist
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -442,6 +442,7 @@ MonoBehaviour:
   totalPayout: {fileID: 6617018267060145884}
   startingPos: {fileID: 0}
   offScreen: {fileID: 0}
+  inspectPos: {fileID: 0}
 --- !u!1 &4900065787398961469
 GameObject:
   m_ObjectHideFlags: 0

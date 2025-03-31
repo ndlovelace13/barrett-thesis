@@ -14,5 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: firstPainting
   charName: Art, the Creativity Spren
-  dialogue: []
-  outlineTag: 
+  dialogue:
+  - This place feels more museumy already! Now, one final thing before I let you
+    go for the day!
+  - While you've placed a couple painting frames on the walls, an empty frame isn't
+    likely to garner many donations from visitors. Let's fill them in with some iconic
+    works of art created by world renown painter - YOU!
+  - When looking at a single card in the archive, press Q to retrieve it. You can
+    then bring it to the placed painting frame, interact with it, and voila! Your
+    work will be displayed for all to see!
+  - Cards with a higher mastery level will hold visitor interest longer, so be sure
+    you are displaying your finest works. You can always tell the mastery tier at
+    a glance by the color of the frame.
+  - Now go display one of those masterpieces you worked so hard to create and sort!
+    Remember, press Q to remove a card from the Archives.
+  outlineTag: Archives
