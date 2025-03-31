@@ -25,6 +25,8 @@ public class Matching : CoreGameMode, IInteractable
     List<GameObject> activePrompts;
     List<GameObject> activeAnswers;
 
+    public List<RoomControl> allRooms;
+
     bool sprenSpawned = false;
 
     // Start is called before the first frame update
@@ -312,7 +314,7 @@ public class Matching : CoreGameMode, IInteractable
         Debug.Log(GameController.SaveData.newQueue.Count + " cards need to be arted");
 
         //retrieve all rooms that could be spawned in
-        List<RoomControl> allRooms = GameObject.FindObjectsOfType<RoomControl>().ToList();
+        allRooms = GameObject.FindObjectsOfType<RoomControl>().ToList();
         for (int i = 0; i < allRooms.Count; i++)
         {
             if (allRooms[i].roomData.roomType == RoomType.CONSTRUCTION)
@@ -320,6 +322,7 @@ public class Matching : CoreGameMode, IInteractable
                 Debug.Log("Room Removed");
                 allRooms.Remove(allRooms[i]);
             }
+            yield return new WaitForFixedUpdate();
         }
         Debug.Log(allRooms.Count + " eligible rooms found");
 
@@ -340,6 +343,7 @@ public class Matching : CoreGameMode, IInteractable
 
             StartCoroutine(CardtoRoom(allRooms[i], remainingCards, cardCount));
             Debug.Log(remainingCards.Count + " cards left to be assigned");
+            yield return new WaitForFixedUpdate();
         }
 
         //deprecated, do not use scatter anymore, just assign to rooms for the sake of splitting up spren
@@ -372,6 +376,7 @@ public class Matching : CoreGameMode, IInteractable
 
             //generate answers for the card
             card.GenerateAnswers();
+            yield return new WaitForFixedUpdate();
         }
         yield return null;
     }

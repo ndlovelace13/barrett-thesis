@@ -73,12 +73,12 @@ public class SprenBehavior : MonoBehaviour
     }
 
     //when the spren reaches the archive, use this to pass on a new card for it to carry around
-    public void CardGrab()
+    IEnumerator CardGrab()
     {
         Debug.Log("Grabbing a card");
         //get a new flashcard from the cardqueue
-        RoomControl[] allRooms = GameObject.FindObjectsOfType<RoomControl>();
-        for (int i = 0; i < allRooms.Length; i++)
+        List<RoomControl> allRooms = GameObject.FindFirstObjectByType<Matching>().allRooms;
+        for (int i = 0; i < allRooms.Count; i++)
         {
             if (allRooms[i].assignedCards.Count > 0)
             {
@@ -88,6 +88,7 @@ public class SprenBehavior : MonoBehaviour
                 assignedRoom = allRooms[i].sprenPoint.position;
                 break;
             }
+            yield return new WaitForFixedUpdate();
         }
         Debug.Log("Assigning card #" + heldCard.cardId);
 
@@ -119,7 +120,7 @@ public class SprenBehavior : MonoBehaviour
                         switch (currentState)
                         {
                             case SprenState.RETRIEVE:
-                                CardGrab();
+                                StartCoroutine(CardGrab());
                                 //retrieve 
                                 break;
                             case SprenState.ROOM:
