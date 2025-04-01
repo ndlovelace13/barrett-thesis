@@ -39,14 +39,14 @@ public class ArtifactControl : MonoBehaviour
         Debug.Log(GameController.SaveData.artifactData.Count + " artifacts found in save data");
 
         //check whether there is a mismatch in the count of artifacts in save and in files
-        if (artifactData.Count == GameController.SaveData.artifactData.Count)
-            return;
+        if (artifactData.Count != GameController.SaveData.artifactData.Count)
+            GameController.SaveData.artifactData.Clear();
 
-        foreach (var data in artifactData)
+        for (int i = 0; i < artifactData.Count; i++)
         {
-            if (!GameController.SaveData.artifactData.Contains(data))
+            if (!GameController.SaveData.artifactData.Contains(artifactData[i]))
             {
-                GameController.SaveData.artifactData.Add(data);
+                GameController.SaveData.artifactData.Add(artifactData[i]);
             }
         }
 
@@ -64,6 +64,7 @@ public class ArtifactControl : MonoBehaviour
     {
         foreach (var data in GameController.SaveData.artifactData)
         {
+            Debug.Log("Artifact Data Found: " + data);
             if (!data.unlocked)
                 data.UnlockCheck();
             yield return new WaitForEndOfFrame();

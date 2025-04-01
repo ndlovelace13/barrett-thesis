@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -84,8 +85,6 @@ public class PlaceableHandler : MonoBehaviour
 
         StorageSetup();
 
-        Delivery();
-
         Debug.Log("Placeables Detected: " + GameController.SaveData.placeables.Count);
         for (int i = 0; i < GameController.SaveData.placeables.Count; i++)
         {
@@ -119,6 +118,11 @@ public class PlaceableHandler : MonoBehaviour
                 newObj.GetComponent<Rearrangeable>().RestoreData(GameController.SaveData.placeables[i]);
             }
         }
+
+        //add additional objects to the ordered placeables if something got fucked up
+        MismatchCheck();
+
+        Delivery();
         //SaveHandler.SaveSystem.SaveGame();
     }
 
@@ -159,11 +163,17 @@ public class PlaceableHandler : MonoBehaviour
 
     public void Delivery()
     {
+
         //enable delivery boxes if there are any items in orderedPlaceables
         if (GameController.SaveData.orderedPlaceables.Count > 0)
         {
             deliveryBox.SetActive(true);
             Debug.Log("Delivery Box correctly enabled");
+
+            /*if (mismatch)
+            {
+                deliveryBox.GetComponent<Deliveries>().Mismatch();
+            }*/
         }
             
         else
@@ -171,6 +181,53 @@ public class PlaceableHandler : MonoBehaviour
             deliveryBox.SetActive(false);
             Debug.Log("Why the fuck would this work as intended");
         }
+    }
+
+    public void MismatchCheck()
+    {
+        Debug.Log("Orders before mismatch: " + GameController.SaveData.orderedPlaceables.Count);
+
+        //check paintings
+        Painting[] paintings = GameObject.FindObjectsOfType<Painting>();
+        int newCount = controlDict[PlaceableType.Painting].currentPlaced - paintings.Length - CountOrdered(PlaceableType.Painting);
+        Debug.Log("Painting Count: " + newCount);
+        for (int i = 0; i < newCount; i++)
+        {
+            Placeable newPlaceable = new Placeable(PlaceableType.Painting);
+            GameController.SaveData.orderedPlaceables.Add(newPlaceable);
+        }
+
+        //check pillar
+        Pillar[] pillars = GameObject.FindObjectsOfType<Pillar>();
+        newCount = controlDict[PlaceableType.Pillar].currentPlaced - pillars.Length - CountOrdered(PlaceableType.Pillar);
+        Debug.Log("Pillar Count: " + newCount);
+        for (int i = 0; i < newCount; i++)
+        {
+            Placeable newPlaceable = new Placeable(PlaceableType.Pillar);
+            GameController.SaveData.orderedPlaceables.Add(newPlaceable);
+        }
+
+        //check donation
+        DonationJar[] donations = GameObject.FindObjectsOfType<DonationJar>();
+        newCount = controlDict[PlaceableType.Donation].currentPlaced - donations.Length - CountOrdered(PlaceableType.Donation);
+        Debug.Log("Donation Count: " + newCount);
+        for (int i = 0; i < newCount; i++)
+        {
+            Placeable newPlaceable = new Placeable(PlaceableType.Donation);
+            GameController.SaveData.orderedPlaceables.Add(newPlaceable);
+        }
+
+        Debug.Log("Orders after mismatch: " + GameController.SaveData.orderedPlaceables.Count);
+    }
+
+    public int CountOrdered(PlaceableType type)
+    {
+        int count = 0;
+        for (int i = 0; i < GameController.SaveData.orderedPlaceables.Count; i++)
+            if (GameController.SaveData.orderedPlaceables[i].type == type)
+                count++;
+
+        return count;
     }
 
     //DEBUG
